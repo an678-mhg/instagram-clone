@@ -17,6 +17,7 @@ export const sidebars: Sidebar[] = [
     icons: Search,
     title: "Search",
     href: "/search",
+    hiddenIconWhenMobile: true,
   },
   {
     icons: Explore,
@@ -37,6 +38,7 @@ export const sidebars: Sidebar[] = [
     icons: Notification,
     title: "Notification",
     href: "/notification",
+    hiddenIconWhenMobile: true,
   },
   {
     icons: Create,

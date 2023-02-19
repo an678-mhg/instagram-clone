@@ -7,3 +7,32 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+input {
+  outline: none;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: #e9e7e4e7;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.swiper-pagination-bullet {
+  background: #fff;
+}

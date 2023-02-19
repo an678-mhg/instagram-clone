@@ -6,11 +6,12 @@ export interface Layout {
 
 export interface IconProps {
   className?: string;
-  color: string;
+  color?: string;
 }
 
 export interface Sidebar {
   icons: Function;
   title: string;
   href: string;
+  hiddenIconWhenMobile?: boolean;
 }
