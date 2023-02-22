@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { IconProps } from "../../types";
 
-const Logo: FC<IconProps> = ({ className, color }) => {
+const Logo: FC<IconProps> = ({ className, color, width, height }) => {
   return (
     <div className={className}>
       <svg
@@ -9,10 +9,10 @@ const Logo: FC<IconProps> = ({ className, color }) => {
         className="_ab6-"
         color={color}
         fill={color}
-        height={29}
+        height={height || 29}
         role="img"
         viewBox="32 4 113 32"
-        width={103}
+        width={width || 103}
       >
         <path
           clipRule="evenodd"

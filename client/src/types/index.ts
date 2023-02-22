@@ -7,6 +7,8 @@ export interface Layout {
 export interface IconProps {
   className?: string;
   color?: string;
+  width?: number;
+  height?: number;
 }
 
 export interface Sidebar {
@@ -14,4 +16,9 @@ export interface Sidebar {
   title: string;
   href: string;
   hiddenIconWhenMobile?: boolean;
+}
+
+export interface SignInFormValue {
+  email: string;
+  password: string;
 }

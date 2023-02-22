@@ -36,3 +36,16 @@ img {
 .swiper-pagination-bullet {
   background: #fff;
 }
+
+.animation-fade {
+  animation: fade ease-in-out 1s;
+}
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+  from {
+    opacity: 0;
+  }
+}

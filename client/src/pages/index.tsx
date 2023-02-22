@@ -1,5 +1,5 @@
 import AccountItem from "../components/Account/AccountItem";
-import MainLayout from "../components/layout/MainLayout";
+import MainLayout from "../components/Layout/MainLayout";
 import PostItem from "../components/Post/PostItem";
 
 const Home = () => {
