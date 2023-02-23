@@ -46,3 +46,6 @@ export const sidebars: Sidebar[] = [
     href: "/create",
   },
 ];
+
+export const ACCESS_TOKEN = "accessToken";
+export const REFRESH_TOKEN = "refreshToken";

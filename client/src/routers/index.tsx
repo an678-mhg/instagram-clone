@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+import AuthLayout from "../components/Layout/AuthLayout";
+import ProtecedLayout from "../components/Layout/ProtecedLayout";
 import Home from "../pages";
 import Explore from "../pages/explore";
 import Search from "../pages/search";
@@ -7,7 +9,11 @@ import SignIn from "../pages/signin";
 const routers = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <ProtecedLayout>
+        <Home />
+      </ProtecedLayout>
+    ),
   },
   {
     path: "/search",
@@ -19,7 +25,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/signin",
-    element: <SignIn />,
+    element: (
+      <AuthLayout>
+        <SignIn />
+      </AuthLayout>
+    ),
   },
 ]);
 

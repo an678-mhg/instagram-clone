@@ -1,3 +1,4 @@
+import AuthLayout from "../components/Layout/AuthLayout";
 import Form from "../components/SignIn/Form";
 import Phone from "../components/SignIn/Phone";
 

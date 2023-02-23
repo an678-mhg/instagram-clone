@@ -3,9 +3,13 @@ import { BsFacebook } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { SignInFormValue } from "../../types";
-import { useState } from "react";
+import { Response, SignInFormValue } from "../../types";
+import { useContext, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { AxiosError } from "axios";
+import { signIn } from "../../services/auth";
+import { AuthContext } from "../../context/AuthContext";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../utils/contants";
 
 const Form = () => {
   const {
@@ -19,16 +23,41 @@ const Form = () => {
     },
   });
 
-  const submitForm = (values: SignInFormValue) => {
-    console.log(values);
-  };
+  const { setUser } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  // const [loading, setLoading] = useState(false)
+
+  const submitForm = async (values: SignInFormValue) => {
+    const { email, password } = values;
+    setErrorMessage("");
+
+    try {
+      const response = await signIn({ email, password });
+
+      if (response.success) {
+        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+        localStorage.setItem(REFRESH_TOKEN, response.refreshToken);
+        setUser(response.user);
+      }
+    } catch (error) {
+      const message = (error as AxiosError<Response>).response?.data.message;
+      setErrorMessage(message as string);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(submitForm)} className="w-[350px]">
       <div className="pt-10 px-5 rounded-md pb-6 w-full border border-gray-200 flex items-center justify-center flex-col">
         <Logo width={174} height={50} />
+
+        {errorMessage && (
+          <span className="mt-3 font-semibold text-xs text-red-500">
+            {"⚠️ " + errorMessage}
+          </span>
+        )}
+
         <div className="w-full mt-6">
           <div className="w-full mb-2">
             <input

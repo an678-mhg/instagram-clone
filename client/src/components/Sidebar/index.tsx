@@ -5,8 +5,12 @@ import More from "../../assets/icons/More";
 import LogoImage from "../../assets/images/LogoImage";
 import { sidebars } from "../../utils/contants";
 import SidebarItem from "./SidebarItem";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const Sidebar = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <div
       className={`md:px-3 md:py-3 px-2 py-1 border-t md:border-t-transparent transition-all flex lg:w-[245px] md:w-auto z-[9999] bg-white dark:bg-[#111] md:flex-col flex-row justify-between border-r border-gray-200 dark:border-[#ccc] w-full md:h-screen fixed md:top-0 bottom-0 left-0`}
@@ -26,8 +30,8 @@ const Sidebar = () => {
           >
             <LazyLoadImage
               className="w-6 h-6 rounded-full"
-              alt="Profile"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_ZvHdn0DadjQB9oXbn9XXKvRdGQP6BSFJzw&usqp=CAU"
+              alt={user?.username}
+              src={user?.avatar}
             />
             <span className="lg:block hidden text-[16px] text-black dark:text-white ml-4">
               Profile
