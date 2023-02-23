@@ -9,3 +9,7 @@ export interface signUpBody {
   username: string;
   fullname: string;
 }
+
+export interface refreshTokenBody {
+  refreshToken: string;
+}

@@ -48,6 +48,10 @@ const users = new Schema(
       type: String,
       default: "",
     },
+    refreshToken: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

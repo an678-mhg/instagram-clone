@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import usersModels from "../models/users.models";
-import { signInBody, signUpBody } from "../types";
+import { refreshTokenBody, signInBody, signUpBody } from "../types";
 import { verify, hash } from "argon2";
 import jwt from "jsonwebtoken";
 import sendMail from "../utils/sendMail";
+import {
+  generateAccessToken,
+  generateActiveToken,
+  generateRefreshToken,
+} from "../utils/token";
 
 class authControllers {
   async signIn(req: Request, res: Response) {
@@ -38,17 +43,25 @@ class authControllers {
           .json({ success: false, message: "Email or password is wrong!" });
       }
 
-      const accessToken = jwt.sign(
-        { _id: user._id },
-        process.env.JWT_SECRET as string,
-        { expiresIn: "7d" }
-      );
+      const accessToken = generateAccessToken({ _id: user._id });
+      const refreshToken = generateRefreshToken({ _id: user._id });
+
+      user.refreshToken = refreshToken;
+      await user.save();
+
+      const {
+        password: ps,
+        activeToken,
+        refreshToken: rfToken,
+        ...userData
+      } = user.toObject();
 
       res.json({
         success: true,
         message: "Sign in success!",
-        user,
+        user: userData,
         accessToken,
+        refreshToken,
       });
     } catch (error) {
       res
@@ -75,7 +88,7 @@ class authControllers {
       }
 
       const hashPassword = await hash(password);
-      const avatar = `https://ui-avatars.com/api/?name=${fullname}&background=random`;
+      const avatar = `https://ui-avatars.com/api/?name=${username}`;
 
       const newUser = new usersModels({
         email,
@@ -85,10 +98,7 @@ class authControllers {
         avatar,
       });
 
-      const activeToken = jwt.sign(
-        { _id: newUser._id },
-        process.env.ACTIVE_JWT_SECRET as string
-      );
+      const activeToken = generateActiveToken({ _id: newUser._id });
 
       newUser.activeToken = activeToken;
 
@@ -101,10 +111,16 @@ class authControllers {
 
       const result = await sendMail(email, html);
 
+      const {
+        password: ps,
+        activeToken: acToken,
+        ...userData
+      } = newUser.toObject();
+
       res.json({
         success: true,
-        message: "Sign up success!",
-        user: newUser,
+        message: "Sign up success! please check the email",
+        user: userData,
         result,
       });
     } catch (error) {
@@ -123,7 +139,12 @@ class authControllers {
           .json({ success: false, message: "Missing active token!" });
       }
 
-      const decoded = jwt.decode(activeToken) as { _id: string };
+      // @ts-ignore
+      const decoded = jwt.decode(
+        activeToken,
+        // @ts-ignore
+        process.env.ACTIVE_JWT_SECRET as string
+      ) as { _id: string };
 
       if (!decoded) {
         return res
@@ -145,6 +166,119 @@ class authControllers {
       await user.save();
 
       res.json({ success: true, message: "Active account success!" });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async refreshToken(req: Request, res: Response) {
+    try {
+      const { refreshToken } = req.body as refreshTokenBody;
+
+      if (!refreshToken) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Missing refresh token!" });
+      }
+
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_JWT_SECRET as string
+      ) as { _id: string };
+
+      if (!decoded) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Refresh token is not valid!" });
+      }
+
+      const user = await usersModels.findOne({ _id: decoded._id });
+
+      if (!user) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Refresh token is not valid!" });
+      }
+
+      if (user.refreshToken !== refreshToken) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Refresh token is not valid!" });
+      }
+
+      const accessToken = generateAccessToken({ _id: user._id });
+      const newRefreshToken = generateRefreshToken({ _id: user._id });
+
+      user.refreshToken = newRefreshToken;
+      await user.save();
+
+      res.json({
+        succsess: true,
+        message: "Refresh token success!",
+        accessToken,
+        refreshToken: newRefreshToken,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async logout(req: Request, res: Response) {
+    const { refreshToken } = req.body as refreshTokenBody;
+
+    if (!refreshToken) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Missing refresh token!" });
+    }
+
+    try {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_JWT_SECRET as string
+      ) as { _id: string };
+
+      if (!decoded) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Refresh token is not valid!" });
+      }
+
+      const user = await usersModels.findOne({ _id: decoded._id });
+
+      if (!user) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Refresh token is not valid!" });
+      }
+
+      if (user.refreshToken !== refreshToken) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Refresh token is not valid!" });
+      }
+
+      user.refreshToken = "";
+      await user.save();
+
+      res.json({ success: true, message: "Log out success!" });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async getMe(req: Request, res: Response) {
+    try {
+      const _id = req.body._id;
+
+      const user = await usersModels
+        .findOne({ _id })
+        .select("-password -refreshToken -activeToken");
+
+      res.json({ success: true, user });
     } catch (error) {
       res
         .status(500)
