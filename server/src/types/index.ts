@@ -13,3 +13,7 @@ export interface signUpBody {
 export interface refreshTokenBody {
   refreshToken: string;
 }
+
+export interface googleLoginBody {
+  idTokens: string;
+}

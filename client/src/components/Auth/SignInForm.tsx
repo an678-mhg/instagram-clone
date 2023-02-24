@@ -1,17 +1,24 @@
 import Logo from "../../assets/images/Logo";
-import { BsFacebook } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Response, SignInFormValue } from "../../types";
 import { useContext, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import {
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  AiOutlineWarning,
+} from "react-icons/ai";
 import { AxiosError } from "axios";
-import { signIn } from "../../services/auth";
+import { googleLogin, signIn } from "../../services/auth";
 import { AuthContext } from "../../context/AuthContext";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../utils/contants";
+import { toast } from "react-hot-toast";
+import { signInWithPopup } from "firebase/auth";
+import { googleProvider } from "../../config/firebase";
+import { auth } from "../../config/firebase";
 
-const Form = () => {
+const SignInForm = () => {
   const {
     register,
     formState: { errors },
@@ -27,24 +34,51 @@ const Form = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  // const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const submitForm = async (values: SignInFormValue) => {
     const { email, password } = values;
     setErrorMessage("");
+    setLoading(true);
+
+    const toastId = toast.loading("Account verification...");
 
     try {
       const response = await signIn({ email, password });
-
       if (response.success) {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
         localStorage.setItem(REFRESH_TOKEN, response.refreshToken);
         setUser(response.user);
+        toast.success("Sign in success", { id: toastId });
       }
     } catch (error) {
       const message = (error as AxiosError<Response>).response?.data.message;
       setErrorMessage(message as string);
+      toast.error("Sign in failed", { id: toastId });
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSignInGoogle = async () => {
+    setLoading(true);
+    let toastId;
+    try {
+      const response = await signInWithPopup(auth, googleProvider);
+      const idTokens = await response.user.getIdToken();
+      toastId = toast.loading("Account verification...");
+      const googleResponse = await googleLogin({ idTokens });
+      if (googleResponse.success) {
+        localStorage.setItem(ACCESS_TOKEN, googleResponse.accessToken);
+        localStorage.setItem(REFRESH_TOKEN, googleResponse.refreshToken);
+        setUser(googleResponse.user);
+        toast.success("Sign in success", { id: toastId });
+      }
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      toast.error("Sign in failed", { id: toastId });
+    }
+    setLoading(false);
   };
 
   return (
@@ -53,8 +87,9 @@ const Form = () => {
         <Logo width={174} height={50} />
 
         {errorMessage && (
-          <span className="mt-3 font-semibold text-xs text-red-500">
-            {"⚠️ " + errorMessage}
+          <span className="mt-3 flex items-center font-semibold text-xs text-red-500">
+            <AiOutlineWarning className="mr-1 h-4" />{" "}
+            <span>{errorMessage}</span>
           </span>
         )}
 
@@ -62,10 +97,10 @@ const Form = () => {
           <div className="w-full mb-2">
             <input
               {...register("email", {
-                required: { value: true, message: "⚠️ Email is required!" },
+                required: { value: true, message: "Email is required!" },
                 pattern: {
                   value: /^\S+@\S+\.\S+$/,
-                  message: "⚠️ Wrong email format!",
+                  message: "Wrong email format!",
                 },
               })}
               placeholder="Email or username"
@@ -83,11 +118,11 @@ const Form = () => {
                 {...register("password", {
                   required: {
                     value: true,
-                    message: "⚠️ Password is required!",
+                    message: "Password is required!",
                   },
                   minLength: {
                     value: 8,
-                    message: "⚠️ Password must be more than 8 characters!",
+                    message: "Password must be more than 8 characters!",
                   },
                 })}
                 type={showPassword ? "text" : "password"}
@@ -111,7 +146,12 @@ const Form = () => {
               </span>
             )}
           </div>
-          <button className="px-4 text-center text-xs font-semibold mt-4 w-full text-white py-2 rounded-md bg-blue-500">
+          <button
+            disabled={loading}
+            className={`${
+              loading && "opacity-50"
+            } px-4 text-center text-xs font-semibold mt-4 w-full text-white py-2 rounded-md bg-blue-500`}
+          >
             Log in
           </button>
           <div className="relative py-6">
@@ -121,13 +161,14 @@ const Form = () => {
             </span>
           </div>
           <div className="w-full">
-            <button className="px-3 w-full mb-3 bg-gray-100 py-2 rounded-md text-xs font-semibold flex items-center">
+            <button
+              onClick={handleSignInGoogle}
+              type="button"
+              disabled={loading}
+              className="px-3 w-full bg-gray-100 py-2 rounded-md text-xs font-semibold flex items-center"
+            >
               <FcGoogle className="w-5 h-5" />{" "}
               <span className="ml-3">Login with Google</span>
-            </button>
-            <button className="px-3 w-full py-2 rounded-md text-xs font-semibold flex items-center bg-blue-500">
-              <BsFacebook className="w-5 h-5 text-white" />{" "}
-              <span className="text-white ml-3">Login with Facebook</span>
             </button>
           </div>
         </div>
@@ -147,4 +188,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default SignInForm;

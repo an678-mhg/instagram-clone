@@ -1,4 +1,13 @@
-import { MeResponse, SignInFormValue, SignInResponse } from "../types";
+import {
+  GoogleLoginFormValue,
+  MeResponse,
+  refreshTokenFormValue,
+  Response,
+  SignInFormValue,
+  SignInResponse,
+  SignUpFormValue,
+  SignUpResponse,
+} from "../types";
 import client from "../utils/client";
 
 export const signIn = async (data: SignInFormValue) => {
@@ -8,5 +17,27 @@ export const signIn = async (data: SignInFormValue) => {
 
 export const getMe = async () => {
   const response = await client.get<MeResponse>("/auth/me");
+  return response.data;
+};
+
+export const signUp = async (data: SignUpFormValue) => {
+  const response = await client.post<SignUpResponse>("/auth/signup", data);
+  return response.data;
+};
+
+export const googleLogin = async (data: GoogleLoginFormValue) => {
+  const response = await client.post<SignInResponse>("/auth/google", data);
+  return response.data;
+};
+
+export const logout = async (data: refreshTokenFormValue) => {
+  const response = await client.post<Response>("/auth/logout", data);
+  return response.data;
+};
+
+export const activeAccount = async (activeToken: string) => {
+  const response = await client.get<SignInResponse>(
+    `/auth/active/${activeToken}`
+  );
   return response.data;
 };

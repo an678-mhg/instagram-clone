@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import usersModels from "../models/users.models";
-import { refreshTokenBody, signInBody, signUpBody } from "../types";
+import {
+  googleLoginBody,
+  refreshTokenBody,
+  signInBody,
+  signUpBody,
+} from "../types";
 import { verify, hash } from "argon2";
 import jwt from "jsonwebtoken";
 import sendMail from "../utils/sendMail";
@@ -9,6 +14,8 @@ import {
   generateActiveToken,
   generateRefreshToken,
 } from "../utils/token";
+import getRandomColor from "../utils/randomColor";
+import { auth } from "../config/firebase";
 
 class authControllers {
   async signIn(req: Request, res: Response) {
@@ -88,7 +95,7 @@ class authControllers {
       }
 
       const hashPassword = await hash(password);
-      const avatar = `https://ui-avatars.com/api/?name=${username}`;
+      const avatar = `https://ui-avatars.com/api/?name=${username}&background=${getRandomColor()}&color=fff`;
 
       const newUser = new usersModels({
         email,
@@ -106,7 +113,7 @@ class authControllers {
 
       const html = `
         <h1>Welcome to Instagram-Clone by an678-mhg</h1>
-        <p>To continue activating your account, please <a href="${process.env.FRONT_END_URL}/api/auth/active/${activeToken}">click here</a></p>
+        <p>To continue activating your account, please <a href="${process.env.FRONT_END_URL}/active?activeToken=${activeToken}">click here</a></p>
       `;
 
       const result = await sendMail(email, html);
@@ -160,12 +167,29 @@ class authControllers {
           .json({ success: false, message: "Active token is not valid!" });
       }
 
+      const accessToken = generateAccessToken({ _id: user._id });
+      const refreshToken = generateRefreshToken({ _id: user._id });
+
       user.active = true;
       user.activeToken = "";
+      user.refreshToken = refreshToken;
 
       await user.save();
 
-      res.json({ success: true, message: "Active account success!" });
+      const {
+        password,
+        refreshToken: rfToken,
+        activeToken: acToken,
+        ...userData
+      } = user.toObject();
+
+      res.json({
+        success: true,
+        message: "Active account success!",
+        user: userData,
+        accessToken,
+        refreshToken,
+      });
     } catch (error) {
       res
         .status(500)
@@ -278,7 +302,87 @@ class authControllers {
         .findOne({ _id })
         .select("-password -refreshToken -activeToken");
 
+      if (!user) {
+        return res
+          .status(401)
+          .json({ success: false, message: "User not found!" });
+      }
+
       res.json({ success: true, user });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async googleLogin(req: Request, res: Response) {
+    try {
+      const { idTokens } = req.body as googleLoginBody;
+
+      if (!idTokens) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Missing idTokens!" });
+      }
+
+      const verifyToken = await auth.verifyIdToken(idTokens);
+
+      const user = await usersModels.findOne({ email: verifyToken.email });
+
+      if (user) {
+        const accessToken = generateAccessToken({ _id: user._id });
+        const refreshToken = generateRefreshToken({ _id: user._id });
+
+        user.active = true;
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        const {
+          password,
+          refreshToken: rfToken,
+          activeToken,
+          ...userData
+        } = user.toObject();
+
+        return res.json({
+          success: true,
+          message: "Sign in success!",
+          user: userData,
+          accessToken,
+          refreshToken,
+        });
+      }
+
+      const newUser = new usersModels({
+        active: true,
+        avatar: verifyToken?.picture as string,
+        email: verifyToken?.email as string,
+        password: "",
+        fullname: verifyToken?.email?.split("@")[0],
+        username: verifyToken?.email?.split("@")[0],
+        provider: "Google",
+      });
+
+      const accessToken = generateAccessToken({ _id: newUser._id });
+      const refreshToken = generateRefreshToken({ _id: newUser._id });
+
+      newUser.refreshToken = refreshToken;
+      await newUser.save();
+
+      const {
+        password,
+        refreshToken: rfToken,
+        activeToken,
+        ...userData
+      } = newUser.toObject();
+
+      res.json({
+        success: true,
+        message: "Sign in success!",
+        user: userData,
+        accessToken,
+        refreshToken,
+      });
     } catch (error) {
       res
         .status(500)

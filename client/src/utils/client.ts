@@ -11,4 +11,9 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
+// client.interceptors.response.use((response) => {
+
+//   return response
+// })
+
 export default client;

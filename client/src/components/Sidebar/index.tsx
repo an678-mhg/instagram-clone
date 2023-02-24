@@ -3,13 +3,16 @@ import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import More from "../../assets/icons/More";
 import LogoImage from "../../assets/images/LogoImage";
-import { sidebars } from "../../utils/contants";
 import SidebarItem from "./SidebarItem";
-import { useContext } from "react";
+import { sidebars } from "../../utils/contants";
 import { AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
+import useLogout from "../../hooks/useLogout";
+import { FiLogOut } from "react-icons/fi";
 
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
+  const { handleLogout, isLoading } = useLogout();
 
   return (
     <div
@@ -39,12 +42,16 @@ const Sidebar = () => {
           </Link>
         </div>
       </div>
-      <div className="md:flex hidden items-center p-3 rounded-full hover:bg-gray-100 hover:dark:bg-[#222] mb-2 transition-colors cursor-pointer last:mb-0">
-        <More className="text-black dark:text-white" />
+      <button
+        onClick={handleLogout}
+        disabled={isLoading}
+        className="md:flex hidden items-center p-3 rounded-full hover:bg-gray-100 hover:dark:bg-[#222] mb-2 transition-colors cursor-pointer last:mb-0"
+      >
+        <FiLogOut className="text-black dark:text-white w-6 h-6" />
         <span className="lg:block hidden text-[16px] ml-4 dark:text-white text-black">
-          More
+          Logout
         </span>
-      </div>
+      </button>
     </div>
   );
 };

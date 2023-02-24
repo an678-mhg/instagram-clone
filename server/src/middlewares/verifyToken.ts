@@ -19,7 +19,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     req.body._id = decoded._id;
     next();
   } catch (error) {
-    console.log(error);
     res.status(403).json({
       success: false,
       message: "Token not found !",

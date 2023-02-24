@@ -1,4 +1,5 @@
 import AccountItem from "../components/Account/AccountItem";
+import AccountProfile from "../components/Account/AccountProfile";
 import MainLayout from "../components/Layout/MainLayout";
 import PostItem from "../components/Post/PostItem";
 
@@ -16,7 +17,7 @@ const Home = () => {
         </div>
         {/* Suggested Account */}
         <div className="flex-1 ml-[64px] xl:block hidden">
-          <AccountItem />
+          <AccountProfile />
           <div className="mt-6">
             <h1 className="text-[16px] font-semibold px-4 text-black dark:text-white">
               Suggestions for you

@@ -23,6 +23,21 @@ export interface SignInFormValue {
   password: string;
 }
 
+export interface SignUpFormValue {
+  email: string;
+  password: string;
+  username: string;
+  fullname: string;
+}
+
+export interface refreshTokenFormValue {
+  refreshToken: string;
+}
+
+export interface GoogleLoginFormValue {
+  idTokens: string;
+}
+
 export interface User {
   _id: string;
   fullname: string;
@@ -52,4 +67,9 @@ export interface SignInResponse extends Response {
 
 export interface MeResponse extends Response {
   user: User;
+}
+
+export interface SignUpResponse extends Response {
+  user: User;
+  result: any;
 }

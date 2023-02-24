@@ -27,11 +27,16 @@ routers.post("/refreshToken", authControllers.refreshToken);
 // public
 // description: log out
 // /api/auth/logout
-routers.delete("/logout", authControllers.logout);
+routers.post("/logout", authControllers.logout);
 
 // private
 // description: get user info
 // /api/auth/me
 routers.get("/me", verifyToken, authControllers.getMe);
+
+// public
+// description: google login
+// /api/auth/google
+routers.post("/google", authControllers.googleLogin);
 
 export default routers;
