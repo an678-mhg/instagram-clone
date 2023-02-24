@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import "./styles/index.css";
 
 const queryClientOptions = {

@@ -28,6 +28,7 @@ const Phone = () => {
         <div className="absolute top-[29px] right-[60px]">
           {listScreenShot?.map((item, index) => (
             <LazyLoadImage
+              effect="blur"
               key={item}
               src={item}
               className={`${

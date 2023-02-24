@@ -5,6 +5,7 @@ const AccountItem = () => {
     <div className="flex items-center justify-between px-4 py-2 last:mb-0">
       <div className="flex items-center">
         <LazyLoadImage
+          effect="blur"
           className="w-[42px] h-[42px] rounded-full"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_ZvHdn0DadjQB9oXbn9XXKvRdGQP6BSFJzw&usqp=CAU"
         />

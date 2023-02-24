@@ -15,6 +15,7 @@ const PostItem = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <LazyLoadImage
+            effect="blur"
             className="w-[42px] h-[42px] rounded-full"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_ZvHdn0DadjQB9oXbn9XXKvRdGQP6BSFJzw&usqp=CAU"
           />
@@ -33,25 +34,28 @@ const PostItem = () => {
         navigation={true}
       >
         <SwiperSlide>
-          <div className="w-full aspect-[4/3] mt-3">
+          <div className="w-full mt-3">
             <LazyLoadImage
-              className="w-full h-full rounded-md"
+              effect="blur"
+              className="w-full aspect-square rounded-md"
               src="https://images.unsplash.com/photo-1676739210571-0f3dc022c3d4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
             />
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="w-full aspect-[4/3] mt-3">
+          <div className="w-full mt-3">
             <LazyLoadImage
-              className="w-full h-full rounded-md"
+              effect="blur"
+              className="w-full aspect-square rounded-md"
               src="https://images.unsplash.com/photo-1676735296710-758d95e3044f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
             />
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="w-full aspect-[4/3] mt-3">
+          <div className="w-full mt-3">
             <LazyLoadImage
-              className="w-full h-full rounded-md"
+              effect="blur"
+              className="w-full aspect-square rounded-md"
               src="https://images.unsplash.com/photo-1676798665374-96270c5655f0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
             />
           </div>
@@ -70,6 +74,9 @@ const PostItem = () => {
       <div className="my-2">
         <p className="text-sm font-semibold text-black dark:text-white">
           10 likes
+        </p>
+        <p className="text-sm font-semibold text-black dark:text-white">
+          5 comments
         </p>
       </div>
       {/* Post Caption */}
