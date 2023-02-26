@@ -16,9 +16,7 @@ const AccountProfile = () => {
           src={user?.avatar}
         />
         <div className="ml-3">
-          <h3 className="text-sm font-semibold text-black dark:text-white">
-            {user?.username}
-          </h3>
+          <h3 className="text-sm font-semibold text-black">{user?.username}</h3>
           <p className="text-sm font-normal text-gray-400">{user?.fullname}</p>
         </div>
       </div>

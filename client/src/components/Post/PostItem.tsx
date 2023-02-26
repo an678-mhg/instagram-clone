@@ -36,6 +36,7 @@ const PostItem = () => {
         <SwiperSlide>
           <div className="w-full mt-3">
             <LazyLoadImage
+              width="100%"
               effect="blur"
               className="w-full aspect-square rounded-md"
               src="https://images.unsplash.com/photo-1676739210571-0f3dc022c3d4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
@@ -45,6 +46,7 @@ const PostItem = () => {
         <SwiperSlide>
           <div className="w-full mt-3">
             <LazyLoadImage
+              width="100%"
               effect="blur"
               className="w-full aspect-square rounded-md"
               src="https://images.unsplash.com/photo-1676735296710-758d95e3044f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
@@ -54,6 +56,7 @@ const PostItem = () => {
         <SwiperSlide>
           <div className="w-full mt-3">
             <LazyLoadImage
+              width="100%"
               effect="blur"
               className="w-full aspect-square rounded-md"
               src="https://images.unsplash.com/photo-1676798665374-96270c5655f0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"

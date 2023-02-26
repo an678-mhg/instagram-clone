@@ -26,10 +26,6 @@ function App() {
     return <Slash />;
   }
 
-  return (
-    <div className="bg-white dark:bg-[#111] transition-colors">
-      <RouterProvider router={routers} />
-    </div>
-  );
+  return <RouterProvider router={routers} />;
 }
 export default App;

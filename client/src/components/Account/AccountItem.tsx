@@ -10,9 +10,7 @@ const AccountItem = () => {
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_ZvHdn0DadjQB9oXbn9XXKvRdGQP6BSFJzw&usqp=CAU"
         />
         <div className="ml-3">
-          <h3 className="text-sm font-semibold text-black dark:text-white">
-            nguyenan763
-          </h3>
+          <h3 className="text-sm font-semibold text-black">nguyenan763</h3>
           <p className="text-sm font-normal text-gray-400">An Nguyen</p>
         </div>
       </div>

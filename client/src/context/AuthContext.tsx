@@ -3,7 +3,7 @@ import { User, Layout } from "../types";
 
 interface AuthContextValue {
   user: User | undefined | null;
-  setUser: Function;
+  setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>;
 }
 
 export const AuthContext = createContext<AuthContextValue>({
@@ -12,7 +12,7 @@ export const AuthContext = createContext<AuthContextValue>({
 });
 
 const AuthContextProvider = ({ children }: Layout) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User | undefined | null>();
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

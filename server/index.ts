@@ -1,8 +1,9 @@
+// apps
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDatabase from "./src/config/database";
-
+// routers
 import authRouters from "./src/routers/auth.routers";
 
 dotenv.config();

@@ -66,8 +66,10 @@ const SignInForm = () => {
     try {
       const response = await signInWithPopup(auth, googleProvider);
       const idTokens = await response.user.getIdToken();
+
       toastId = toast.loading("Account verification...");
       const googleResponse = await googleLogin({ idTokens });
+
       if (googleResponse.success) {
         localStorage.setItem(ACCESS_TOKEN, googleResponse.accessToken);
         localStorage.setItem(REFRESH_TOKEN, googleResponse.refreshToken);
@@ -170,6 +172,14 @@ const SignInForm = () => {
               <FcGoogle className="w-5 h-5" />{" "}
               <span className="ml-3">Login with Google</span>
             </button>
+          </div>
+          <div className="text-center w-full mt-4">
+            <Link
+              className="text-xs text-blue-500 hover:underline"
+              to="/forgot-password"
+            >
+              Forgot Password?
+            </Link>
           </div>
         </div>
       </div>
