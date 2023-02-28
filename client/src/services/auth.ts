@@ -1,7 +1,9 @@
+import axios from "axios";
 import {
   GoogleLoginFormValue,
   MeResponse,
   refreshTokenFormValue,
+  RefreshTokenResponse,
   Response,
   SignInFormValue,
   SignInResponse,
@@ -38,6 +40,14 @@ export const logout = async (data: refreshTokenFormValue) => {
 export const activeAccount = async (activeToken: string) => {
   const response = await client.get<SignInResponse>(
     `/auth/active/${activeToken}`
+  );
+  return response.data;
+};
+
+export const refreshToken = async (refreshToken: string) => {
+  const response = await axios.post<RefreshTokenResponse>(
+    "http://localhost:5000/api/auth/refreshToken",
+    { refreshToken }
   );
   return response.data;
 };

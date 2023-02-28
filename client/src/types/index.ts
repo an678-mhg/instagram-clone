@@ -34,6 +34,11 @@ export interface refreshTokenFormValue {
   refreshToken: string;
 }
 
+export interface RefreshTokenResponse extends Response {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface GoogleLoginFormValue {
   idTokens: string;
 }

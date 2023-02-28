@@ -9,6 +9,7 @@ import {
   AiOutlineEyeInvisible,
   AiOutlineWarning,
 } from "react-icons/ai";
+import { BsFacebook } from "react-icons/bs";
 import { AxiosError } from "axios";
 import { googleLogin, signIn } from "../../services/auth";
 import { AuthContext } from "../../context/AuthContext";
@@ -167,10 +168,18 @@ const SignInForm = () => {
               onClick={handleSignInGoogle}
               type="button"
               disabled={loading}
-              className="px-3 w-full bg-gray-100 py-2 rounded-md text-xs font-semibold flex items-center"
+              className="px-3 mb-4 w-full bg-gray-100 py-2 rounded-md text-xs justify-center font-semibold flex items-center"
             >
               <FcGoogle className="w-5 h-5" />{" "}
               <span className="ml-3">Login with Google</span>
+            </button>
+            <button
+              type="button"
+              disabled={loading}
+              className="px-3 w-full bg-blue-500 py-2 rounded-md text-xs justify-center font-semibold flex items-center"
+            >
+              <BsFacebook className="w-5 text-white h-5" />{" "}
+              <span className="ml-3 text-white">Login with Facebook</span>
             </button>
           </div>
           <div className="text-center w-full mt-4">

@@ -4,6 +4,7 @@ import ProtecedLayout from "../components/Layout/ProtecedLayout";
 import Home from "../pages";
 import Active from "../pages/active";
 import Explore from "../pages/explore";
+import Forgot from "../pages/forgot";
 import Search from "../pages/search";
 import SignIn from "../pages/signin";
 import SignUp from "../pages/signup";
@@ -46,6 +47,14 @@ const routers = createBrowserRouter([
     element: (
       <AuthLayout>
         <Active />
+      </AuthLayout>
+    ),
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <AuthLayout>
+        <Forgot />
       </AuthLayout>
     ),
   },

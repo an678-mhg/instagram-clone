@@ -1,5 +1,4 @@
 import Logo from "../../assets/images/Logo";
-import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Response, SignUpFormValue } from "../../types";

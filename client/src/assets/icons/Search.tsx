@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { IconProps } from "../../types";
 
-const Search: FC<IconProps> = ({ className, color }) => {
+const Search: FC<IconProps> = ({ className, color, width, height }) => {
   return (
     <div className={className}>
       <svg
@@ -9,10 +9,10 @@ const Search: FC<IconProps> = ({ className, color }) => {
         className="_ab6-"
         color={color}
         fill={color}
-        height={24}
+        height={height}
         role="img"
         viewBox="0 0 24 24"
-        width={24}
+        width={width}
       >
         <path
           d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z"
