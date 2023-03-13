@@ -4,6 +4,7 @@ import App from "./App";
 import AuthContextProvider from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
+import CreatePostModalContextProvider from "./context/CreatePostModalContext";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -14,13 +15,18 @@ import "./styles/index.css";
 const queryClientOptions = {
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
 };
+
 const queryClient = new QueryClient(queryClientOptions);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <AuthContextProvider>
+  <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
-      <Toaster />
+      <AuthContextProvider>
+        <CreatePostModalContextProvider>
+          <App />
+          <Toaster />
+        </CreatePostModalContextProvider>
+      </AuthContextProvider>
     </QueryClientProvider>
-  </AuthContextProvider>
+  </React.StrictMode>
 );

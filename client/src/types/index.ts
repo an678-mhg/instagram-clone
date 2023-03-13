@@ -15,7 +15,6 @@ export interface Sidebar {
   icons: Function;
   title: string;
   href: string;
-  hiddenIconWhenMobile?: boolean;
 }
 
 export interface SignInFormValue {

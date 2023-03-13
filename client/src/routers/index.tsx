@@ -8,6 +8,7 @@ import Forgot from "../pages/forgot";
 import Search from "../pages/search";
 import SignIn from "../pages/signin";
 import SignUp from "../pages/signup";
+import Stories from "../pages/stories";
 
 const routers = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const routers = createBrowserRouter([
         <Forgot />
       </AuthLayout>
     ),
+  },
+  {
+    path: "/stories",
+    element: <Stories />,
   },
 ]);
 

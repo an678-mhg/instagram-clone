@@ -354,13 +354,15 @@ class authControllers {
         });
       }
 
+      const username = verifyToken?.email?.split("@")[0] as string;
+
       const newUser = new usersModels({
         active: true,
         avatar: verifyToken?.picture as string,
         email: verifyToken?.email as string,
         password: "",
-        fullname: verifyToken?.email?.split("@")[0],
-        username: verifyToken?.email?.split("@")[0],
+        fullname: username.charAt(0).toUpperCase() + username.slice(1),
+        username: username,
         provider: "Google",
       });
 

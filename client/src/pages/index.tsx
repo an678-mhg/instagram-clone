@@ -2,6 +2,7 @@ import AccountItem from "../components/Account/AccountItem";
 import AccountProfile from "../components/Account/AccountProfile";
 import MainLayout from "../components/Layout/MainLayout";
 import PostItem from "../components/Post/PostItem";
+import StoryItem from "../components/StoryItem";
 
 const Home = () => {
   return (
@@ -9,17 +10,26 @@ const Home = () => {
       <div className="xl:w-[917px] max-w-full py-8 flex">
         {/* List Post */}
         <div className="md:w-[470px] max-w-full">
+          {/* <div className="mb-8 flex items-center justify-between md:px-0 px-2">
+            <StoryItem />
+            <StoryItem />
+            <StoryItem />
+            <StoryItem />
+            <StoryItem />
+          </div> */}
           {/* Post Item */}
-          <PostItem />
-          <PostItem />
-          <PostItem />
-          <PostItem />
+          <div>
+            <PostItem />
+            <PostItem />
+            <PostItem />
+            <PostItem />
+          </div>
         </div>
         {/* Suggested Account */}
         <div className="flex-1 ml-[64px] xl:block hidden">
           <AccountProfile />
           <div className="mt-6">
-            <h1 className="text-[16px] font-semibold px-4 text-black dark:text-white">
+            <h1 className="text-[16px] font-semibold px-4 text-black">
               Suggestions for you
             </h1>
             <div className="mt-3">

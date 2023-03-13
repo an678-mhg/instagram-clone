@@ -26,11 +26,6 @@ export const sidebars: Sidebar[] = [
     title: "Messages",
     href: "/messages",
   },
-  {
-    icons: Create,
-    title: "Create",
-    href: "/create",
-  },
 ];
 export const ACCESS_TOKEN = "accessToken";
 export const REFRESH_TOKEN = "refreshToken";
