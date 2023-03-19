@@ -9,9 +9,10 @@ import { MdOutlineAutoStories } from "react-icons/md";
 import { useState } from "react";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";
 import ImageSlide from "../ImageSlide";
-import { IoMdResize } from "react-icons/io";
-import Tippy from "@tippyjs/react/headless";
-import MenuRadio from "../Menu/MenuRadio";
+import { toast } from "react-hot-toast";
+import { useMutation } from "react-query";
+import { addPost } from "../../services/posts";
+import uploadFile from "../../utils/upload";
 
 interface FilePreview {
   file: File;
@@ -21,24 +22,29 @@ interface FilePreview {
 interface FormData {
   caption: string;
   files: FilePreview[];
-  type: "post" | "stories";
+  type: "posts" | "stories";
 }
+
+const initialFormData: FormData = {
+  caption: "",
+  files: [],
+  type: "posts",
+};
 
 const CreatePostModal = () => {
   const { user } = useContext(AuthContext);
   const { setIsOpen } = useContext(CreatePostModalContext);
 
   const [showType, setShowType] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
-    caption: "",
-    files: [],
-    type: "post",
-  });
-  const [showMenuRadio, setShowMenuRadio] = useState(false);
-  const [radio, setRadio] = useState<"1/1" | "16/9" | "4/5">("1/1");
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [loading, setLoading] = useState(false);
 
   const media = useMemo(
-    () => formData?.files?.map((file) => file.preview),
+    () =>
+      formData?.files?.map((file) => ({
+        url: file.preview,
+        type: file.file.type,
+      })),
     [formData?.files?.length]
   );
 
@@ -49,8 +55,11 @@ const CreatePostModal = () => {
     };
   }, [formData?.files?.length]);
 
+  const { mutateAsync } = useMutation(addPost);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files as FileList);
+
     setFormData({
       ...formData,
       files: files?.map((file) => {
@@ -62,22 +71,57 @@ const CreatePostModal = () => {
     });
   };
 
+  const handleAddPost = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!formData.caption || formData.files?.length === 0) {
+      return toast.error("A caption or photo is required!");
+    }
+
+    let toastId;
+
+    try {
+      toastId = toast.loading("Upload posts start");
+      setLoading(true);
+
+      const media = await Promise.all(
+        formData?.files?.map((file) => uploadFile(file.file))
+      );
+
+      await mutateAsync({
+        caption: formData.caption,
+        media,
+        post_type: formData.type,
+        user_id: user?._id as string,
+      });
+
+      setIsOpen(false);
+
+      toast.dismiss(toastId);
+      toast.success("Upload post success");
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error("Upload posts failed");
+    }
+  };
+
   return (
-    <div
-      className={`md:w-[835px] max-w-full ${
-        formData?.files?.length === 0 ? "h-[500px]" : "h-auto"
-      } mx-auto overflow-hidden rounded-md bg-white flex flex-col`}
+    <form
+      onSubmit={handleAddPost}
+      className={`md:w-[835px] max-w-full h-[540px] mx-auto overflow-hidden rounded-md bg-white flex flex-col`}
     >
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
         <BiArrowBack onClick={() => setIsOpen(false)} className="text-2xl" />
         <h1 className="font-semibold">Create new {formData.type}</h1>
-        <button className="font-semibold text-blue-500">Share</button>
+        <button disabled={loading} className="font-semibold text-blue-500">
+          Share
+        </button>
       </div>
 
-      <div className="w-full flex-1 flex md:flex-row flex-col h-full">
-        <div className="md:w-[60%] relative flex justify-center items-center h-full flex-col">
+      <div className="w-full flex-1 flex md:flex-row flex-col h-full overflow-hidden">
+        <div className="md:w-[60%] overflow-hidden relative flex justify-center items-center h-full flex-col">
           {formData?.files?.length > 0 ? (
-            <ImageSlide radio={radio} contain={true} media={media} />
+            <ImageSlide media={media} />
           ) : (
             <div className="flex items-center flex-col">
               <VideoAndImage />
@@ -85,6 +129,7 @@ const CreatePostModal = () => {
                 Drag, drop video and image file
               </h3>
               <input
+                accept="image/*, video/*"
                 onChange={handleFileChange}
                 id="fileSelect"
                 type="file"
@@ -98,22 +143,6 @@ const CreatePostModal = () => {
                 Select file to computer
               </label>
             </div>
-          )}
-
-          {formData?.files?.length > 0 && (
-            <Tippy
-              onClickOutside={() => setShowMenuRadio(false)}
-              visible={showMenuRadio}
-              interactive
-              render={(attrs) => <MenuRadio {...attrs} setRadio={setRadio} />}
-            >
-              <div
-                onClick={() => setShowMenuRadio(true)}
-                className="bg-[rgba(0,0,0,0.646)] cursor-pointer flex items-center justify-center w-[30px] h-[30px] rounded-full absolute left-0 bottom-0 z-[99999999] m-2"
-              >
-                <IoMdResize color="#fff" />
-              </div>
-            </Tippy>
           )}
         </div>
         <div className="p-4 flex-1 flex flex-col border-l md:border-t-0 border-t border-gray-200">
@@ -150,7 +179,7 @@ const CreatePostModal = () => {
             {showType && (
               <ul className="mt-3">
                 <li
-                  onClick={() => setFormData({ ...formData, type: "post" })}
+                  onClick={() => setFormData({ ...formData, type: "posts" })}
                   className="text-sm p-2 flex items-center justify-between"
                 >
                   Post <BsFilePostFill className="w-5 h-5" />
@@ -166,7 +195,7 @@ const CreatePostModal = () => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

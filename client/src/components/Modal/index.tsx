@@ -8,7 +8,7 @@ const Modal = ({ children, handleClose }: Modal) => {
   return (
     <div
       onClick={handleClose}
-      className="fixed inset-0 bg-[#000000a1] flex items-center justify-center z-[99999]"
+      className="fixed inset-0 bg-[#000000a1] flex items-center justify-center z-[9999]"
     >
       <div
         onClick={(e) => e.stopPropagation()}

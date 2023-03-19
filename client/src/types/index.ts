@@ -77,3 +77,10 @@ export interface SignUpResponse extends Response {
   user: User;
   result: any;
 }
+
+export interface CreatePostFormValue {
+  caption: string;
+  media: string[];
+  post_type: "stories" | "posts";
+  user_id: string;
+}

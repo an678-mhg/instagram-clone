@@ -7,11 +7,30 @@ import Save from "../../assets/icons/Save";
 import ImageSlide from "../ImageSlide";
 
 const media = [
-  "https://images.unsplash.com/photo-1676739210571-0f3dc022c3d4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1676735296710-758d95e3044f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1676798665374-96270c5655f0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
-  "https://plus.unsplash.com/premium_photo-1661512469330-822bbfbd6a48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-  "https://res.cloudinary.com/annnn/video/upload/v1676561561/lc3lxaxfic4v2gbdmxyc.jpg",
+  {
+    url: "https://images.unsplash.com/photo-1676739210571-0f3dc022c3d4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    type: "image",
+  },
+  {
+    url: "https://plus.unsplash.com/premium_photo-1661776042506-9154882ba689?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    type: "image",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1678801869142-488f27d9b42a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    type: "image",
+  },
+  {
+    url: "https://plus.unsplash.com/premium_photo-1663013584567-23392ce22001?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+    type: "image",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1678845530054-0268510ebc25?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
+    type: "image",
+  },
+  {
+    url: "http://res.cloudinary.com/annnn/video/upload/v1678089139/cto16qizlmm0ah3cqy2h.mp4",
+    type: "video",
+  },
 ];
 
 const PostItem = () => {
