@@ -1,31 +1,32 @@
+import { useQuery } from "react-query";
 import AccountItem from "../components/Account/AccountItem";
 import AccountProfile from "../components/Account/AccountProfile";
 import MainLayout from "../components/Layout/MainLayout";
 import PostItem from "../components/Post/PostItem";
-import StoryItem from "../components/StoryItem";
+import { getSuggestAccount } from "../services/follow";
+import { getPosts } from "../services/posts";
+import postKey from "../utils/react-query-key";
 
 const Home = () => {
+  const { data, isLoading, isError } = useQuery([postKey.GET_HOME_FEED], () =>
+    Promise.all([getPosts(5, 0), getSuggestAccount()])
+  );
+
+  console.log(data);
+
   return (
     <MainLayout>
       <div className="xl:w-[917px] max-w-full py-8 flex">
-        {/* List Post */}
         <div className="md:w-[470px] max-w-full">
-          {/* <div className="mb-8 flex items-center justify-between md:px-0 px-2">
-            <StoryItem />
-            <StoryItem />
-            <StoryItem />
-            <StoryItem />
-            <StoryItem />
-          </div> */}
-          {/* Post Item */}
+          {isLoading && <p>Loading...</p>}
+
           <div>
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
+            {data &&
+              data[0]?.posts?.map((post) => (
+                <PostItem post={post} key={post._id} />
+              ))}
           </div>
         </div>
-        {/* Suggested Account */}
         <div className="flex-1 ml-[64px] xl:block hidden">
           <AccountProfile />
           <div className="mt-6">
@@ -33,11 +34,10 @@ const Home = () => {
               Suggestions for you
             </h1>
             <div className="mt-3">
-              <AccountItem />
-              <AccountItem />
-              <AccountItem />
-              <AccountItem />
-              <AccountItem />
+              {data &&
+                data[1]?.account?.map((account) => (
+                  <AccountItem key={account._id} account={account} />
+                ))}
             </div>
           </div>
           <button className="text-sm text-blue-500 px-4 py-2 font-semibold">

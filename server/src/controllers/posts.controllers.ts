@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import postsModels from "../models/posts.models";
 import { addPostBody } from "../types";
+import checkAuth from "../utils/checkAuth";
 
 class postControllers {
   async addPost(req: Request, res: Response) {
@@ -34,9 +35,10 @@ class postControllers {
     const limit = Number(req.query?.limit) || 5;
     const skip = Number(req.query?.skip) || 0;
 
+    const user_id = checkAuth(req.header("Authorization") as string);
+
     try {
       const posts = await postsModels.aggregate([
-        // Join với collection Users để lấy thông tin người đăng post
         {
           $lookup: {
             from: "users",
@@ -45,9 +47,7 @@ class postControllers {
             as: "user",
           },
         },
-        // Unwind kết quả từ join với Users
         { $unwind: "$user" },
-        // Join với collection Likes để đếm số lượng like của mỗi post
         {
           $lookup: {
             from: "likes",
@@ -56,9 +56,7 @@ class postControllers {
             as: "likes",
           },
         },
-        // Tính toán số lượng like bằng size của mảng likes
         { $addFields: { like_count: { $size: "$likes" } } },
-        // Join với collection Comments để đếm số lượng comment của mỗi post
         {
           $lookup: {
             from: "comments",
@@ -67,9 +65,7 @@ class postControllers {
             as: "comments",
           },
         },
-        // Tính toán số lượng comment bằng size của mảng comments
         { $addFields: { comment_count: { $size: "$comments" } } },
-        // Chỉ lấy các trường cần thiết của collection Posts
         {
           $project: {
             _id: 1,
@@ -83,6 +79,14 @@ class postControllers {
             },
             like_count: 1,
             comment_count: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            is_liked: { $in: [user_id, "$likes.user"] },
+          },
+        },
+        {
+          $sort: {
+            createdAt: -1,
           },
         },
         {

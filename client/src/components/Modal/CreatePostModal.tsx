@@ -13,6 +13,8 @@ import { toast } from "react-hot-toast";
 import { useMutation } from "react-query";
 import { addPost } from "../../services/posts";
 import uploadFile from "../../utils/upload";
+import { useQueryClient } from "react-query";
+import postKey from "../../utils/react-query-key";
 
 interface FilePreview {
   file: File;
@@ -34,19 +36,11 @@ const initialFormData: FormData = {
 const CreatePostModal = () => {
   const { user } = useContext(AuthContext);
   const { setIsOpen } = useContext(CreatePostModalContext);
+  const queryClient = useQueryClient();
 
   const [showType, setShowType] = useState(false);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [loading, setLoading] = useState(false);
-
-  const media = useMemo(
-    () =>
-      formData?.files?.map((file) => ({
-        url: file.preview,
-        type: file.file.type,
-      })),
-    [formData?.files?.length]
-  );
 
   useEffect(() => {
     return () => {
@@ -97,6 +91,7 @@ const CreatePostModal = () => {
 
       setIsOpen(false);
 
+      queryClient.refetchQueries([postKey.GET_HOME_FEED]);
       toast.dismiss(toastId);
       toast.success("Upload post success");
     } catch (error) {
@@ -121,7 +116,7 @@ const CreatePostModal = () => {
       <div className="w-full flex-1 flex md:flex-row flex-col h-full overflow-hidden">
         <div className="md:w-[60%] overflow-hidden relative flex justify-center items-center h-full flex-col">
           {formData?.files?.length > 0 ? (
-            <ImageSlide media={media} />
+            <ImageSlide media={formData?.files?.map((file) => file.preview)} />
           ) : (
             <div className="flex items-center flex-col">
               <VideoAndImage />

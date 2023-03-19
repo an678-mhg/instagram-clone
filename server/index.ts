@@ -8,6 +8,7 @@ import authRouters from "./src/routers/auth.routers";
 import postsRouters from "./src/routers/posts.routers";
 import likeRouters from "./src/routers/likes.routers";
 import commentRouters from "./src/routers/comments.routers";
+import followRouters from "./src/routers/follow.models";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/auth", authRouters);
 app.use("/api/posts", postsRouters);
 app.use("/api/reaction", likeRouters);
 app.use("/api/comment", commentRouters);
+app.use("/api/follow", followRouters);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
