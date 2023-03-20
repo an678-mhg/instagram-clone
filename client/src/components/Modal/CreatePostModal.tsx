@@ -1,7 +1,7 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import Emoji from "../../assets/icons/Emoji";
+// import Emoji from "../../assets/icons/Emoji";
 import VideoAndImage from "../../assets/images/VideoAndImage";
 import { AuthContext } from "../../context/AuthContext";
 import { BsChevronDown, BsFilePostFill } from "react-icons/bs";
@@ -161,7 +161,7 @@ const CreatePostModal = () => {
             className="outline-none text-sm w-full text-black mt-3 flex-1"
           />
           <div className="flex items-center justify-between mt-3">
-            <Emoji width={20} height={20} />
+            {/* <Emoji width={20} height={20} /> */}
             <p className="text-xs text-gray-500">0/2,200</p>
           </div>
           <div className="mt-3 cursor-pointer">
