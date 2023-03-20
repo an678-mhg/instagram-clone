@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
+import followModels from "../models/follow.models";
 import usersModels from "../models/users.models";
+import { followUserBody } from "../types";
+import checkAuth from "../utils/checkAuth";
 
 class followControllers {
   async getSuggestAccount(req: Request, res: Response) {
+    const user_id = checkAuth(req.header("Authorization") as string);
+    let follow: any[] = [];
+
     try {
       const account = await usersModels.aggregate([
-        // Lấy các bài post của mỗi tài khoản
         {
           $lookup: {
             from: "posts",
@@ -14,19 +19,16 @@ class followControllers {
             as: "posts",
           },
         },
-        // Loại bỏ các tài khoản không có bài post
         {
           $match: {
             "posts.0": { $exists: true },
           },
         },
-        // Sắp xếp theo bài viết mới nhất
         {
           $sort: {
             createdAt: -1,
           },
         },
-        // Chỉ lấy ra các trường thông tin cần thiết
         {
           $project: {
             _id: 1,
@@ -38,7 +40,48 @@ class followControllers {
         },
       ]);
 
-      res.json({ success: true, account });
+      if (user_id) {
+        follow = await followModels.find({
+          user: user_id,
+          user_follow: account.map((account) => account._id),
+        });
+      }
+
+      res.json({
+        success: true,
+        account: account?.map((account) => ({
+          ...account,
+          is_follow: follow.some(
+            (item) => item.user_follow?.toString() === account._id?.toString()
+          ),
+        })),
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async followUser(req: Request, res: Response) {
+    const { user_follow } = req.body as followUserBody;
+    const user_id = req.body._id;
+
+    try {
+      const existFollow = await followModels.findOne({
+        user: user_id,
+        user_follow,
+      });
+
+      if (!existFollow) {
+        await new followModels({
+          user: user_id,
+          user_follow,
+        }).save();
+      } else {
+        await followModels.findOneAndDelete({ _id: existFollow._id });
+      }
+
+      res.json({ success: true });
     } catch (error) {
       res
         .status(500)

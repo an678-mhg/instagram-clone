@@ -33,3 +33,7 @@ export interface addCommentBody {
   post_id: string;
   comment: string;
 }
+
+export interface followUserBody {
+  user_follow: string;
+}

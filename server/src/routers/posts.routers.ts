@@ -12,6 +12,6 @@ routers.post("/create", verifyToken, postsControllers.addPost);
 // private
 // description: get posts
 // /api/posts/gets
-routers.get("/gets", postsControllers.getPosts);
+routers.get("/gets", verifyToken, postsControllers.getPosts);
 
 export default routers;

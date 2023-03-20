@@ -8,7 +8,7 @@ import authRouters from "./src/routers/auth.routers";
 import postsRouters from "./src/routers/posts.routers";
 import likeRouters from "./src/routers/likes.routers";
 import commentRouters from "./src/routers/comments.routers";
-import followRouters from "./src/routers/follow.models";
+import followRouters from "./src/routers/follow.routers";
 
 dotenv.config();
 
