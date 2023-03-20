@@ -1,5 +1,7 @@
-const postKey = {
+export const postKey = {
   GET_HOME_FEED: "GET_HOME_FEED",
 };
 
-export default postKey;
+export const accountKey = {
+  GET_SUGGEST_ACCOUNT: "GET_SUGGEST_ACCOUNT",
+};

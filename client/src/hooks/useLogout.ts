@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { logout } from "../services/auth";
 import { toast } from "react-hot-toast";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/contants";
 
 const useLogout = () => {
   const { setUser } = useContext(AuthContext);
+  const queryClient = useQueryClient();
 
   const { mutateAsync, isLoading } = useMutation(logout, {
     onSuccess: (response) => {
@@ -15,6 +16,7 @@ const useLogout = () => {
         localStorage.removeItem(REFRESH_TOKEN);
         setUser(null);
         toast.success("Logout success!");
+        queryClient.clear();
       }
     },
     onError: () => {

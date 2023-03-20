@@ -2,6 +2,8 @@ import { Response } from "../types";
 
 export interface HomeFeed extends Response {
   posts: Post[];
+  hashNextPage: boolean;
+  nextSkip: number | null;
 }
 
 export interface Post {
@@ -13,6 +15,7 @@ export interface Post {
   comment_count: number;
   createdAt: string;
   updatedAt: string;
+  is_liked: boolean;
 }
 
 export interface User {
@@ -20,4 +23,5 @@ export interface User {
   fullname: string;
   username: string;
   avatar: string;
+  is_follow: boolean;
 }

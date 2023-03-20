@@ -14,7 +14,7 @@ import { useMutation } from "react-query";
 import { addPost } from "../../services/posts";
 import uploadFile from "../../utils/upload";
 import { useQueryClient } from "react-query";
-import postKey from "../../utils/react-query-key";
+import { postKey } from "../../utils/react-query-key";
 
 interface FilePreview {
   file: File;
