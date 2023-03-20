@@ -6,6 +6,7 @@ import checkAuth from "../utils/checkAuth";
 
 class followControllers {
   async getSuggestAccount(req: Request, res: Response) {
+    const limit = Number(req.query.limit) || 5;
     const user_id = checkAuth(req.header("Authorization") as string);
     let follow: any[] = [];
 
@@ -38,12 +39,15 @@ class followControllers {
             createdAt: 1,
           },
         },
+        {
+          $limit: limit,
+        },
       ]);
 
       if (user_id) {
         follow = await followModels.find({
           user: user_id,
-          user_follow: account.map((account) => account._id),
+          user_follow: { $in: account.map((account) => account._id) },
         });
       }
 

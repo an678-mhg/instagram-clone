@@ -4,8 +4,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 // import Emoji from "../../assets/icons/Emoji";
 import VideoAndImage from "../../assets/images/VideoAndImage";
 import { AuthContext } from "../../context/AuthContext";
-import { BsChevronDown, BsFilePostFill } from "react-icons/bs";
-import { MdOutlineAutoStories } from "react-icons/md";
 import { useState } from "react";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";
 import ImageSlide from "../ImageSlide";
@@ -38,7 +36,6 @@ const CreatePostModal = () => {
   const { setIsOpen } = useContext(CreatePostModalContext);
   const queryClient = useQueryClient();
 
-  const [showType, setShowType] = useState(false);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [loading, setLoading] = useState(false);
 
@@ -160,34 +157,6 @@ const CreatePostModal = () => {
             placeholder="Write a caption..."
             className="outline-none text-sm w-full text-black mt-3 flex-1"
           />
-          <div className="flex items-center justify-between mt-3">
-            {/* <Emoji width={20} height={20} /> */}
-            <p className="text-xs text-gray-500">0/2,200</p>
-          </div>
-          <div className="mt-3 cursor-pointer">
-            <p
-              onClick={() => setShowType(!showType)}
-              className="flex items-center justify-between"
-            >
-              Type <BsChevronDown className="cursor-pointer" />
-            </p>
-            {showType && (
-              <ul className="mt-3">
-                <li
-                  onClick={() => setFormData({ ...formData, type: "posts" })}
-                  className="text-sm p-2 flex items-center justify-between"
-                >
-                  Post <BsFilePostFill className="w-5 h-5" />
-                </li>
-                <li
-                  onClick={() => setFormData({ ...formData, type: "stories" })}
-                  className="text-sm p-2 flex items-center justify-between"
-                >
-                  Stories <MdOutlineAutoStories className="w-5 h-5" />
-                </li>
-              </ul>
-            )}
-          </div>
         </div>
       </div>
     </form>
