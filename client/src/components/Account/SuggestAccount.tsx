@@ -19,7 +19,7 @@ const SuggestAccount = () => {
         </h1>
         <div className="mt-3">
           {isLoading && <p>LOading...</p>}
-          {data?.account?.map((account) => (
+          {data?.map((account) => (
             <AccountItem
               isFetching={isFetching}
               key={account._id}

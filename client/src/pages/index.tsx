@@ -38,8 +38,14 @@ const Home = () => {
                 curr.push(...page.posts);
                 return curr;
               }, [] as Post[])
-              .map((post) => (
-                <PostItem key={post._id} post={post} isFetching={isFetching} />
+              .map((post, index) => (
+                <PostItem
+                  limit={5}
+                  index={index}
+                  key={post._id}
+                  post={post}
+                  isFetching={isFetching}
+                />
               ))}
 
             <InView

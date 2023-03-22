@@ -1,10 +1,11 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { toast } from "react-hot-toast";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useMutation, useQueryClient } from "react-query";
 import { AuthContext } from "../../context/AuthContext";
 import { followUser } from "../../services/follow";
 import { User } from "../../types/posts";
+import { accountKey } from "../../utils/react-query-key";
 
 interface AccountItemProps {
   account: User;
@@ -13,25 +14,32 @@ interface AccountItemProps {
 
 const AccountItem: React.FC<AccountItemProps> = ({ account, isFetching }) => {
   const { user } = useContext(AuthContext);
-  const [follow, setFollow] = useState(account.is_follow);
   const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation(followUser, {
     onError: () => {
-      setFollow((prev) => !prev);
       toast.error("Something went wrong!");
     },
   });
 
   const handleFollowUser = () => {
     if (!user) return toast.error("You need login to follow user!");
-    setFollow((prev) => !prev);
+
+    const oldData = queryClient.getQueryData([
+      accountKey.GET_SUGGEST_ACCOUNT,
+    ]) as User[];
+
+    queryClient.setQueryData(
+      [accountKey.GET_SUGGEST_ACCOUNT],
+      oldData?.map((item) =>
+        item._id === account._id
+          ? { ...item, is_follow: !item.is_follow }
+          : { ...item }
+      )
+    );
+
     mutateAsync(account._id);
   };
-
-  useEffect(() => {
-    setFollow(account.is_follow);
-  }, [account.is_follow]);
 
   return (
     <div className="flex items-center justify-between px-4 py-2 last:mb-0">
@@ -55,10 +63,10 @@ const AccountItem: React.FC<AccountItemProps> = ({ account, isFetching }) => {
           disabled={isFetching}
           onClick={handleFollowUser}
           className={`p-2 ${
-            follow ? "text-gray-600" : "text-blue-500"
+            account.is_follow ? "text-gray-600" : "text-blue-500"
           } font-semibold text-sm`}
         >
-          {follow ? "Following" : "Follow"}
+          {account.is_follow ? "Following" : "Follow"}
         </button>
       )}
     </div>

@@ -4,7 +4,7 @@ import client from "../utils/client";
 
 export const getSuggestAccount = async () => {
   const response = await client.get<SuggestAccount>("/follow/suggest-account");
-  return response.data;
+  return response.data.account;
 };
 
 export const followUser = async (user_follow: string) => {
