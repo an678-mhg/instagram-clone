@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { toast } from "react-hot-toast";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useMutation, useQueryClient } from "react-query";
 import { AuthContext } from "../../context/AuthContext";
 import { followUser } from "../../services/follow";

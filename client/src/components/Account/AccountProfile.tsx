@@ -1,4 +1,3 @@
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import useLogout from "../../hooks/useLogout";

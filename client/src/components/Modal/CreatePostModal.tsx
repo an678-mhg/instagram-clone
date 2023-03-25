@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 // import Emoji from "../../assets/icons/Emoji";
 import VideoAndImage from "../../assets/images/VideoAndImage";
 import { AuthContext } from "../../context/AuthContext";

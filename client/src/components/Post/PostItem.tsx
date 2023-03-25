@@ -1,4 +1,3 @@
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { InfiniteData, useMutation, useQueryClient } from "react-query";
 import Comment from "../../assets/icons/Comment";
 import Like from "../../assets/icons/Like";

@@ -1,6 +1,5 @@
 import Logo from "../../assets/images/Logo";
 import { Link } from "react-router-dom";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import LogoImage from "../../assets/images/LogoImage";
 import SidebarItem from "./SidebarItem";
 import { sidebars } from "../../utils/contants";

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const listScreenShot = [
   "/images/screenshot1.png",
