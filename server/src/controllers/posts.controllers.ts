@@ -36,21 +36,32 @@ class postControllers {
   async getPosts(req: Request, res: Response) {
     const limit = Number(req.query?.limit) || 5;
     const skip = Number(req.query?.skip) || 0;
+    const type = String(req.query.type) || "feed";
     let likes: any[] = [];
     const user_id = req.body._id;
 
     try {
       const followUser = await followModels.find({ user: user_id });
 
-      const posts = await postsModels.aggregate([
-        {
-          $match: {
-            user: {
+      const query =
+        type === "feed"
+          ? {
               $in: [
                 ...followUser?.map((item) => item.user_follow),
                 new mongoose.Types.ObjectId(user_id),
               ],
-            },
+            }
+          : {
+              $nin: [
+                ...followUser?.map((item) => item.user_follow),
+                new mongoose.Types.ObjectId(user_id),
+              ],
+            };
+
+      const posts = await postsModels.aggregate([
+        {
+          $match: {
+            user: query,
           },
         },
         {
