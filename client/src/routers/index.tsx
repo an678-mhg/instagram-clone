@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import AuthLayout from "../components/Layout/AuthLayout";
-import MainLayout from "../components/Layout/MainLayout";
-import ProtecedLayout from "../components/Layout/ProtecedLayout";
+import AuthLayout from "../components/Layouts/AuthLayout";
+import MainLayout from "../components/Layouts/MainLayout";
+import ProtecedLayout from "../components/Layouts/ProtecedLayout";
 import Home from "../pages";
 import Active from "../pages/active";
 import Explore from "../pages/explore";
