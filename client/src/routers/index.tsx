@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "../components/Layout/AuthLayout";
+import MainLayout from "../components/Layout/MainLayout";
 import ProtecedLayout from "../components/Layout/ProtecedLayout";
 import Home from "../pages";
 import Active from "../pages/active";
@@ -15,7 +16,9 @@ const routers = createBrowserRouter([
     path: "/",
     element: (
       <ProtecedLayout>
-        <Home />
+        <MainLayout>
+          <Home />
+        </MainLayout>
       </ProtecedLayout>
     ),
   },
@@ -25,7 +28,13 @@ const routers = createBrowserRouter([
   },
   {
     path: "/explore",
-    element: <Explore />,
+    element: (
+      <ProtecedLayout>
+        <MainLayout>
+          <Explore />
+        </MainLayout>
+      </ProtecedLayout>
+    ),
   },
   {
     path: "/signin",

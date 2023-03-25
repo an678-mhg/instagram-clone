@@ -24,11 +24,15 @@ const Phone = () => {
   return (
     <div className="mr-6 lg:block hidden">
       <div className="relative">
-        <LazyLoadImage src="/images/home-phones.png" alt="home-phones.png" />
+        <img
+          src="/images/home-phones.png"
+          loading="lazy"
+          alt="home-phones.png"
+        />
         <div className="absolute top-[29px] right-[60px]">
           {listScreenShot?.map((item, index) => (
-            <LazyLoadImage
-              effect="blur"
+            <img
+              loading="lazy"
               key={item}
               src={item}
               className={`${

@@ -49,6 +49,15 @@ input {
   background-clip: content-box, border-box;
 }
 
+.post-explore-overlay {
+  opacity: 0;
+  transition: all ease-in-out 0.4s;
+}
+
+.post-explore:hover .post-explore-overlay {
+  opacity: 1;
+}
+
 @keyframes fade {
   to {
     opacity: 1;

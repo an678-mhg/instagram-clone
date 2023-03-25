@@ -10,12 +10,14 @@ export const addPost = async (post: CreatePostFormValue) => {
 
 export const getPosts = async (
   limit: number,
-  page: QueryFunctionContext<string[], any>
+  page: QueryFunctionContext<string[], any>,
+  type: "feed" | "explore"
 ) => {
   const response = await client.get<HomeFeed>("/posts/gets", {
     params: {
       limit,
       skip: page?.pageParam || 0,
+      type,
     },
   });
   return response.data;

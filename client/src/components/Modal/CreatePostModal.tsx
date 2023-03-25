@@ -139,10 +139,10 @@ const CreatePostModal = () => {
         </div>
         <div className="p-4 flex-1 flex flex-col border-l md:border-t-0 border-t border-gray-200">
           <div className="flex items-center">
-            <LazyLoadImage
+            <img
+              loading="lazy"
               src={user?.avatar}
               className="w-8 h-8 rounded-full"
-              effect="blur"
             />
             <p className="text-sm font-semibold ml-3">
               {user?.username}{" "}

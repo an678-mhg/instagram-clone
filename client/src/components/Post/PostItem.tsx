@@ -46,7 +46,6 @@ const PostItem: React.FC<PostItemProps> = ({
     ]) as InfiniteData<HomeFeed>;
 
     const pageCurrent = Math.floor(index / limit);
-    console.log(pageCurrent);
 
     const newData = { ...oldData };
 
@@ -72,8 +71,8 @@ const PostItem: React.FC<PostItemProps> = ({
     <div className="mb-5 last:mb-0 md:px-0 px-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <LazyLoadImage
-            effect="blur"
+          <img
+            loading="lazy"
             className="w-[42px] h-[42px] rounded-full"
             src={post.user?.avatar}
           />

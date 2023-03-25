@@ -44,8 +44,8 @@ const AccountItem: React.FC<AccountItemProps> = ({ account, isFetching }) => {
   return (
     <div className="flex items-center justify-between px-4 py-2 last:mb-0">
       <div className="flex items-center">
-        <LazyLoadImage
-          effect="blur"
+        <img
+          loading="lazy"
           className="w-[35px] h-[35px] rounded-full"
           src={account.avatar}
         />
