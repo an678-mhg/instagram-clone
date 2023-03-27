@@ -53,7 +53,7 @@ class authControllers {
       const accessToken = generateAccessToken({ _id: user._id });
       const refreshToken = generateRefreshToken({ _id: user._id });
 
-      user.refreshToken = refreshToken;
+      user.refreshToken.push(refreshToken);
       await user.save();
 
       const {
@@ -173,7 +173,7 @@ class authControllers {
 
       user.active = true;
       user.activeToken = "";
-      user.refreshToken = refreshToken;
+      user.refreshToken.push(refreshToken);
 
       await user.save();
 
@@ -226,7 +226,7 @@ class authControllers {
           .json({ success: false, message: "Refresh token is not valid!" });
       }
 
-      if (user.refreshToken !== refreshToken) {
+      if (!user.refreshToken.includes(refreshToken)) {
         return res
           .status(401)
           .json({ success: false, message: "Refresh token is not valid!" });
@@ -235,7 +235,8 @@ class authControllers {
       const accessToken = generateAccessToken({ _id: user._id });
       const newRefreshToken = generateRefreshToken({ _id: user._id });
 
-      user.refreshToken = newRefreshToken;
+      user.refreshToken.push(newRefreshToken);
+
       await user.save();
 
       res.json({
@@ -279,13 +280,16 @@ class authControllers {
           .json({ success: false, message: "Refresh token is not valid!" });
       }
 
-      if (user.refreshToken !== refreshToken) {
+      if (!user.refreshToken.includes(refreshToken)) {
         return res
           .status(401)
           .json({ success: false, message: "Refresh token is not valid!" });
       }
 
-      user.refreshToken = "";
+      user.refreshToken = user.refreshToken.filter(
+        (token) => token !== refreshToken
+      );
+
       await user.save();
 
       res.json({ success: true, message: "Log out success!" });
@@ -335,7 +339,7 @@ class authControllers {
         const refreshToken = generateRefreshToken({ _id: user._id });
 
         user.active = true;
-        user.refreshToken = refreshToken;
+        user.refreshToken.push(refreshToken);
         await user.save();
 
         const {
@@ -369,7 +373,7 @@ class authControllers {
       const accessToken = generateAccessToken({ _id: newUser._id });
       const refreshToken = generateRefreshToken({ _id: newUser._id });
 
-      newUser.refreshToken = refreshToken;
+      newUser.refreshToken.push(refreshToken);
       await newUser.save();
 
       const {

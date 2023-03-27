@@ -49,8 +49,8 @@ const users = new Schema(
       default: "",
     },
     refreshToken: {
-      type: String,
-      default: "",
+      type: Array,
+      default: [],
     },
   },
   {
