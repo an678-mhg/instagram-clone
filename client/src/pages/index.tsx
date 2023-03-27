@@ -2,7 +2,9 @@ import { CircularProgress } from "react-cssfx-loading";
 import { InView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 import SuggestAccount from "../components/Account/SuggestAccount";
+import NoPostYet from "../components/NoPostYet";
 import PostItem from "../components/Post/PostItem";
+import PostSkeleton from "../components/Skeleton/PostSkeleton";
 import { getPosts } from "../services/posts";
 import { Post } from "../types/posts";
 import { postKey } from "../utils/react-query-key";
@@ -24,22 +26,19 @@ const Home = () => {
     }
   );
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (isError) {
     return <p>Failed to load data...</p>;
-  }
-
-  if (data?.pages?.length === 0 || data?.pages[0]?.posts?.length === 0) {
-    return <div className="flex-grow text-center">There is no posts yet</div>;
   }
 
   return (
     <div className="xl:w-[917px] max-w-full py-8 flex">
       <div className="md:w-[470px] max-w-full">
         <div>
+          {isLoading && <PostSkeleton />}
+
+          {data?.pages?.length === 0 ||
+            (data?.pages[0]?.posts?.length === 0 && <NoPostYet />)}
+
           {data?.pages
             ?.reduce((curr, page) => {
               // @ts-ignore

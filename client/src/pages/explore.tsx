@@ -1,6 +1,7 @@
 import { CircularProgress } from "react-cssfx-loading";
 import { InView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
+import NoPostYet from "../components/NoPostYet";
 import PostExplore from "../components/Post/PostExplore";
 import { getPosts } from "../services/posts";
 import { Post } from "../types/posts";
@@ -22,20 +23,28 @@ const Explore = () => {
     }
   );
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (isError) {
     return <p>Failed to load data...</p>;
   }
 
   if (data?.pages?.length === 0 || data?.pages[0]?.posts?.length === 0) {
-    return <div className="flex-grow text-center">There is no posts yet</div>;
+    return (
+      <div className="mt-5">
+        <NoPostYet />
+      </div>
+    );
   }
 
   return (
-    <div className="xl:w-[1050px] max-w-full mt-5">
+    <div className="xl:w-[950px] max-w-full md:mt-5 mt-0">
+      {isLoading && (
+        <div className="w-full grid grid-cols-3 gap-1">
+          {Array.from(Array(6).keys()).map((item) => (
+            <div className="w-full aspect-square skeleton" key={item} />
+          ))}
+        </div>
+      )}
+
       <div className="w-full grid grid-cols-3 gap-1">
         {data?.pages
           ?.reduce((curr, page) => {
@@ -51,6 +60,7 @@ const Explore = () => {
       <InView
         fallbackInView
         onChange={(InVidew) => {
+          console.log("inview");
           if (InVidew && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
           }

@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { getSuggestAccount } from "../../services/follow";
 import { accountKey } from "../../utils/react-query-key";
+import AccountSkeleton from "../Skeleton/AccountSkeleton";
 import AccountItem from "./AccountItem";
 import AccountProfile from "./AccountProfile";
 
@@ -18,7 +19,11 @@ const SuggestAccount = () => {
           Suggestions for you
         </h1>
         <div className="mt-3">
-          {isLoading && <p>LOading...</p>}
+          {isLoading &&
+            Array.from(Array(5).keys()).map((item) => (
+              <AccountSkeleton key={item} />
+            ))}
+
           {data?.map((account) => (
             <AccountItem
               isFetching={isFetching}
