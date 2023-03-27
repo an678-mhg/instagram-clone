@@ -71,7 +71,11 @@ const Explore = () => {
             ref={ref}
             className="mt-5 flex w-full items-center justify-center"
           >
-            {isFetchingNextPage && <CircularProgress />}
+            {isFetchingNextPage && (
+              <div className="mb-5">
+                <CircularProgress />
+              </div>
+            )}
           </div>
         )}
       </InView>

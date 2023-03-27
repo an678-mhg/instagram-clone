@@ -18,7 +18,7 @@ export const sidebars: Sidebar[] = [
   },
   {
     icons: Reels,
-    title: "Reels",
+    title: "Stories",
     href: "/reels",
   },
   {

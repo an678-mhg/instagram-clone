@@ -2,22 +2,17 @@ import Logo from "../../assets/images/Logo";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Response, SignInFormValue } from "../../types";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   AiOutlineEye,
   AiOutlineEyeInvisible,
   AiOutlineWarning,
 } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
-import { AxiosError } from "axios";
-import { googleLogin, signIn } from "../../services/auth";
-import { AuthContext } from "../../context/AuthContext";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../utils/contants";
-import { toast } from "react-hot-toast";
-import { signInWithPopup } from "firebase/auth";
+import { googleLogin } from "../../services/auth";
 import { googleProvider } from "../../config/firebase";
-import { auth } from "../../config/firebase";
+import useSignIn from "../../hooks/useSignIn";
+import useSignInSocial from "../../hooks/useSignInSocial";
 
 const SignInForm = () => {
   const {
@@ -31,61 +26,18 @@ const SignInForm = () => {
     },
   });
 
-  const { setUser } = useContext(AuthContext);
-
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const submitForm = async (values: SignInFormValue) => {
-    const { email, password } = values;
-    setErrorMessage("");
-    setLoading(true);
+  const { errorMessage, isLoading, handleSignIn } = useSignIn();
 
-    const toastId = toast.loading("Account verification...");
-
-    try {
-      const response = await signIn({ email, password });
-      if (response.success) {
-        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        localStorage.setItem(REFRESH_TOKEN, response.refreshToken);
-        setUser(response.user);
-        toast.success("Sign in success", { id: toastId });
-      }
-    } catch (error) {
-      const message = (error as AxiosError<Response>).response?.data.message;
-      setErrorMessage(message as string);
-      toast.error("Sign in failed", { id: toastId });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSignInGoogle = async () => {
-    setLoading(true);
-    let toastId;
-    try {
-      const response = await signInWithPopup(auth, googleProvider);
-      const idTokens = await response.user.getIdToken();
-
-      toastId = toast.loading("Account verification...");
-      const googleResponse = await googleLogin({ idTokens });
-
-      if (googleResponse.success) {
-        localStorage.setItem(ACCESS_TOKEN, googleResponse.accessToken);
-        localStorage.setItem(REFRESH_TOKEN, googleResponse.refreshToken);
-        setUser(googleResponse.user);
-        toast.success("Sign in success", { id: toastId });
-      }
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      toast.error("Sign in failed", { id: toastId });
-    }
-    setLoading(false);
-  };
+  const {
+    handleSignIn: signInGoogle,
+    signInSocialErrorMess,
+    signInSocialLoading,
+  } = useSignInSocial(googleLogin, googleProvider);
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="w-[350px]">
+    <form onSubmit={handleSubmit(handleSignIn)} className="w-[350px]">
       <div className="pt-10 px-5 rounded-md pb-6 w-full border border-gray-200 flex items-center justify-center flex-col">
         <Logo width={174} height={50} />
 
@@ -93,6 +45,13 @@ const SignInForm = () => {
           <span className="mt-3 flex items-center font-semibold text-xs text-red-500">
             <AiOutlineWarning className="mr-1 h-4" />{" "}
             <span>{errorMessage}</span>
+          </span>
+        )}
+
+        {signInSocialErrorMess && (
+          <span className="mt-3 flex items-center font-semibold text-xs text-red-500">
+            <AiOutlineWarning className="mr-1 h-4" />{" "}
+            <span>{signInSocialErrorMess}</span>
           </span>
         )}
 
@@ -150,9 +109,9 @@ const SignInForm = () => {
             )}
           </div>
           <button
-            disabled={loading}
+            disabled={isLoading || signInSocialLoading}
             className={`${
-              loading && "opacity-50"
+              isLoading && "opacity-50"
             } px-4 text-center text-xs font-semibold mt-4 w-full text-white py-2 rounded-md bg-blue-500`}
           >
             Log in
@@ -165,9 +124,9 @@ const SignInForm = () => {
           </div>
           <div className="w-full">
             <button
-              onClick={handleSignInGoogle}
+              onClick={signInGoogle}
               type="button"
-              disabled={loading}
+              disabled={isLoading || signInSocialLoading}
               className="px-3 mb-4 w-full bg-gray-100 py-2 rounded-md text-xs justify-center font-semibold flex items-center"
             >
               <FcGoogle className="w-5 h-5" />{" "}
@@ -175,7 +134,7 @@ const SignInForm = () => {
             </button>
             <button
               type="button"
-              disabled={loading}
+              disabled={isLoading || signInSocialLoading}
               className="px-3 w-full bg-blue-500 py-2 rounded-md text-xs justify-center font-semibold flex items-center"
             >
               <BsFacebook className="w-5 text-white h-5" />{" "}

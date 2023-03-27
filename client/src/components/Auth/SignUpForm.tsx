@@ -1,13 +1,10 @@
 import Logo from "../../assets/images/Logo";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Response, SignUpFormValue } from "../../types";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { AxiosError } from "axios";
-import { signUp } from "../../services/auth";
-import { toast } from "react-hot-toast";
 import { AiOutlineWarning, AiOutlineCheckCircle } from "react-icons/ai";
+import useSignUp from "../../hooks/useSignUp";
 
 const SignUpForm = () => {
   const {
@@ -24,36 +21,10 @@ const SignUpForm = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const submitForm = async (values: SignUpFormValue) => {
-    const { email, password, fullname, username } = values;
-    setErrorMessage("");
-    setSuccessMessage("");
-    setLoading(true);
-
-    const toastId = toast.loading("Account verification...");
-
-    try {
-      const response = await signUp({ email, password, fullname, username });
-      if (response.success) {
-        setErrorMessage("");
-        setSuccessMessage(response.message);
-        toast.success("Sign up success", { id: toastId });
-      }
-    } catch (error) {
-      const message = (error as AxiosError<Response>).response?.data.message;
-      setErrorMessage(message as string);
-      toast.error("Sign up failed", { id: toastId });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { errorMessage, handleSignUp, isLoading, successMessage } = useSignUp();
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="w-[350px]">
+    <form onSubmit={handleSubmit(handleSignUp)} className="w-[350px]">
       <div className="pt-10 px-5 rounded-md pb-6 w-full border border-gray-200 flex items-center justify-center flex-col">
         <Logo width={174} height={50} />
 
@@ -153,9 +124,9 @@ const SignUpForm = () => {
             )}
           </div>
           <button
-            disabled={loading}
+            disabled={isLoading}
             className={`${
-              loading && "opacity-50"
+              isLoading && "opacity-50"
             } px-4 text-center text-xs font-semibold mt-4 w-full text-white py-2 rounded-md bg-blue-500`}
           >
             Sign up
