@@ -45,7 +45,7 @@ const Explore = () => {
         </div>
       )}
 
-      <div className="w-full grid grid-cols-3 gap-1">
+      <div className="w-full grid md:grid-cols-3 grid-cols-2 gap-1">
         {data?.pages
           ?.reduce((curr, page) => {
             // @ts-ignore
