@@ -31,8 +31,8 @@ const Home = () => {
   }
 
   return (
-    <div className="xl:w-[917px] max-w-full py-8 flex">
-      <div className="md:w-[470px] max-w-full">
+    <div className="xl:w-[917px] w-full py-8 flex justify-center">
+      <div className="md:w-[470px] w-full">
         <div>
           {isLoading && <PostSkeleton />}
 

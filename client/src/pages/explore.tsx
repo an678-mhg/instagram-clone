@@ -36,9 +36,9 @@ const Explore = () => {
   }
 
   return (
-    <div className="xl:w-[950px] max-w-full md:mt-5 mt-0">
+    <div className="xl:w-[950px] w-full md:mt-5 mt-0 md:pb-0 pb-8">
       {isLoading && (
-        <div className="w-full grid grid-cols-3 gap-1">
+        <div className="w-full grid md:grid-cols-3 grid-cols-2 gap-1">
           {Array.from(Array(6).keys()).map((item) => (
             <div className="w-full aspect-square skeleton" key={item} />
           ))}

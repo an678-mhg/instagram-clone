@@ -84,3 +84,8 @@ export interface CreatePostFormValue {
   post_type: "stories" | "posts";
   user_id: string;
 }
+
+export interface CreateCommentFormValue {
+  post_id: string;
+  comment: string;
+}

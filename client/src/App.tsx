@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 import { RouterProvider } from "react-router-dom";
 import Slash from "./components/Slash";
 import { AuthContext } from "./context/AuthContext";

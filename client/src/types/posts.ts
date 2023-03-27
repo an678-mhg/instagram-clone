@@ -25,3 +25,20 @@ export interface User {
   avatar: string;
   is_follow: boolean;
 }
+
+export interface PostDetail extends Response {
+  post: Post;
+}
+
+export interface CommentResponse extends Response {
+  comments: Comment[];
+}
+
+export interface Comment {
+  user: User;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  _id: string;
+  num_replies: number;
+}

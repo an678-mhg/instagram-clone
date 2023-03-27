@@ -6,6 +6,7 @@ import Home from "../pages";
 import Active from "../pages/active";
 import Explore from "../pages/explore";
 import Forgot from "../pages/forgot";
+import Post from "../pages/post";
 import Search from "../pages/search";
 import SignIn from "../pages/signin";
 import SignUp from "../pages/signup";
@@ -71,6 +72,10 @@ const routers = createBrowserRouter([
   {
     path: "/stories",
     element: <Stories />,
+  },
+  {
+    path: "/post/:_id",
+    element: <Post />,
   },
 ]);
 

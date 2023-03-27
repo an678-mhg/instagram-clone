@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Comment from "../../assets/icons/Comment";
 import Notification from "../../assets/icons/Notification";
 import { Post } from "../../types/posts";
@@ -8,7 +9,10 @@ interface PostExploreProps {
 
 const PostExplore: React.FC<PostExploreProps> = ({ post }) => {
   return (
-    <div className="aspect-square relative cursor-pointer post-explore">
+    <Link
+      to={`/post/${post._id}`}
+      className="aspect-square relative cursor-pointer post-explore"
+    >
       <img
         src={post.media[0]}
         loading="lazy"
@@ -26,7 +30,7 @@ const PostExplore: React.FC<PostExploreProps> = ({ post }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
