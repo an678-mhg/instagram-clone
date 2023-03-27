@@ -13,7 +13,7 @@ const MainLayout: FC<Layout> = ({ children }) => {
     <div className="flex">
       <Sidebar />
       <div
-        className={`flex flex-col pb-8 md:pb-0 items-center justify-center w-full flex-1 lg:ml-[245px] md:ml-[72px] ml-0`}
+        className={`flex flex-col pb-[60px] md:pb-0 items-center justify-center w-full flex-1 lg:ml-[245px] md:ml-[72px] ml-0`}
       >
         <Headers />
         {children}
