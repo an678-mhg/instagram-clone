@@ -14,4 +14,19 @@ routers.post("/create", verifyToken, postsControllers.addPost);
 // /api/posts/gets
 routers.get("/gets", verifyToken, postsControllers.getPosts);
 
+// public
+// description: get post by id
+// /api/posts/get/:_id
+routers.get("/get/:_id", postsControllers.getPost);
+
+// public
+// desciption: get comment by post_id
+// /api/posts/comment/gets/:post_id
+routers.get("/comment/gets/:post_id", postsControllers.getComment);
+
+// private
+// description: create new comment
+// /api/posts/comment/create
+routers.post("/comment/create", verifyToken, postsControllers.createComment);
+
 export default routers;

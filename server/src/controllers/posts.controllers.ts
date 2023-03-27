@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import commentsModels from "../models/comments.models";
 import followModels from "../models/follow.models";
 import likesModels from "../models/likes.models";
 import postsModels from "../models/posts.models";
 import { addPostBody } from "../types";
+import checkAuth from "../utils/checkAuth";
 
 class postControllers {
   async addPost(req: Request, res: Response) {
@@ -139,6 +141,177 @@ class postControllers {
         hashNextPage: posts?.length >= limit ? true : false,
         nextSkip: posts?.length >= limit ? limit + skip : null,
       });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async getPost(req: Request, res: Response) {
+    const _id = req.params._id;
+    const user_id = checkAuth(req.header("Authorization") as string);
+    let is_liked = false;
+
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing paramerter postId" });
+    }
+
+    try {
+      const post = await postsModels.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(_id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: "$user" },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "post",
+            as: "likes",
+          },
+        },
+        { $addFields: { like_count: { $size: "$likes" } } },
+        {
+          $lookup: {
+            from: "comments",
+            localField: "_id",
+            foreignField: "post",
+            as: "comments",
+          },
+        },
+        { $addFields: { comment_count: { $size: "$comments" } } },
+        {
+          $project: {
+            _id: 1,
+            caption: 1,
+            media: 1,
+            user: {
+              _id: 1,
+              fullname: 1,
+              username: 1,
+              avatar: 1,
+            },
+            like_count: 1,
+            comment_count: 1,
+            createdAt: 1,
+            updatedAt: 1,
+          },
+        },
+      ]);
+
+      if (user_id) {
+        is_liked = Boolean(
+          await likesModels.findOne({ user: user_id, post: _id })
+        );
+      }
+
+      if (post.length === 0) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Post not found!" });
+      }
+
+      res.json({ success: true, post: { ...post[0], is_liked } });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async getComment(req: Request, res: Response) {
+    const post_id = req.params.post_id;
+
+    if (!post_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing paramerter postId" });
+    }
+
+    try {
+      const comments = await commentsModels.aggregate([
+        {
+          $match: {
+            parent_id: null,
+            post: new mongoose.Types.ObjectId(post_id),
+          },
+        },
+        {
+          $lookup: {
+            from: "comments",
+            localField: "_id",
+            foreignField: "parent_id",
+            as: "replies",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: "$user" },
+        {
+          $project: {
+            _id: "$_id",
+            num_replies: { $size: "$replies" },
+            comment: 1,
+            user: {
+              _id: 1,
+              fullname: 1,
+              username: 1,
+              avatar: 1,
+            },
+            createdAt: 1,
+            updatedAt: 1,
+          },
+        },
+      ]);
+
+      res.json({ comments, success: true });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async createComment(req: Request, res: Response) {
+    const { comment, post_id } = req.body as {
+      comment: string;
+      post_id: string;
+    };
+    const user_id = req.body._id;
+
+    if (!comment) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing paramerter comment text" });
+    }
+
+    try {
+      const newComment = new commentsModels({
+        user: user_id,
+        parent_id: null,
+        post: post_id,
+        comment,
+      });
+
+      await newComment.save();
+
+      res.json({ success: true, comment: newComment });
     } catch (error) {
       res
         .status(500)
