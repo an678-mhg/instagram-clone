@@ -41,4 +41,7 @@ export interface Comment {
   updatedAt: string;
   _id: string;
   num_replies: number;
+  like_count: number;
+  post: string;
+  is_liked: boolean;
 }

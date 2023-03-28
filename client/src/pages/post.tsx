@@ -11,6 +11,7 @@ import Notification from "../assets/icons/Notification";
 import Save from "../assets/icons/Save";
 import LogoImage from "../assets/images/LogoImage";
 import CommentItem from "../components/Comment/CommentItem";
+import FormComment from "../components/Comment/FormComment";
 import ImageSlide from "../components/ImageSlide";
 import PostDetailSkeleton from "../components/Skeleton/PostDetailSkeleton";
 import { AuthContext } from "../context/AuthContext";
@@ -27,8 +28,6 @@ const Post = () => {
     () => Promise.all([getPost(_id as string), getComment(_id as string)])
   );
 
-  const [comment, setComment] = useState("");
-
   const bottomCommentRef = useRef<HTMLDivElement | null>(null);
 
   const queryClient = useQueryClient();
@@ -43,12 +42,17 @@ const Post = () => {
           postKey.GET_DETAIL_POST(_id as string),
         ]) as [PostType, Comment[]];
 
-        newData[1].push({
-          _id: response.comment._id,
-          comment: response.comment.comment,
-          createdAt: response.comment.createdAt,
+        const { _id: id, comment, createdAt, updatedAt, post } = response;
+
+        const newComment = {
+          _id: id,
+          comment,
+          createdAt,
+          is_liked: false,
+          like_count: 0,
           num_replies: 0,
-          updatedAt: response.comment.updatedAt,
+          post,
+          updatedAt,
           user: {
             _id: user?._id as string,
             avatar: user?.avatar as string,
@@ -56,7 +60,9 @@ const Post = () => {
             is_follow: false,
             username: user?.username as string,
           },
-        });
+        };
+
+        newData[1].push(newComment);
 
         queryClient.setQueryData(
           [postKey.GET_DETAIL_POST(_id as string)],
@@ -72,11 +78,15 @@ const Post = () => {
     }
   );
 
-  const handleCreateComment = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleCreateComment = (
+    e: React.FormEvent<HTMLFormElement>,
+    comment: string,
+    clearText: () => void
+  ) => {
     e.preventDefault();
     if (!comment.trim()) return;
     mutateAsync({ post_id: data?.[0]._id as string, comment }).finally(() =>
-      setComment("")
+      clearText()
     );
   };
 
@@ -137,28 +147,10 @@ const Post = () => {
             {calculateCreatedTime(data?.[0]?.createdAt)}
           </p>
         </div>
-        <form
-          onSubmit={handleCreateComment}
-          className="p-4 flex items-center space-x-4 border-t border-gray-200"
-        >
-          <BsEmojiSmile />
-          <input
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Add a comment..."
-            className="flex-1 text-sm"
-          />
-          <button
-            disabled={createCommentLoading}
-            className="text-blue-500 font-semibold text-sm"
-          >
-            {createCommentLoading ? (
-              <CircularProgress width={20} height={20} />
-            ) : (
-              "Post"
-            )}
-          </button>
-        </form>
+        <FormComment
+          handleCreateComment={handleCreateComment}
+          createCommentLoading={createCommentLoading}
+        />
       </div>
     </div>
   );

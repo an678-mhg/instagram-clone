@@ -89,3 +89,9 @@ export interface CreateCommentFormValue {
   post_id: string;
   comment: string;
 }
+
+export interface ReplyCommentFormValue {
+  parent_id: string;
+  comment: string;
+  post_id: string;
+}

@@ -2,9 +2,10 @@ import { QueryFunctionContext } from "react-query";
 import {
   CreateCommentFormValue,
   CreatePostFormValue,
+  ReplyCommentFormValue,
   Response,
 } from "../types";
-import { CommentResponse, HomeFeed, PostDetail } from "../types/posts";
+import { CommentResponse, HomeFeed, PostDetail, Comment } from "../types/posts";
 import client from "../utils/client";
 
 export const addPost = async (post: CreatePostFormValue) => {
@@ -48,9 +49,27 @@ export const createComment = async ({
   post_id,
   comment,
 }: CreateCommentFormValue) => {
-  const response = await client.post("/posts/comment/create", {
-    post_id,
-    comment,
+  const response = await client.post<{ success: Boolean; comment: Comment }>(
+    "/posts/comment/create",
+    {
+      post_id,
+      comment,
+    }
+  );
+  return response.data.comment;
+};
+
+export const likeComment = async (comment_id: string) => {
+  const response = await client.post<Response>("/reaction/like-comment", {
+    comment_id,
   });
+  return response.data;
+};
+
+export const replyComment = async (values: ReplyCommentFormValue) => {
+  const response = await client.post<Response>(
+    "/posts/reply-comment/create",
+    values
+  );
   return response.data;
 };
