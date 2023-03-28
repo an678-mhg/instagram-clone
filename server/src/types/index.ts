@@ -29,6 +29,10 @@ export interface likePostBody {
   post_id: string;
 }
 
+export interface likeCommentBody {
+  comment_id: string;
+}
+
 export interface addCommentBody {
   post_id: string;
   comment: string;

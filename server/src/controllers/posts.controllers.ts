@@ -232,6 +232,8 @@ class postControllers {
   }
   async getComment(req: Request, res: Response) {
     const post_id = req.params.post_id;
+    let likes: any[] = [];
+    const user_id = checkAuth(req.header("Authorization") as string);
 
     if (!post_id) {
       return res
@@ -265,6 +267,17 @@ class postControllers {
         },
         { $unwind: "$user" },
         {
+          $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "comment",
+            as: "likes",
+          },
+        },
+        {
+          $addFields: { like_count: { $size: "$likes" } },
+        },
+        {
           $project: {
             _id: "$_id",
             num_replies: { $size: "$replies" },
@@ -277,11 +290,28 @@ class postControllers {
             },
             createdAt: 1,
             updatedAt: 1,
+            like_count: 1,
+            post: 1,
           },
         },
       ]);
 
-      res.json({ comments, success: true });
+      if (user_id) {
+        likes = await likesModels.find({
+          user: user_id,
+          comment: { $in: comments.map((item) => item._id) },
+        });
+      }
+
+      res.json({
+        comments: comments.map((item) => ({
+          ...item,
+          is_liked: likes.some(
+            (like) => like.comment.toString() === item._id.toString()
+          ),
+        })),
+        success: true,
+      });
     } catch (error) {
       res
         .status(500)
@@ -312,6 +342,25 @@ class postControllers {
       await newComment.save();
 
       res.json({ success: true, comment: newComment });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async replyComment(req: Request, res: Response) {
+    const { parent_id, comment, post_id } = req.body;
+    const user_id = req.body._id;
+
+    try {
+      await new commentsModels({
+        comment,
+        parent_id,
+        post: post_id,
+        user: user_id,
+      }).save();
+
+      res.json({ success: true });
     } catch (error) {
       res
         .status(500)

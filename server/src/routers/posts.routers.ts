@@ -29,4 +29,13 @@ routers.get("/comment/gets/:post_id", postsControllers.getComment);
 // /api/posts/comment/create
 routers.post("/comment/create", verifyToken, postsControllers.createComment);
 
+// private
+// description: create reply comment
+// /api/post/reply-comment/create
+routers.post(
+  "/reply-comment/create",
+  verifyToken,
+  postsControllers.replyComment
+);
+
 export default routers;
