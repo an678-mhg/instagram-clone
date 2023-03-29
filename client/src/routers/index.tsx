@@ -7,6 +7,7 @@ import Active from "../pages/active";
 import Explore from "../pages/explore";
 import Forgot from "../pages/forgot";
 import Post from "../pages/post";
+import Profile from "../pages/profile";
 import Search from "../pages/search";
 import SignIn from "../pages/signin";
 import SignUp from "../pages/signup";
@@ -76,6 +77,14 @@ const routers = createBrowserRouter([
   {
     path: "/post/:_id",
     element: <Post />,
+  },
+  {
+    path: "/profile/:_id",
+    element: (
+      <MainLayout>
+        <Profile />
+      </MainLayout>
+    ),
   },
 ]);
 

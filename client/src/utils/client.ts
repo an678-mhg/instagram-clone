@@ -2,10 +2,14 @@ import axios from "axios";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./contants";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { refreshToken } from "../services/auth";
+import { RefreshTokenResponse } from "../types";
+import { removeToken, setToken } from "./token";
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
+
+let refreshTokenRequest: Promise<RefreshTokenResponse> | null = null;
 
 client.interceptors.request.use(async (config) => {
   let accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -23,17 +27,19 @@ client.interceptors.request.use(async (config) => {
       }
 
       try {
-        const response = await refreshToken(
-          localStorage.getItem(REFRESH_TOKEN) as string
-        );
+        refreshTokenRequest = refreshTokenRequest
+          ? refreshTokenRequest
+          : refreshToken(localStorage.getItem(REFRESH_TOKEN) as string);
+
+        const response = await refreshTokenRequest;
 
         accessToken = response.accessToken;
 
-        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        localStorage.setItem(REFRESH_TOKEN, response.refreshToken);
+        setToken(response.accessToken, response.refreshToken);
+
+        refreshTokenRequest = null;
       } catch (error) {
-        localStorage.removeItem(ACCESS_TOKEN);
-        localStorage.removeItem(REFRESH_TOKEN);
+        removeToken();
       }
     }
 

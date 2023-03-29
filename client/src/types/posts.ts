@@ -44,4 +44,5 @@ export interface Comment {
   like_count: number;
   post: string;
   is_liked: boolean;
+  parent_id: string;
 }

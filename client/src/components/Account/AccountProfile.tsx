@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import useLogout from "../../hooks/useLogout";
 
@@ -8,7 +9,7 @@ const AccountProfile = () => {
 
   return (
     <div className="flex items-center justify-between px-4 py-2 last:mb-0">
-      <div className="flex items-center">
+      <Link to={`/profile/${user?._id}`} className="flex items-center">
         <img
           loading="lazy"
           className="w-[42px] h-[42px] rounded-full"
@@ -18,7 +19,7 @@ const AccountProfile = () => {
           <h3 className="text-sm font-semibold text-black">{user?.username}</h3>
           <p className="text-sm font-normal text-gray-400">{user?.fullname}</p>
         </div>
-      </div>
+      </Link>
       <button
         disabled={isLoading}
         onClick={handleLogout}

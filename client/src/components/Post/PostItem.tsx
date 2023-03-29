@@ -70,7 +70,7 @@ const PostItem: React.FC<PostItemProps> = ({
   return (
     <div className="mb-5 last:mb-0 md:px-0 px-2">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
+        <Link to={`/profile/${post.user._id}`} className="flex items-center">
           <img
             loading="lazy"
             className="w-[42px] h-[42px] rounded-full"
@@ -83,7 +83,7 @@ const PostItem: React.FC<PostItemProps> = ({
               • {calculateCreatedTime(post.createdAt)}
             </span>
           </h3>
-        </div>
+        </Link>
         <Menu className="text-black" />
       </div>
       <div className="mt-3">

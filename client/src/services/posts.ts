@@ -38,10 +38,15 @@ export const getPost = async (_id: string) => {
   return response.data.post;
 };
 
-export const getComment = async (post_id: string) => {
-  const response = await client.get<CommentResponse>(
-    `/posts/comment/gets/${post_id}`
-  );
+export const getComment = async (
+  post_id: string,
+  parent_id: string | null = null
+) => {
+  const path = parent_id
+    ? `/posts/comment/gets/${post_id}?parent_id=${parent_id}`
+    : `/posts/comment/gets/${post_id}`;
+
+  const response = await client.get<CommentResponse>(path);
   return response.data.comments;
 };
 

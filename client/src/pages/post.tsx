@@ -1,5 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { CircularProgress } from "react-cssfx-loading";
+import { toast } from "react-hot-toast";
 import { BsEmojiSmile } from "react-icons/bs";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
@@ -53,6 +54,7 @@ const Post = () => {
           num_replies: 0,
           post,
           updatedAt,
+          parent_id: response.parent_id,
           user: {
             _id: user?._id as string,
             avatar: user?.avatar as string,
@@ -74,7 +76,9 @@ const Post = () => {
           block: "nearest",
         });
       },
-      onError: (error) => {},
+      onError: () => {
+        toast.error("Something went wrong!");
+      },
     }
   );
 
