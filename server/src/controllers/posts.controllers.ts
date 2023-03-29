@@ -232,6 +232,7 @@ class postControllers {
   }
   async getComment(req: Request, res: Response) {
     const post_id = req.params.post_id;
+    const parent_id = req.query.parent_id;
     let likes: any[] = [];
     const user_id = checkAuth(req.header("Authorization") as string);
 
@@ -245,7 +246,9 @@ class postControllers {
       const comments = await commentsModels.aggregate([
         {
           $match: {
-            parent_id: null,
+            parent_id: parent_id
+              ? new mongoose.Types.ObjectId(String(parent_id))
+              : null,
             post: new mongoose.Types.ObjectId(post_id),
           },
         },
@@ -292,6 +295,7 @@ class postControllers {
             updatedAt: 1,
             like_count: 1,
             post: 1,
+            parent_id: 1,
           },
         },
       ]);
@@ -313,6 +317,7 @@ class postControllers {
         success: true,
       });
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ success: false, message: "Server not found!", error });
@@ -353,6 +358,14 @@ class postControllers {
     const user_id = req.body._id;
 
     try {
+      const commentParent = await commentsModels.findOne({ _id: parent_id });
+
+      if (commentParent?.parent_id) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Only support 1 level answer!" });
+      }
+
       await new commentsModels({
         comment,
         parent_id,
