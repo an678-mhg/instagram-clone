@@ -95,3 +95,12 @@ export interface ReplyCommentFormValue {
   comment: string;
   post_id: string;
 }
+
+export interface Emoji {
+  slug: string;
+  character: string;
+  unicodeName: string;
+  codePoint: string;
+  group: string;
+  subGroup: string;
+}

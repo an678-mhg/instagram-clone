@@ -38,7 +38,7 @@ const Sidebar = () => {
             </span>
           </button>
           <Link
-            to="/profile"
+            to={`/profile/${user?._id}`}
             className="flex md:justify-start justify-center items-center w-full p-3 rounded-full hover:bg-gray-100 text-black mb-2 transition-colors cursor-pointer last:mb-0"
           >
             <img

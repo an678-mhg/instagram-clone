@@ -72,18 +72,30 @@ const routers = createBrowserRouter([
   },
   {
     path: "/stories",
-    element: <Stories />,
+    element: (
+      <ProtecedLayout>
+        <MainLayout>
+          <Stories />
+        </MainLayout>
+      </ProtecedLayout>
+    ),
   },
   {
     path: "/post/:_id",
-    element: <Post />,
+    element: (
+      <ProtecedLayout>
+        <Post />
+      </ProtecedLayout>
+    ),
   },
   {
     path: "/profile/:_id",
     element: (
-      <MainLayout>
-        <Profile />
-      </MainLayout>
+      <ProtecedLayout>
+        <MainLayout>
+          <Profile />
+        </MainLayout>
+      </ProtecedLayout>
     ),
   },
 ]);

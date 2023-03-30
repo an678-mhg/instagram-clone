@@ -1,7 +1,5 @@
-import { useContext, useRef, useState } from "react";
-import { CircularProgress } from "react-cssfx-loading";
+import { useContext, useRef } from "react";
 import { toast } from "react-hot-toast";
-import { BsEmojiSmile } from "react-icons/bs";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import CommentIcons from "../assets/icons/Comment";
@@ -16,7 +14,12 @@ import FormComment from "../components/Comment/FormComment";
 import ImageSlide from "../components/ImageSlide";
 import PostDetailSkeleton from "../components/Skeleton/PostDetailSkeleton";
 import { AuthContext } from "../context/AuthContext";
-import { createComment, getComment, getPost } from "../services/posts";
+import {
+  createComment,
+  getComment,
+  getPost,
+  likePost,
+} from "../services/posts";
 import { Comment, Post as PostType } from "../types/posts";
 import calculateCreatedTime from "../utils/formatDate";
 import { postKey } from "../utils/react-query-key";
@@ -24,16 +27,22 @@ import { postKey } from "../utils/react-query-key";
 const Post = () => {
   const { _id } = useParams();
 
-  const { data, isLoading, isError } = useQuery(
-    [postKey.GET_DETAIL_POST(_id as string)],
-    () => Promise.all([getPost(_id as string), getComment(_id as string)])
-  );
-
   const bottomCommentRef = useRef<HTMLDivElement | null>(null);
 
   const queryClient = useQueryClient();
 
   const { user } = useContext(AuthContext);
+
+  const { data, isLoading } = useQuery(
+    [postKey.GET_DETAIL_POST(_id as string)],
+    () => Promise.all([getPost(_id as string), getComment(_id as string)])
+  );
+
+  const { mutateAsync: likePostAsync } = useMutation(likePost, {
+    onError: () => {
+      toast.error("Something went wrong");
+    },
+  });
 
   const { mutateAsync, isLoading: createCommentLoading } = useMutation(
     createComment,
@@ -73,7 +82,7 @@ const Post = () => {
 
         bottomCommentRef.current?.scrollIntoView({
           behavior: "smooth",
-          block: "nearest",
+          block: "center",
         });
       },
       onError: () => {
@@ -92,6 +101,18 @@ const Post = () => {
     mutateAsync({ post_id: data?.[0]._id as string, comment }).finally(() =>
       clearText()
     );
+  };
+
+  const handleLikePost = () => {
+    const newData = queryClient.getQueryData([
+      postKey.GET_DETAIL_POST(_id as string),
+    ]) as [PostType, Comment[]];
+    newData[0].like_count = newData[0].is_liked
+      ? newData[0].like_count - 1
+      : newData[0].like_count + 1;
+    newData[0].is_liked = !newData[0].is_liked;
+    queryClient.setQueryData([postKey.GET_DETAIL_POST(_id as string)], newData);
+    likePostAsync(_id as string);
   };
 
   if (isLoading) {
@@ -132,7 +153,9 @@ const Post = () => {
         <div className="border-t border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div>{data?.[0]?.is_liked ? <Like /> : <Notification />}</div>
+              <div onClick={handleLikePost}>
+                {data?.[0]?.is_liked ? <Like /> : <Notification />}
+              </div>
               <div>
                 <CommentIcons />
               </div>

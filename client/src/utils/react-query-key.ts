@@ -9,3 +9,7 @@ export const postKey = {
 export const accountKey = {
   GET_SUGGEST_ACCOUNT: "GET_SUGGEST_ACCOUNT",
 };
+
+export const emojiKey = {
+  GET_EMOJI: "GET_EMOJI",
+};

@@ -1,6 +1,8 @@
 import { BsEmojiSmile } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { CircularProgress } from "react-cssfx-loading";
+import Tippy from "@tippyjs/react/headless";
+import SelectEmoji from "./SelectEmoji";
 
 interface FormCommentProps {
   handleCreateComment: (
@@ -18,6 +20,13 @@ const FormComment: React.FC<FormCommentProps> = ({
   placeholder,
 }) => {
   const [comment, setComment] = useState("");
+  const [showSelectEmoji, setShowSelectEmoji] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const typingEmoji = (emoji: string) => {
+    setComment((prev) => (prev += emoji));
+    inputRef.current?.focus();
+  };
 
   return (
     <form
@@ -28,8 +37,24 @@ const FormComment: React.FC<FormCommentProps> = ({
       }
       className="p-4 flex items-center space-x-4 border-t border-b border-gray-200"
     >
-      <BsEmojiSmile />
+      <Tippy
+        interactive
+        onClickOutside={() => setShowSelectEmoji(false)}
+        visible={showSelectEmoji}
+        render={(attrs) => <SelectEmoji typingEmoji={typingEmoji} {...attrs} />}
+        placement="top-end"
+      >
+        <div className="cursor-pointer">
+          <BsEmojiSmile
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSelectEmoji((prev) => !prev);
+            }}
+          />
+        </div>
+      </Tippy>
       <input
+        ref={inputRef}
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         placeholder={placeholder || "Add a comment..."}

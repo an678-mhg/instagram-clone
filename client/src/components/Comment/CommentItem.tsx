@@ -176,14 +176,6 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
         </div>
       </div>
 
-      {showReply && (
-        <div className="ml-10 space-y-4">
-          {data?.map((item) => (
-            <CommentItem key={item._id} comment={item} />
-          ))}
-        </div>
-      )}
-
       {showReplyForm && (
         <div className="ml-10">
           <FormComment
@@ -191,6 +183,14 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
             createCommentLoading={isLoading}
             placeholder={`Reply from ${comment.user?.username}`}
           />
+        </div>
+      )}
+
+      {showReply && (
+        <div className="ml-10 space-y-4">
+          {data?.map((item) => (
+            <CommentItem key={item._id} comment={item} />
+          ))}
         </div>
       )}
     </>
