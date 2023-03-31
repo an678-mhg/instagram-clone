@@ -39,6 +39,7 @@ client.interceptors.request.use(async (config) => {
 
         refreshTokenRequest = null;
       } catch (error) {
+        console.log(error);
         removeToken();
       }
     }
