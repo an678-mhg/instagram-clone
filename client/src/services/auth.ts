@@ -10,7 +10,7 @@ import {
   SignUpFormValue,
   SignUpResponse,
 } from "../types";
-import client from "../utils/client";
+import client, { baseURL } from "../utils/client";
 
 export const signIn = async (data: SignInFormValue) => {
   const response = await client.post<SignInResponse>("/auth/signin", data);
@@ -46,7 +46,7 @@ export const activeAccount = async (activeToken: string) => {
 
 export const refreshToken = async (refreshToken: string) => {
   const response = await axios.post<RefreshTokenResponse>(
-    "http://localhost:5000/api/auth/refreshToken",
+    `${baseURL}/auth/refreshToken`,
     { refreshToken }
   );
   return response.data;

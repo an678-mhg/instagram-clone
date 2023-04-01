@@ -5,8 +5,10 @@ import { refreshToken } from "../services/auth";
 import { RefreshTokenResponse } from "../types";
 import { removeToken, setToken } from "./token";
 
+export const baseURL = import.meta.env.VITE_API_URL;
+
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL,
 });
 
 let refreshTokenRequest: Promise<RefreshTokenResponse> | null = null;
