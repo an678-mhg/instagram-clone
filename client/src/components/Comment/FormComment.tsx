@@ -1,5 +1,5 @@
 import { BsEmojiSmile } from "react-icons/bs";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { CircularProgress } from "react-cssfx-loading";
 import Tippy from "@tippyjs/react/headless";
 import SelectEmoji from "./SelectEmoji";
@@ -23,10 +23,10 @@ const FormComment: React.FC<FormCommentProps> = ({
   const [showSelectEmoji, setShowSelectEmoji] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const typingEmoji = (emoji: string) => {
+  const typingEmoji = useCallback((emoji: string) => {
     setComment((prev) => (prev += emoji));
     inputRef.current?.focus();
-  };
+  }, []);
 
   return (
     <form
@@ -41,7 +41,11 @@ const FormComment: React.FC<FormCommentProps> = ({
         interactive
         onClickOutside={() => setShowSelectEmoji(false)}
         visible={showSelectEmoji}
-        render={(attrs) => <SelectEmoji typingEmoji={typingEmoji} {...attrs} />}
+        render={(attrs) =>
+          showSelectEmoji && (
+            <SelectEmoji typingEmoji={typingEmoji} {...attrs} />
+          )
+        }
         placement="top-end"
       >
         <div className="cursor-pointer">

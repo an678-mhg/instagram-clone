@@ -2,7 +2,7 @@ import { CircularProgress } from "react-cssfx-loading";
 import { useQuery } from "react-query";
 import { getEmoji } from "../../services/emoji";
 import { emojiKey } from "../../utils/react-query-key";
-import { useMemo, useState, startTransition } from "react";
+import { useMemo, useState, startTransition, memo } from "react";
 
 interface SelectEmojiProps {
   typingEmoji: (emoiji: string) => void;
@@ -55,4 +55,4 @@ const SelectEmoji: React.FC<SelectEmojiProps> = ({ typingEmoji }) => {
   );
 };
 
-export default SelectEmoji;
+export default memo(SelectEmoji);
