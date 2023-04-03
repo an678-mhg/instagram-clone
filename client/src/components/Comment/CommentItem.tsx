@@ -125,7 +125,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
   };
 
   return (
-    <>
+    <div>
       <div className="flex space-x-4">
         <img
           src={comment.user.avatar}
@@ -193,7 +193,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -112,7 +112,9 @@ const PostItem: React.FC<PostItemProps> = ({
         </p>
       </div>
       <div className="border-b border-gray-200 pb-4">
-        <p className="text-sm font-normal text-black">{post.caption}</p>
+        <p className="text-sm font-normal text-black line-clamp-2">
+          {post.caption}
+        </p>
       </div>
     </div>
   );

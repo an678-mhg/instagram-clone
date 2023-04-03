@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Comment from "../../assets/icons/Comment";
 import Notification from "../../assets/icons/Notification";
 import { Post } from "../../types/posts";
+import Like from "../../assets/icons/Like";
 
 interface PostExploreProps {
   post: Post;
@@ -21,7 +22,7 @@ const PostExplore: React.FC<PostExploreProps> = ({ post }) => {
       <div className="absolute post-explore-overlay inset-0 bg-[#0000006c] flex items-center justify-center">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <Notification color="#fff" />
+            {post.is_liked ? <Like /> : <Notification color="#fff" />}
             <p className="text-white">{post.like_count}</p>
           </div>
           <div className="flex items-center space-x-2">

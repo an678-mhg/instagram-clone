@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
-// import Emoji from "../../assets/icons/Emoji";
 import VideoAndImage from "../../assets/images/VideoAndImage";
 import { AuthContext } from "../../context/AuthContext";
 import { useState } from "react";
@@ -99,7 +98,7 @@ const CreatePostModal = () => {
   return (
     <form
       onSubmit={handleAddPost}
-      className={`md:w-[835px] max-w-full h-[540px] mx-auto overflow-hidden rounded-md bg-white flex flex-col`}
+      className={`w-[835px] max-w-full md:h-[540px] h-screen mx-auto overflow-hidden rounded-md bg-white flex flex-col`}
     >
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
         <BiArrowBack onClick={() => setIsOpen(false)} className="text-2xl" />
@@ -110,7 +109,7 @@ const CreatePostModal = () => {
       </div>
 
       <div className="w-full flex-1 flex md:flex-row flex-col h-full overflow-hidden">
-        <div className="md:w-[60%] overflow-hidden relative flex justify-center items-center h-full flex-col">
+        <div className="md:w-[60%] overflow-hidden relative flex justify-center items-center md:h-full h-auto aspect-square md:py-0 flex-col">
           {formData?.files?.length > 0 ? (
             <ImageSlide media={formData?.files?.map((file) => file.preview)} />
           ) : (

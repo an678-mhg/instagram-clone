@@ -4,6 +4,7 @@ export const postKey = {
   GET_DETAIL_POST: (_id: string) => `GET_DETAIL_POST_${_id}`,
   GET_REPLY_COMMENT: (parent_id: string, show: boolean) =>
     `GET_REPLY_COMMENT_${parent_id}_${show}`,
+  GET_MYPOST: (_id: string) => `GET_MYPOST_${_id}`,
 };
 
 export const accountKey = {
@@ -12,4 +13,8 @@ export const accountKey = {
 
 export const emojiKey = {
   GET_EMOJI: "GET_EMOJI",
+};
+
+export const usersKey = {
+  GET_INFO: (_id: string) => `GET_INFO_${_id}`,
 };

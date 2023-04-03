@@ -115,7 +115,7 @@ const Post = () => {
     likePostAsync(_id as string);
   };
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <PostDetailSkeleton />;
   }
 
@@ -145,6 +145,18 @@ const Post = () => {
           </div>
         </div>
         <div className="md:flex-1 h-[300px] px-4 pt-2 space-y-4 overflow-y-auto">
+          <div className="flex space-x-4">
+            <img
+              className="w-8 h-8 rounded-full"
+              src={data?.[0].user?.avatar}
+            />
+            <div className="flex">
+              <h3 className="text-sm font-semibold">
+                {data?.[0].user?.username}{" "}
+                <span className="font-normal">{data?.[0].caption}</span>
+              </h3>
+            </div>
+          </div>
           {data?.[1].map((comment) => (
             <CommentItem comment={comment} key={comment._id} />
           ))}
