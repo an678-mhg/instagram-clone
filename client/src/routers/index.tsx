@@ -12,6 +12,7 @@ import Search from "../pages/search";
 import SignIn from "../pages/signin";
 import SignUp from "../pages/signup";
 import Stories from "../pages/stories";
+import EditProfile from "../pages/edit-profile";
 
 const routers = createBrowserRouter([
   {
@@ -94,6 +95,16 @@ const routers = createBrowserRouter([
       <ProtecedLayout>
         <MainLayout>
           <Profile />
+        </MainLayout>
+      </ProtecedLayout>
+    ),
+  },
+  {
+    path: "/edit-profile",
+    element: (
+      <ProtecedLayout>
+        <MainLayout>
+          <EditProfile />
         </MainLayout>
       </ProtecedLayout>
     ),

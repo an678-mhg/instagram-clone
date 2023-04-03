@@ -14,7 +14,8 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-input {
+input,
+textarea {
   outline: none;
 }
 

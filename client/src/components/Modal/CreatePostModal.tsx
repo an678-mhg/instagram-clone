@@ -152,6 +152,7 @@ const CreatePostModal = () => {
             onChange={(e) =>
               setFormData({ ...formData, caption: e.target.value })
             }
+            style={{ resize: "none" }}
             placeholder="Write a caption..."
             className="outline-none text-sm w-full text-black mt-3 flex-1"
           />
