@@ -41,3 +41,11 @@ export interface addCommentBody {
 export interface followUserBody {
   user_follow: string;
 }
+
+export interface changeProfileFormValue {
+  username: string;
+  fullname: string;
+  bio: string;
+  website: string;
+  phone: string;
+}

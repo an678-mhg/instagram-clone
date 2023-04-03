@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import likesModels from "../models/likes.models";
 import postsModels from "../models/posts.models";
 import checkAuth from "../utils/checkAuth";
+import { changeProfileFormValue } from "../types";
 
 class usersControllers {
   async getInfo(req: Request, res: Response) {
@@ -156,6 +157,42 @@ class usersControllers {
           ),
         })),
       });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async changeProfile(req: Request, res: Response) {
+    const { bio, fullname, phone, username, website } =
+      req.body as changeProfileFormValue;
+    const user_id = req.body._id;
+
+    if (!bio || !fullname || !phone || !username || !website) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing parameter!" });
+    }
+
+    try {
+      const updatedUser = await usersModels.findOneAndUpdate(
+        { _id: user_id },
+        {
+          bio,
+          fullname,
+          username,
+          phone,
+          website,
+        }
+      );
+
+      if (!updatedUser) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Update user failed!" });
+      }
+
+      res.json({ success: true });
     } catch (error) {
       res
         .status(500)
