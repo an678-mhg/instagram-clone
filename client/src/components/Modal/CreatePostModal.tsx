@@ -50,12 +50,8 @@ const CreatePostModal = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files as FileList);
 
-    for (let i = 0; i <= files.length; i++) {
-      if (!checkFile("image", 5, files[i])) {
-        return toast.error(
-          "Only accepts image file and file cannot exceed 5MB"
-        );
-      }
+    if (files.some((file) => !checkFile("image", 5, file))) {
+      return toast.error("Only accepts image file and file cannot exceed 5MB");
     }
 
     setFormData({
@@ -109,7 +105,7 @@ const CreatePostModal = () => {
       onSubmit={handleAddPost}
       className={`w-[835px] max-w-full md:h-[540px] h-screen mx-auto overflow-hidden rounded-md bg-white flex flex-col`}
     >
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 cursor-pointer">
         <BiArrowBack onClick={() => setIsOpen(false)} className="text-2xl" />
         <h1 className="font-semibold">Create new {formData.type}</h1>
         <button disabled={loading} className="font-semibold text-blue-500">

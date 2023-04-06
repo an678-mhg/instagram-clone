@@ -33,6 +33,7 @@ const EditProfile = () => {
     register,
     formState: { errors },
     handleSubmit,
+    getValues,
   } = useForm({
     defaultValues: {
       username: user?.username,
@@ -64,6 +65,8 @@ const EditProfile = () => {
         ...values,
         avatar: newAvatarUrl || user.avatar,
       }));
+
+      navigate(`/profile/${user._id}`);
 
       toast.success("Edit profile success", { id: toastId });
     } catch (error) {
@@ -191,6 +194,10 @@ const EditProfile = () => {
               <textarea
                 {...register("bio", {
                   required: { value: true, message: "Bio is required!" },
+                  maxLength: {
+                    value: 100,
+                    message: "Bio should not exceed 100 characters",
+                  },
                 })}
                 rows={4}
                 className="px-2 py-1.5 mt-2 bg-gray-300 w-full max-w-full text-sm rounded-sm"
@@ -202,6 +209,9 @@ const EditProfile = () => {
                   {errors?.bio?.message}
                 </span>
               )}
+              <p className="text-right text-xs font-normal">
+                {getValues("bio")?.length} / 100
+              </p>
             </div>
           </div>
           <button

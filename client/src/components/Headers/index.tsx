@@ -13,7 +13,9 @@ const Headers = () => {
       <div className="relative cursor-pointer">
         <Notification />
 
-        <p className="absolute w-[10px] h-[10px] rounded-full bg-red-500 top-[-2px] right-0"></p>
+        <p className="absolute text-xs text-white w-[20px] h-[20px] flex items-center justify-center rounded-full bg-red-500 top-[-10px] right-[-10px]">
+          10
+        </p>
       </div>
     </div>
   );

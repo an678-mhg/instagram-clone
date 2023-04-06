@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import PostExplore from "../components/Post/PostExplore";
 import ProfileSkeleton from "../components/Skeleton/ProfileSkeleton";
+import { AiOutlineLink } from "react-icons/ai";
 
 const Profile = () => {
   const { _id } = useParams();
@@ -44,7 +45,7 @@ const Profile = () => {
               {user?._id === profile?.user?._id ? (
                 <Link
                   to="/edit-profile"
-                  className="px-4 py-1.5 rounded-md bg-gray-200 font-semibold text-sm"
+                  className="px-4 py-1.5 rounded-md inline bg-gray-200 font-semibold text-sm"
                 >
                   Edit profile
                 </Link>
@@ -85,16 +86,16 @@ const Profile = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   href={profile.user?.website}
-                  className="text-sm font-normal text-blue-500 underline line-clamp-1"
+                  className="text-sm flex items-center space-x-2 font-normal text-blue-500 underline"
                 >
-                  {profile.user?.website}
+                  <AiOutlineLink /> <span>Visit my website</span>
                 </a>
               )}
             </div>
           </div>
         </div>
       </div>
-      <div className="grid md:grid-cols-3 grid-cols-2 gap-1 py-5">
+      <div className="grid md:grid-cols-3 grid-cols-2 gap-1 md:py-5">
         {posts?.posts?.map((post) => (
           <PostExplore key={post._id} post={post} />
         ))}
