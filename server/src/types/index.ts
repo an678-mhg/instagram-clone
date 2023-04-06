@@ -48,4 +48,5 @@ export interface changeProfileFormValue {
   bio: string;
   website: string;
   phone: string;
+  avatar?: string;
 }

@@ -164,7 +164,7 @@ class usersControllers {
     }
   }
   async changeProfile(req: Request, res: Response) {
-    const { bio, fullname, phone, username, website } =
+    const { bio, fullname, phone, username, website, avatar } =
       req.body as changeProfileFormValue;
     const user_id = req.body._id;
 
@@ -183,6 +183,7 @@ class usersControllers {
           username,
           phone,
           website,
+          avatar,
         }
       );
 
