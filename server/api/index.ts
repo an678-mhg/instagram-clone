@@ -9,6 +9,7 @@ import postsRouters from "../src/routers/posts.routers";
 import likeRouters from "../src/routers/likes.routers";
 import followRouters from "../src/routers/follow.routers";
 import usersRouters from "../src/routers/users.routers";
+import notificationsRouters from "../src/routers/notifications.routers";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use("/api/posts", postsRouters);
 app.use("/api/reaction", likeRouters);
 app.use("/api/follow", followRouters);
 app.use("/api/users", usersRouters);
+app.use("/api/notifications", notificationsRouters);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

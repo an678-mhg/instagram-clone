@@ -6,8 +6,13 @@ const notifications = new Schema(
     from_user: { type: mongoose.Schema.Types.ObjectId, required: true },
     post: { type: mongoose.Schema.Types.ObjectId },
     comment: { type: mongoose.Schema.Types.ObjectId },
-    type: { type: String, enum: ["comment", "like", "follow"], required: true },
+    type: {
+      type: String,
+      enum: ["comment", "like", "follow", "replyComment"],
+      required: true,
+    },
     read: { type: Boolean, default: false },
+    url: { type: String, default: "" },
   },
   {
     timestamps: true,

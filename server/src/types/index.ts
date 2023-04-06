@@ -50,3 +50,11 @@ export interface changeProfileFormValue {
   phone: string;
   avatar?: string;
 }
+
+export interface createNotificationFormValue {
+  user: string;
+  type: "comment" | "like" | "follow" | "replyComment";
+  comment: string | null;
+  post: string | null;
+  reply: string | null;
+}
