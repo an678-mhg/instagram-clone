@@ -11,6 +11,7 @@ import { addPost } from "../../services/posts";
 import uploadFile from "../../utils/upload";
 import { useQueryClient } from "react-query";
 import { postKey } from "../../utils/react-query-key";
+import checkFile from "../../utils/checkFile";
 
 interface FilePreview {
   file: File;
@@ -48,6 +49,14 @@ const CreatePostModal = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files as FileList);
+
+    for (let i = 0; i <= files.length; i++) {
+      if (!checkFile("image", 5, files[i])) {
+        return toast.error(
+          "Only accepts image file and file cannot exceed 5MB"
+        );
+      }
+    }
 
     setFormData({
       ...formData,
@@ -119,7 +128,6 @@ const CreatePostModal = () => {
                 Drag, drop video and image file
               </h3>
               <input
-                accept="image/*, video/*"
                 onChange={handleFileChange}
                 id="fileSelect"
                 type="file"

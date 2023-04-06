@@ -17,7 +17,7 @@ const Explore = () => {
     fetchNextPage,
   } = useInfiniteQuery(
     [postKey.GET_EXPLORE],
-    (page) => getPosts(6, page, "explore"),
+    (page) => getPosts(9, page, "explore"),
     {
       getNextPageParam: (lastPage) => lastPage?.nextSkip,
     }
@@ -60,7 +60,6 @@ const Explore = () => {
       <InView
         fallbackInView
         onChange={(InVidew) => {
-          console.log("inview");
           if (InVidew && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
           }
@@ -69,7 +68,7 @@ const Explore = () => {
         {({ ref }) => (
           <div
             ref={ref}
-            className="mt-5 flex w-full items-center justify-center"
+            className="pt-5 flex w-full items-center justify-center"
           >
             {isFetchingNextPage && (
               <div className="mb-5">

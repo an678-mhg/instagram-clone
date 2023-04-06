@@ -9,6 +9,7 @@ import { postKey } from "../../utils/react-query-key";
 import { useState } from "react";
 import FormComment from "./FormComment";
 import { CircularProgress } from "react-cssfx-loading";
+import { Link } from "react-router-dom";
 
 interface CommentItemProps {
   comment: Comment;
@@ -126,16 +127,21 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
 
   return (
     <div>
-      <div className="flex space-x-4">
-        <img
-          src={comment.user.avatar}
-          className="w-8 h-8 rounded-full mt-[5px]"
-        />
+      <div className="flex space-x-3">
+        <Link to={`/profile/${comment.user?._id}`}>
+          <img
+            src={comment.user.avatar}
+            className="w-8 h-8 rounded-full mt-[5px]"
+          />
+        </Link>
         <div className="flex-1">
           <h4 className="text-sm">
-            <span className="font-semibold inline-block">
+            <Link
+              to={`/profile/${comment.user?._id}`}
+              className="font-semibold inline-block"
+            >
               {comment.user?.username}
-            </span>{" "}
+            </Link>{" "}
             {comment.comment}
           </h4>
           <div className="text-[13px] font-semibold text-gray-400 flex items-center space-x-3 mt-1">
@@ -167,7 +173,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
             </div>
           )}
         </div>
-        <div onClick={handleLikeComment} className="mt-[5px]">
+        <div onClick={handleLikeComment} className="mt-[5px] cursor-pointer">
           {comment.is_liked ? (
             <Like width={16} height={16} />
           ) : (
@@ -177,7 +183,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
       </div>
 
       {showReplyForm && (
-        <div className="ml-10">
+        <div className="ml-10 mt-3">
           <FormComment
             handleCreateComment={createReplyComment}
             createCommentLoading={isLoading}
@@ -187,7 +193,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
       )}
 
       {showReply && (
-        <div className="ml-10 space-y-4">
+        <div className="ml-10 space-y-4 mt-3">
           {data?.map((item) => (
             <CommentItem key={item._id} comment={item} />
           ))}

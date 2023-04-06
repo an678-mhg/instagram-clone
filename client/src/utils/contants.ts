@@ -1,8 +1,6 @@
-import Create from "../assets/icons/Create";
 import Explore from "../assets/icons/Explore";
 import Home from "../assets/icons/Home";
 import Message from "../assets/icons/Message";
-import Reels from "../assets/icons/Reels";
 import { Sidebar } from "../types";
 
 export const sidebars: Sidebar[] = [
@@ -15,11 +13,6 @@ export const sidebars: Sidebar[] = [
     icons: Explore,
     title: "Explore",
     href: "/explore",
-  },
-  {
-    icons: Reels,
-    title: "Stories",
-    href: "/reels",
   },
   {
     icons: Message,

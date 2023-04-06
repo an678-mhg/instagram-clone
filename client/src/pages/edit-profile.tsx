@@ -1,9 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { editProfile } from "../services/users";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import checkFile from "../utils/checkFile";
+import uploadFile from "../utils/upload";
 
 export interface changeProfileFormValue {
   username: string;
@@ -15,7 +18,16 @@ export interface changeProfileFormValue {
 
 const EditProfile = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [previewFile, setPreviewFile] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      previewFile && URL.revokeObjectURL(previewFile);
+    };
+  }, [previewFile]);
 
   const {
     register,
@@ -31,34 +43,72 @@ const EditProfile = () => {
     },
   });
 
-  const { mutateAsync, isLoading } = useMutation(editProfile, {
-    onSuccess: (_, body) => {},
-    onError: () => {
-      toast.error("Edit profile failed");
-    },
-  });
+  const { mutateAsync } = useMutation(editProfile);
 
-  const submitForm = (values: any) => {};
+  const submitForm = async (values: any) => {
+    if (!user) return;
+    let toastId = toast.loading("Loading....");
+    setLoading(true);
+
+    try {
+      let newAvatarUrl: string = "";
+
+      if (file) {
+        newAvatarUrl = await uploadFile(file);
+      }
+
+      await mutateAsync({ ...values, avatar: newAvatarUrl || user.avatar });
+
+      setUser((prev) => ({
+        ...prev,
+        ...values,
+        avatar: newAvatarUrl || user.avatar,
+      }));
+
+      toast.success("Edit profile success", { id: toastId });
+    } catch (error) {
+      toast.error("Edit profile failed", { id: toastId });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    if (!checkFile("image", 5, file)) {
+      return toast.error("Only accepts image file and file cannot exceed 5MB");
+    }
+
+    const previewFile = URL.createObjectURL(file);
+    setPreviewFile(previewFile);
+    setFile(file);
+  };
 
   return (
-    <div className="pt-4 md:py-4 py-10">
-      <h1 className="text-lg font-semibold md:text-left text-center">
-        Edit Profile
-      </h1>
+    <div className="pt-4 md:py-4 py-10 w-full md:w-[500px]">
+      <h1 className="text-2xl font-medium text-center">Edit Profile</h1>
       <form
         onSubmit={handleSubmit(submitForm)}
-        className="flex flex-col justify-center items-center md:px-0 px-4 mt-3"
+        className="flex flex-col justify-center items-center md:px-0 px-4 mt-5 w-full"
       >
-        <div className="md:w-[500px] w-full">
+        <div className="w-full">
           <div className="flex items-center space-x-3">
             <img
-              src={user?.avatar}
-              className="w-10 h-10 rounded-full"
+              src={previewFile || user?.avatar}
+              className="w-10 h-10 rounded-full object-cover"
               loading="lazy"
             />
             <div>
               <h3 className="text-sm">{user?.username}</h3>
-              <input type="file" hidden id="change-avatar" />
+              <input
+                onChange={handleFileChange}
+                type="file"
+                hidden
+                id="change-avatar"
+              />
               <label
                 htmlFor="change-avatar"
                 className="text-sm cursor-pointer text-blue-500"
@@ -154,7 +204,10 @@ const EditProfile = () => {
               )}
             </div>
           </div>
-          <button className="text-sm rounded-sm px-4 py-1.5 w-full max-w-full mt-3 bg-blue-500 text-white">
+          <button
+            disabled={loading}
+            className="text-sm rounded-sm px-4 py-1.5 w-full max-w-full mt-3 bg-blue-500 text-white"
+          >
             Change Profile
           </button>
         </div>

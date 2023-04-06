@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import CommentIcons from "../assets/icons/Comment";
 import Like from "../assets/icons/Like";
 import Menu from "../assets/icons/Menu";
-import Message from "../assets/icons/Message";
 import Notification from "../assets/icons/Notification";
 import Save from "../assets/icons/Save";
 import LogoImage from "../assets/images/LogoImage";
@@ -98,7 +97,7 @@ const Post = () => {
   ) => {
     e.preventDefault();
     if (!comment.trim()) return;
-    mutateAsync({ post_id: data?.[0]._id as string, comment }).finally(() =>
+    mutateAsync({ post_id: post._id as string, comment }).finally(() =>
       clearText()
     );
   };
@@ -107,11 +106,15 @@ const Post = () => {
     const newData = queryClient.getQueryData([
       postKey.GET_DETAIL_POST(_id as string),
     ]) as [PostType, Comment[]];
+
     newData[0].like_count = newData[0].is_liked
       ? newData[0].like_count - 1
       : newData[0].like_count + 1;
+
     newData[0].is_liked = !newData[0].is_liked;
+
     queryClient.setQueryData([postKey.GET_DETAIL_POST(_id as string)], newData);
+
     likePostAsync(_id as string);
   };
 
@@ -119,45 +122,49 @@ const Post = () => {
     return <PostDetailSkeleton />;
   }
 
+  const [post, comments] = data;
+
   return (
     <div className="md:h-screen flex md:flex-row flex-col">
       <Link to="/" className="absolute top-0 left-0 z-[9999] p-4">
         <LogoImage />
       </Link>
       <div className="md:w-[50%] w-full object-contain md:h-full">
-        <ImageSlide media={data?.[0]?.media as string[]} />
+        <ImageSlide media={post?.media as string[]} />
       </div>
       <div className="flex-1 flex flex-col">
-        <div className="p-4 flex items-center w-full border-b border-gray-200">
-          <img
-            loading="lazy"
-            className="w-[40px] h-[40px] rounded-full"
-            src={data?.[0]?.user?.avatar}
-          />
+        <div className="px-4 py-2 flex items-center w-full border-b border-gray-200">
+          <Link to={`/profile/${post?.user?._id}`}>
+            <img
+              loading="lazy"
+              className="w-[40px] h-[40px] rounded-full"
+              src={post?.user?.avatar}
+            />
+          </Link>
           <div className="ml-3 flex items-center justify-between flex-1">
             <div>
-              <h3 className="text-sm font-semibold">
-                {data?.[0]?.user?.username}
-              </h3>
-              <p className="text-sm">{data?.[0]?.user?.fullname}</p>
+              <Link
+                to={`/profile/${post?.user?._id}`}
+                className="text-sm font-semibold"
+              >
+                {post?.user?.username}
+              </Link>
+              <p className="text-sm">{post?.user?.fullname}</p>
             </div>
             <Menu />
           </div>
         </div>
         <div className="md:flex-1 h-[300px] px-4 pt-2 space-y-4 overflow-y-auto">
-          <div className="flex space-x-4">
-            <img
-              className="w-8 h-8 rounded-full"
-              src={data?.[0].user?.avatar}
-            />
+          <div className="flex space-x-3">
+            <img className="w-8 h-8 rounded-full" src={post.user?.avatar} />
             <div className="flex">
               <h3 className="text-sm font-semibold">
-                {data?.[0].user?.username}{" "}
-                <span className="font-normal">{data?.[0].caption}</span>
+                {post.user?.username}{" "}
+                <span className="font-normal">{post.caption}</span>
               </h3>
             </div>
           </div>
-          {data?.[1].map((comment) => (
+          {comments?.map((comment) => (
             <CommentItem comment={comment} key={comment._id} />
           ))}
           <div ref={bottomCommentRef}></div>
@@ -165,25 +172,18 @@ const Post = () => {
         <div className="border-t border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div onClick={handleLikePost}>
-                {data?.[0]?.is_liked ? <Like /> : <Notification />}
+              <div className="cursor-pointer" onClick={handleLikePost}>
+                {post?.is_liked ? <Like /> : <Notification />}
               </div>
-              <div>
-                <CommentIcons />
-              </div>
-              <div>
-                <Message />
-              </div>
+              <CommentIcons />
             </div>
             <div>
               <Save />
             </div>
           </div>
-          <p className="mt-3 text-sm font-semibold">
-            {data?.[0]?.like_count} likes
-          </p>
+          <p className="mt-3 text-sm font-semibold">{post?.like_count} likes</p>
           <p className="text-gray-500 text-xs uppercase font-semibold mt-3">
-            {calculateCreatedTime(data?.[0]?.createdAt)}
+            {calculateCreatedTime(post?.createdAt)}
           </p>
         </div>
         <FormComment

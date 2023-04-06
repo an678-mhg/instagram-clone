@@ -37,14 +37,14 @@ const Profile = () => {
             className="md:w-[150px] md:h-[150px] w-[80px] h-[80px] rounded-full"
           />
           <div className="flex-1">
-            <div className="flex md:space-x-4 md:items-center flex-col md:flex-row">
+            <div className="flex md:space-x-4 md:space-y-0 space-y-2 md:items-center flex-col md:flex-row">
               <h3 className="font-semibold text-lg">
                 {profile?.user?.username}
               </h3>
               {user?._id === profile?.user?._id ? (
                 <Link
                   to="/edit-profile"
-                  className="px-4 mt-2 py-1.5 rounded-md bg-gray-200 font-semibold text-sm"
+                  className="px-4 py-1.5 rounded-md bg-gray-200 font-semibold text-sm"
                 >
                   Edit profile
                 </Link>

@@ -12,7 +12,7 @@ const AccountProfile = () => {
       <Link to={`/profile/${user?._id}`} className="flex items-center">
         <img
           loading="lazy"
-          className="w-[42px] h-[42px] rounded-full"
+          className="w-[50px] h-[50px] rounded-full"
           src={user?.avatar}
         />
         <div className="ml-3">

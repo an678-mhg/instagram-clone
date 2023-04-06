@@ -75,9 +75,7 @@ const routers = createBrowserRouter([
     path: "/stories",
     element: (
       <ProtecedLayout>
-        <MainLayout>
-          <Stories />
-        </MainLayout>
+        <Stories />
       </ProtecedLayout>
     ),
   },

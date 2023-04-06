@@ -12,7 +12,7 @@ const SidebarItem: FC<SidebarItemProps> = ({ sidebar }) => {
   return (
     <Link
       to={sidebar.href}
-      className={`flex md:justify-start justify-center items-center w-full text-black p-3 rounded-full hover:bg-gray-100 ${
+      className={`flex md:justify-start justify-center items-center w-full text-black p-3 md:rounded-full hover:bg-gray-100 ${
         sidebar.href === location.pathname && "bg-gray-100"
       } md:mb-2 transition-colors cursor-pointer last:mb-0`}
     >
