@@ -37,7 +37,6 @@ const users = new Schema(
     },
     provider: {
       type: String,
-      enum: ["Facebook", "Google", "Email"],
       default: "Email",
     },
     avatar: {

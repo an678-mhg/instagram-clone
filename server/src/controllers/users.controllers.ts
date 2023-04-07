@@ -70,6 +70,7 @@ class usersControllers {
             post_count: 1,
             website: 1,
             bio: 1,
+            email: 1,
           },
         },
       ]);
@@ -92,6 +93,8 @@ class usersControllers {
     let likes: any[] = [];
     const user_id = checkAuth(req.header("Authorization") as string);
     const user_post = req.params._id;
+    const limit = Number(req.query.limit) || 6;
+    const skip = Number(req.query.skip) || 0;
 
     try {
       const posts = await postsModels.aggregate([
@@ -149,6 +152,10 @@ class usersControllers {
             createdAt: -1,
           },
         },
+        { $skip: skip },
+        {
+          $limit: limit,
+        },
       ]);
 
       if (user_id) {
@@ -166,6 +173,8 @@ class usersControllers {
             (like) => post._id?.toString() === like.post?.toString()
           ),
         })),
+        hashNextPage: posts?.length >= limit ? true : false,
+        nextSkip: posts?.length >= limit ? limit + skip : null,
       });
     } catch (error) {
       res

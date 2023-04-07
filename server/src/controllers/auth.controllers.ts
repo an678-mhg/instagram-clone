@@ -367,7 +367,7 @@ class authControllers {
         password: "",
         fullname: username.charAt(0).toUpperCase() + username.slice(1),
         username: username,
-        provider: "Google",
+        provider: verifyToken.firebase.sign_in_provider,
       });
 
       const accessToken = generateAccessToken({ _id: newUser._id });
