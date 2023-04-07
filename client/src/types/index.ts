@@ -104,3 +104,10 @@ export interface Emoji {
   group: string;
   subGroup: string;
 }
+
+export interface createNotificationFormValue {
+  user: string;
+  type: "comment" | "like" | "follow" | "replyComment";
+  comment: string | null;
+  post: string | null;
+}

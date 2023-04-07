@@ -11,6 +11,7 @@ export interface Profile {
   following_count: number;
   website: string;
   bio: string;
+  is_follow: boolean;
 }
 
 export interface ProfileResponse extends Response {

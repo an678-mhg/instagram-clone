@@ -132,7 +132,7 @@ const Post = () => {
       <div className="md:w-[50%] w-full object-contain md:h-full">
         <ImageSlide media={post?.media as string[]} />
       </div>
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col border-l border-gray-200">
         <div className="px-4 py-2 flex items-center w-full border-b border-gray-200">
           <Link to={`/profile/${post?.user?._id}`}>
             <img

@@ -36,7 +36,7 @@ const Explore = () => {
   }
 
   return (
-    <div className="xl:w-[950px] w-full md:mt-5 mt-0 md:pb-0 pb-8">
+    <div className="xl:w-[950px] w-full xl:mt-5 mt-0 md:pb-0 pb-8">
       {isLoading && (
         <div className="w-full grid md:grid-cols-3 grid-cols-2 gap-1">
           {Array.from(Array(6).keys()).map((item) => (

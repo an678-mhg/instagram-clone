@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getMyPost, getUserInfoById } from "../services/users";
 import { usersKey } from "../utils/react-query-key";
 import { Link, useParams } from "react-router-dom";
@@ -7,16 +7,38 @@ import { AuthContext } from "../context/AuthContext";
 import PostExplore from "../components/Post/PostExplore";
 import ProfileSkeleton from "../components/Skeleton/ProfileSkeleton";
 import { AiOutlineLink } from "react-icons/ai";
+import { followUser } from "../services/follow";
+import { MyPostResponse, ProfileResponse } from "../types/users";
 
 const Profile = () => {
   const { _id } = useParams();
   const { user } = useContext(AuthContext);
+  const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery(
+  const { data, isLoading, isError, isFetching } = useQuery(
     [usersKey.GET_INFO(_id as string)],
     () =>
       Promise.all([getUserInfoById(_id as string), getMyPost(_id as string)])
   );
+
+  const { mutateAsync, isLoading: followUserLoading } = useMutation(followUser);
+
+  const handleFollowUser = () => {
+    if (user?._id === _id) return;
+
+    const key = usersKey.GET_INFO(_id as string);
+
+    const newData = queryClient.getQueryData([key]) as [
+      ProfileResponse,
+      MyPostResponse
+    ];
+
+    newData[0].user.is_follow = !newData[0].user.is_follow;
+
+    queryClient.setQueryData([key], newData);
+
+    mutateAsync(_id as string);
+  };
 
   if (isLoading || !data) {
     return <ProfileSkeleton />;
@@ -51,8 +73,16 @@ const Profile = () => {
                 </Link>
               ) : (
                 <div className="space-x-4 md:mt-0 mt-3">
-                  <button className="px-4 text-white py-1.5 rounded-md bg-blue-400 font-semibold text-sm">
-                    Follow
+                  <button
+                    onClick={handleFollowUser}
+                    disabled={followUserLoading || isFetching}
+                    className={`px-4 py-1.5 rounded-md ${
+                      !profile.user.is_follow
+                        ? "text-white bg-blue-500"
+                        : "text-black bg-gray-300"
+                    } font-semibold text-sm`}
+                  >
+                    {profile.user?.is_follow ? "Following" : "Follow"}
                   </button>
                   <button className="px-4 py-1.5 rounded-md bg-gray-200 font-semibold text-sm">
                     Message
