@@ -1,24 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getMyPost, getUserInfoById } from "../services/users";
+import { getUserInfoById } from "../services/users";
 import { usersKey } from "../utils/react-query-key";
 import { Link, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import PostExplore from "../components/Post/PostExplore";
 import ProfileSkeleton from "../components/Skeleton/ProfileSkeleton";
-import { AiOutlineLink } from "react-icons/ai";
+import { AiOutlineLink, AiOutlineMail } from "react-icons/ai";
 import { followUser } from "../services/follow";
-import { MyPostResponse, ProfileResponse } from "../types/users";
+import { ProfileResponse } from "../types/users";
+import ListMyPost from "../components/Post/ListMyPost";
 
 const Profile = () => {
   const { _id } = useParams();
   const { user } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError, isFetching } = useQuery(
-    [usersKey.GET_INFO(_id as string)],
-    () =>
-      Promise.all([getUserInfoById(_id as string), getMyPost(_id as string)])
+  const {
+    data: profile,
+    isLoading,
+    isError,
+    isFetching,
+  } = useQuery([usersKey.GET_INFO(_id as string)], () =>
+    getUserInfoById(_id as string)
   );
 
   const { mutateAsync, isLoading: followUserLoading } = useMutation(followUser);
@@ -28,27 +32,22 @@ const Profile = () => {
 
     const key = usersKey.GET_INFO(_id as string);
 
-    const newData = queryClient.getQueryData([key]) as [
-      ProfileResponse,
-      MyPostResponse
-    ];
+    const newData = queryClient.getQueryData([key]) as ProfileResponse;
 
-    newData[0].user.is_follow = !newData[0].user.is_follow;
+    newData.user.is_follow = !newData.user.is_follow;
 
     queryClient.setQueryData([key], newData);
 
     mutateAsync(_id as string);
   };
 
-  if (isLoading || !data) {
+  if (isLoading || !profile) {
     return <ProfileSkeleton />;
   }
 
   if (isError) {
     return <p>Failed to load data...</p>;
   }
-
-  const [profile, posts] = data;
 
   return (
     <div className="xl:w-[950px] w-full md:mt-8 mt-4">
@@ -107,10 +106,19 @@ const Profile = () => {
             <h4 className="font-semibold text-sm mt-4">
               {profile?.user?.fullname}
             </h4>
+            {profile?.user?.email && (
+              <div className="flex items-center space-x-2">
+                <p className="text-sm font-normal">{profile.user?.email}</p>
+                <a href={`mailto:${profile?.user?.email}`}>
+                  <AiOutlineMail size={20} />
+                </a>
+              </div>
+            )}
             <div className="mt-2">
               {profile.user?.bio && (
                 <p className="text-sm font-normal">{profile.user?.bio}</p>
               )}
+
               {profile.user?.website && (
                 <a
                   target="_blank"
@@ -125,11 +133,8 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="grid md:grid-cols-3 grid-cols-2 gap-1 md:py-5">
-        {posts?.posts?.map((post) => (
-          <PostExplore key={post._id} post={post} />
-        ))}
-      </div>
+
+      <ListMyPost _id={_id as string} />
     </div>
   );
 };

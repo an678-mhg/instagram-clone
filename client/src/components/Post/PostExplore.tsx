@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import Comment from "../../assets/icons/Comment";
-import Notification from "../../assets/icons/Notification";
+import Comment from "../../icons/Comment";
+import Notification from "../../icons/Notification";
 import { Post } from "../../types/posts";
-import Like from "../../assets/icons/Like";
+import Like from "../../icons/Like";
 
 interface PostExploreProps {
   post: Post;

@@ -1,7 +1,7 @@
 import { toast } from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import Like from "../../assets/icons/Like";
-import Notification from "../../assets/icons/Notification";
+import Like from "../../icons/Like";
+import Notification from "../../icons/Notification";
 import { getComment, likeComment, replyComment } from "../../services/posts";
 import { Comment, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
@@ -10,6 +10,7 @@ import { useState } from "react";
 import FormComment from "./FormComment";
 import { CircularProgress } from "react-cssfx-loading";
 import { Link } from "react-router-dom";
+import { parseLinkDescription } from "../../utils/contants";
 
 interface CommentItemProps {
   comment: Comment;
@@ -142,7 +143,11 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
             >
               {comment.user?.username}
             </Link>{" "}
-            {comment.comment}
+            <span
+              dangerouslySetInnerHTML={{
+                __html: parseLinkDescription(comment.comment),
+              }}
+            />
           </h4>
           <div className="text-[13px] font-semibold text-gray-400 flex items-center space-x-3 mt-1">
             <p>{calculateCreatedTime(comment.createdAt)}</p>

@@ -2,12 +2,12 @@ import { useContext, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import CommentIcons from "../assets/icons/Comment";
-import Like from "../assets/icons/Like";
-import Menu from "../assets/icons/Menu";
-import Notification from "../assets/icons/Notification";
-import Save from "../assets/icons/Save";
-import LogoImage from "../assets/images/LogoImage";
+import CommentIcons from "../icons/Comment";
+import Like from "../icons/Like";
+import Menu from "../icons/Menu";
+import Notification from "../icons/Notification";
+import Save from "../icons/Save";
+import LogoImage from "../icons/LogoImage";
 import CommentItem from "../components/Comment/CommentItem";
 import FormComment from "../components/Comment/FormComment";
 import ImageSlide from "../components/ImageSlide";
@@ -22,6 +22,7 @@ import {
 import { Comment, Post as PostType } from "../types/posts";
 import calculateCreatedTime from "../utils/formatDate";
 import { postKey } from "../utils/react-query-key";
+import { parseLinkDescription } from "../utils/contants";
 
 const Post = () => {
   const { _id } = useParams();
@@ -160,7 +161,12 @@ const Post = () => {
             <div className="flex">
               <h3 className="text-sm font-semibold">
                 {post.user?.username}{" "}
-                <span className="font-normal">{post.caption}</span>
+                <span
+                  className="font-normal"
+                  dangerouslySetInnerHTML={{
+                    __html: parseLinkDescription(post?.caption),
+                  }}
+                />
               </h3>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { QueryFunctionContext } from "react-query";
 import { changeProfileFormValue } from "../pages/edit-profile";
 import { Response } from "../types";
 import { MyPostResponse, ProfileResponse } from "../types/users";
@@ -8,8 +9,16 @@ export const getUserInfoById = async (_id: string) => {
   return response.data;
 };
 
-export const getMyPost = async (_id: string) => {
-  const resposne = await client.get<MyPostResponse>(`/users/get/posts/${_id}`);
+export const getMyPost = async (
+  _id: string,
+  page: QueryFunctionContext<string[], any>
+) => {
+  const resposne = await client.get<MyPostResponse>(`/users/get/posts/${_id}`, {
+    params: {
+      limit: 6,
+      skip: page.pageParam || 0,
+    },
+  });
   return resposne.data;
 };
 

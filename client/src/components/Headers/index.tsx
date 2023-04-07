@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Notification from "../../assets/icons/Notification";
-import LogoImage from "../../assets/images/LogoImage";
+import { GrNotification } from "react-icons/gr";
+import LogoImage from "../../icons/LogoImage";
 import SearchBox from "./SearchBox";
 
 const Headers = () => {
@@ -11,8 +11,7 @@ const Headers = () => {
       </Link>
       <SearchBox />
       <div className="relative cursor-pointer">
-        <Notification />
-
+        <GrNotification size={20} />
         <p className="absolute text-xs text-white w-[20px] h-[20px] flex items-center justify-center rounded-full bg-red-500 top-[-10px] right-[-10px]">
           10
         </p>

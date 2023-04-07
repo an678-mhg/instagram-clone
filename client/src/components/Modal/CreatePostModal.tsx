@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import VideoAndImage from "../../assets/images/VideoAndImage";
+import VideoAndImage from "../../icons/VideoAndImage";
 import { AuthContext } from "../../context/AuthContext";
 import { useState } from "react";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";

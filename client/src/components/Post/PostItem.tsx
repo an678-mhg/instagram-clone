@@ -1,10 +1,10 @@
 import { InfiniteData, useMutation, useQueryClient } from "react-query";
-import Comment from "../../assets/icons/Comment";
-import Like from "../../assets/icons/Like";
-import Menu from "../../assets/icons/Menu";
-import Message from "../../assets/icons/Message";
-import Notification from "../../assets/icons/Notification";
-import Save from "../../assets/icons/Save";
+import Comment from "../../icons/Comment";
+import Like from "../../icons/Like";
+import Menu from "../../icons/Menu";
+import Message from "../../icons/Message";
+import Notification from "../../icons/Notification";
+import Save from "../../icons/Save";
 import { likePost } from "../../services/posts";
 import { HomeFeed, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
@@ -14,6 +14,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { postKey } from "../../utils/react-query-key";
 import { Link } from "react-router-dom";
+import { parseLinkDescription } from "../../utils/contants";
 
 interface PostItemProps {
   post: Post;
@@ -112,9 +113,12 @@ const PostItem: React.FC<PostItemProps> = ({
         </p>
       </div>
       <div className="border-b border-gray-200 pb-4">
-        <p className="text-sm font-normal text-black line-clamp-2">
-          {post.caption}
-        </p>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: parseLinkDescription(post?.caption),
+          }}
+          className="text-sm font-normal text-black line-clamp-2"
+        />
       </div>
     </div>
   );

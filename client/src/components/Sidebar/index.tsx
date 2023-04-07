@@ -1,13 +1,13 @@
-import Logo from "../../assets/images/Logo";
+import Logo from "../../icons/Logo";
 import { Link } from "react-router-dom";
-import LogoImage from "../../assets/images/LogoImage";
+import LogoImage from "../../icons/LogoImage";
 import SidebarItem from "./SidebarItem";
 import { sidebars } from "../../utils/contants";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
 import useLogout from "../../hooks/useLogout";
 import { FiLogOut } from "react-icons/fi";
-import Create from "../../assets/icons/Create";
+import Create from "../../icons/Create";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";
 
 const Sidebar = () => {

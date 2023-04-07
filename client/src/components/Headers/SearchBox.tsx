@@ -1,4 +1,4 @@
-import Search from "../../assets/icons/Search";
+import Search from "../../icons/Search";
 
 const SearchBox = () => {
   return (

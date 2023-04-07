@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { IconProps } from "../../types";
+import { IconProps } from "../types";
 
 const Create: FC<IconProps> = ({ className, color }) => {
   return (

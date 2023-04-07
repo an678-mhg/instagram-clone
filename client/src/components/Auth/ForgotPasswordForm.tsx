@@ -1,4 +1,4 @@
-import Logo from "../../assets/images/Logo";
+import Logo from "../../icons/Logo";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { SignInFormValue } from "../../types";

@@ -12,6 +12,7 @@ export interface Profile {
   website: string;
   bio: string;
   is_follow: boolean;
+  email: string;
 }
 
 export interface ProfileResponse extends Response {
@@ -20,4 +21,6 @@ export interface ProfileResponse extends Response {
 
 export interface MyPostResponse extends Response {
   posts: Post[];
+  hashNextPage: boolean;
+  nextSkip: number | null;
 }

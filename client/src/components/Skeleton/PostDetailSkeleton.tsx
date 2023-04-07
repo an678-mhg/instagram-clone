@@ -1,4 +1,4 @@
-import Menu from "../../assets/icons/Menu";
+import Menu from "../../icons/Menu";
 
 const PostDetailSkeleton = () => {
   return (
