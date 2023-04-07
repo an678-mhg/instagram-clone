@@ -56,5 +56,4 @@ export interface createNotificationFormValue {
   type: "comment" | "like" | "follow" | "replyComment";
   comment: string | null;
   post: string | null;
-  reply: string | null;
 }

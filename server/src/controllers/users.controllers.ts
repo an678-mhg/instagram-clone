@@ -5,10 +5,13 @@ import likesModels from "../models/likes.models";
 import postsModels from "../models/posts.models";
 import checkAuth from "../utils/checkAuth";
 import { changeProfileFormValue } from "../types";
+import followModels from "../models/follow.models";
 
 class usersControllers {
   async getInfo(req: Request, res: Response) {
     const user_id = req.params._id;
+    const my_id = checkAuth(req.header("Authorization") as string);
+    let is_follow = false;
 
     if (!user_id) {
       return res
@@ -71,7 +74,14 @@ class usersControllers {
         },
       ]);
 
-      res.json({ success: user?.[0] ? true : false, user: user?.[0] });
+      is_follow = Boolean(
+        await followModels.findOne({ user: my_id, user_follow: user_id })
+      );
+
+      res.json({
+        success: user?.[0] ? true : false,
+        user: { ...user?.[0], is_follow },
+      });
     } catch (error) {
       res
         .status(500)

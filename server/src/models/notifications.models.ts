@@ -8,7 +8,7 @@ const notifications = new Schema(
     comment: { type: mongoose.Schema.Types.ObjectId },
     type: {
       type: String,
-      enum: ["comment", "like", "follow", "replyComment"],
+      enum: ["comment", "like", "follow", "reply comment"],
       required: true,
     },
     read: { type: Boolean, default: false },

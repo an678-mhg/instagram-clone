@@ -4,7 +4,7 @@ import { createNotificationFormValue } from "../types";
 
 class notificationsControllers {
   async createNotification(req: Request, res: Response) {
-    const { comment, post, type, user, reply } =
+    const { comment, post, type, user } =
       req.body as createNotificationFormValue;
     const from_user = req.body._id;
 
@@ -25,9 +25,7 @@ class notificationsControllers {
             ? `/post/${post}?comment_id=${comment}`
             : type === "like"
             ? `/post/${post}`
-            : type === "replyComment"
-            ? `/post/${post}?comment_id=${comment}?reply_id=${reply}`
-            : "",
+            : `/profile/${from_user}`,
         comment,
         post,
       });
