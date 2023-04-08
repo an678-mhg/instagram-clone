@@ -6,6 +6,7 @@ import likesModels from "../models/likes.models";
 import postsModels from "../models/posts.models";
 import { addPostBody } from "../types";
 import checkAuth from "../utils/checkAuth";
+import notificationsModels from "../models/notifications.models";
 
 class postControllers {
   async addPost(req: Request, res: Response) {
@@ -374,6 +375,40 @@ class postControllers {
       }).save();
 
       res.json({ success: true });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async removePost(req: Request, res: Response) {
+    try {
+      const post_id = req.body.post_id;
+      const user_id = req.body._id;
+
+      if (!post_id) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing parameters" });
+      }
+
+      const post = await postsModels.findOne({ _id: post_id });
+
+      if (post?.user?.toString() !== user_id) {
+        return res.status(404).json({
+          success: false,
+          message: "You do not have permission to delete this resource",
+        });
+      }
+
+      await Promise.all([
+        post?.delete(),
+        commentsModels.deleteMany({ post: post_id }),
+        likesModels.deleteMany({ post: post_id }),
+        notificationsModels.deleteMany({ post: post_id }),
+      ]);
+
+      res.json({ success: true, message: "Delete post success!" });
     } catch (error) {
       res
         .status(500)

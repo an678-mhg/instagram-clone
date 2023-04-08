@@ -38,4 +38,9 @@ routers.post(
   postsControllers.replyComment
 );
 
+// private
+// description: remove post by id
+// /api/posts/remove
+routers.post("/remove", verifyToken, postsControllers.removePost);
+
 export default routers;
