@@ -43,4 +43,9 @@ routers.post(
 // /api/posts/remove
 routers.post("/remove", verifyToken, postsControllers.removePost);
 
+// private
+// description: edit post by id
+// /api/posts/edit
+routers.post("/edit", verifyToken, postsControllers.editPost);
+
 export default routers;

@@ -415,6 +415,36 @@ class postControllers {
         .json({ success: false, message: "Server not found!", error });
     }
   }
+  async editPost(req: Request, res: Response) {
+    try {
+      const post_id = req.body.post_id;
+      const new_caption = req.body.new_caption as string;
+      const user_id = req.body._id;
+
+      if (!post_id || !new_caption) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing parameters" });
+      }
+
+      const post = await postsModels.findOne({ _id: post_id });
+
+      if (post?.user?.toString() !== user_id) {
+        return res.status(404).json({
+          success: false,
+          message: "You do not have permission to edit this resource",
+        });
+      }
+
+      await post?.update({ $set: { caption: new_caption } });
+
+      res.json({ success: true, message: "Edit post success!" });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
 }
 
 export default new postControllers();
