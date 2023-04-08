@@ -22,7 +22,10 @@ const EmojiTippy: React.FC<EmojiTippyProps> = ({
       visible={showSelectEmoji}
       render={(attrs) => (
         <div {...attrs}>
-          <EmojiPicker onEmojiClick={(emoji) => typingEmoji(emoji.emoji)} />
+          <EmojiPicker
+            emojiVersion="1.0"
+            onEmojiClick={(emoji) => typingEmoji(emoji.emoji)}
+          />
         </div>
       )}
       placement="auto-start"

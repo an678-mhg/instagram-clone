@@ -11,6 +11,10 @@ const SuggestAccount = () => {
     getSuggestAccount
   );
 
+  if (isError) {
+    return <h1>Failed to load post</h1>;
+  }
+
   return (
     <div className="flex-1 ml-[64px] xl:block hidden">
       <AccountProfile />

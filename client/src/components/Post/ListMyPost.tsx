@@ -28,6 +28,10 @@ const ListMyPost: React.FC<ListMyPostProps> = ({ _id }) => {
     }
   );
 
+  if (isError) {
+    return <p>Failed to load data...</p>;
+  }
+
   if (isLoading || !data) {
     return (
       <div className="w-full grid md:grid-cols-3 grid-cols-2 gap-1">
@@ -36,10 +40,6 @@ const ListMyPost: React.FC<ListMyPostProps> = ({ _id }) => {
         ))}
       </div>
     );
-  }
-
-  if (isError) {
-    return <p>Failed to load data...</p>;
   }
 
   if (data?.pages?.length === 0 || data?.pages[0]?.posts?.length === 0) {

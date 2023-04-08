@@ -78,3 +78,8 @@ export const replyComment = async (values: ReplyCommentFormValue) => {
   );
   return response.data;
 };
+
+export const removePost = async (post_id: string) => {
+  const response = await client.post<Response>("/posts/remove", { post_id });
+  return response.data;
+};

@@ -5,16 +5,20 @@ import Menu from "../../icons/Menu";
 import Message from "../../icons/Message";
 import Notification from "../../icons/Notification";
 import Save from "../../icons/Save";
-import { likePost } from "../../services/posts";
+import { likePost, removePost } from "../../services/posts";
 import { HomeFeed, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
 import ImageSlide from "../ImageSlide";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { postKey } from "../../utils/react-query-key";
 import { Link } from "react-router-dom";
 import { parseLinkDescription } from "../../utils/contants";
+import Tippy from "@tippyjs/react/headless";
+import { FiEdit2 } from "react-icons/fi";
+import { BsTrash } from "react-icons/bs";
+import { CircularProgress } from "react-cssfx-loading";
 
 interface PostItemProps {
   post: Post;
@@ -30,6 +34,8 @@ const PostItem: React.FC<PostItemProps> = ({
   limit,
 }) => {
   const { user } = useContext(AuthContext);
+  const [showMenu, setShowMenu] = useState(false);
+  const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation(likePost, {
     onError: () => {
@@ -37,11 +43,23 @@ const PostItem: React.FC<PostItemProps> = ({
     },
   });
 
-  const queryClient = useQueryClient();
+  const { mutateAsync: removePostAsync, isLoading } = useMutation(removePost, {
+    onSuccess: () => {
+      const newData = queryClient.getQueryData([
+        postKey.GET_HOME_FEED,
+      ]) as InfiniteData<HomeFeed>;
+
+      const pageCurrent = Math.floor(index / limit);
+
+      newData.pages[pageCurrent].posts = newData.pages[
+        pageCurrent
+      ].posts.filter((item) => item._id !== post._id);
+
+      queryClient.setQueryData([postKey.GET_HOME_FEED], newData);
+    },
+  });
 
   const handleLikePost = () => {
-    if (!user) return toast.error("You want login to like post!");
-
     const oldData = queryClient.getQueryData([
       postKey.GET_HOME_FEED,
     ]) as InfiniteData<HomeFeed>;
@@ -68,6 +86,12 @@ const PostItem: React.FC<PostItemProps> = ({
     mutateAsync(post._id);
   };
 
+  const handleRemovePost = () => {
+    const isDelete = window.confirm("Are you sure!");
+    if (!isDelete) return setShowMenu(false);
+    removePostAsync(post._id);
+  };
+
   return (
     <div className="mb-5 last:mb-0 md:px-0 px-2">
       <div className="flex items-center justify-between">
@@ -85,7 +109,42 @@ const PostItem: React.FC<PostItemProps> = ({
             </span>
           </h3>
         </Link>
-        <Menu className="text-black" />
+        {user?._id === post?.user?._id && (
+          <Tippy
+            visible={showMenu}
+            interactive
+            placement="bottom-start"
+            onClickOutside={() => setShowMenu(false)}
+            render={(attrs) => (
+              <div {...attrs}>
+                <div className="bg-white shadow-lg rounded-md">
+                  <button className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4">
+                    <FiEdit2 size={15} /> <span>Edit post</span>
+                  </button>
+                  <button
+                    disabled={isLoading}
+                    onClick={handleRemovePost}
+                    className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4"
+                  >
+                    {!isLoading ? (
+                      <BsTrash size={15} />
+                    ) : (
+                      <CircularProgress width={16} height={16} />
+                    )}
+                    <span>Remove post</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          >
+            <div
+              className="cursor-pointer"
+              onClick={() => setShowMenu((prev) => !prev)}
+            >
+              <Menu className="text-black" />
+            </div>
+          </Tippy>
+        )}
       </div>
       <div className="mt-3">
         <Link to={`/post/${post._id}`}>

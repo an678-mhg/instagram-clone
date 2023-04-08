@@ -33,7 +33,7 @@ const Post = () => {
 
   const { user } = useContext(AuthContext);
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     [postKey.GET_DETAIL_POST(_id as string)],
     () => Promise.all([getPost(_id as string), getComment(_id as string)])
   );
@@ -118,6 +118,10 @@ const Post = () => {
 
     likePostAsync(_id as string);
   };
+
+  if (isError) {
+    return <h1>Failed to load post</h1>;
+  }
 
   if (isLoading || !data) {
     return <PostDetailSkeleton />;

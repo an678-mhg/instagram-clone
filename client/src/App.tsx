@@ -4,6 +4,7 @@ import Slash from "./components/Slash";
 import { AuthContext } from "./context/AuthContext";
 import useUserInfomation from "./hooks/useUserInfomation";
 import routers from "./routers";
+import useTopScreen from "./hooks/useTopScreen";
 
 function App() {
   const { user } = useContext(AuthContext);

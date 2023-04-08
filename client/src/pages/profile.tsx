@@ -41,12 +41,12 @@ const Profile = () => {
     mutateAsync(_id as string);
   };
 
-  if (isLoading || !profile) {
-    return <ProfileSkeleton />;
-  }
-
   if (isError) {
     return <p>Failed to load data...</p>;
+  }
+
+  if (isLoading || !profile) {
+    return <ProfileSkeleton />;
   }
 
   return (
