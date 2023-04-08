@@ -11,10 +11,6 @@ export const accountKey = {
   GET_SUGGEST_ACCOUNT: "GET_SUGGEST_ACCOUNT",
 };
 
-export const emojiKey = {
-  GET_EMOJI: "GET_EMOJI",
-};
-
 export const usersKey = {
   GET_INFO: (_id: string) => `GET_INFO_${_id}`,
 };

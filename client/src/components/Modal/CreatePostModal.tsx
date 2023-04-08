@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useCallback, useRef } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import VideoAndImage from "../../icons/VideoAndImage";
 import { AuthContext } from "../../context/AuthContext";
@@ -12,6 +12,7 @@ import uploadFile from "../../utils/upload";
 import { useQueryClient } from "react-query";
 import { postKey } from "../../utils/react-query-key";
 import checkFile from "../../utils/checkFile";
+import EmojiTippy from "../Comment/EmojiTippy";
 
 interface FilePreview {
   file: File;
@@ -34,9 +35,20 @@ const CreatePostModal = () => {
   const { user } = useContext(AuthContext);
   const { setIsOpen } = useContext(CreatePostModalContext);
   const queryClient = useQueryClient();
+  const areaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [loading, setLoading] = useState(false);
+  const [showSelectEmoji, setShowSelectEmoji] = useState(false);
+
+  const typingEmoji = useCallback((emoji: string) => {
+    setFormData((prev) => ({ ...prev, caption: (prev.caption += emoji) }));
+    areaRef.current?.focus();
+  }, []);
+
+  const setStatusEmoji = useCallback(() => {
+    setShowSelectEmoji((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -156,9 +168,15 @@ const CreatePostModal = () => {
             onChange={(e) =>
               setFormData({ ...formData, caption: e.target.value })
             }
+            ref={areaRef}
             style={{ resize: "none" }}
             placeholder="Write a caption..."
             className="outline-none text-sm w-full text-black mt-3 flex-1"
+          />
+          <EmojiTippy
+            setShowSelectEmoji={setStatusEmoji}
+            typingEmoji={typingEmoji}
+            showSelectEmoji={showSelectEmoji}
           />
         </div>
       </div>
