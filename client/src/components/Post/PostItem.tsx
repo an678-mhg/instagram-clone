@@ -5,7 +5,7 @@ import Menu from "../../icons/Menu";
 import Message from "../../icons/Message";
 import Notification from "../../icons/Notification";
 import Save from "../../icons/Save";
-import { likePost, removePost } from "../../services/posts";
+import { editPost, likePost, removePost } from "../../services/posts";
 import { HomeFeed, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
 import ImageSlide from "../ImageSlide";
@@ -19,6 +19,7 @@ import Tippy from "@tippyjs/react/headless";
 import { FiEdit2 } from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
 import { CircularProgress } from "react-cssfx-loading";
+import { CreatePostModalContext } from "../../context/CreatePostModalContext";
 
 interface PostItemProps {
   post: Post;
@@ -59,6 +60,26 @@ const PostItem: React.FC<PostItemProps> = ({
     },
   });
 
+  const { mutateAsync: editPostAsync, isLoading: editPostLoading } =
+    useMutation(editPost, {
+      onSuccess: (_, body) => {
+        const newData = queryClient.getQueryData([
+          postKey.GET_HOME_FEED,
+        ]) as InfiniteData<HomeFeed>;
+
+        const pageCurrent = Math.floor(index / limit);
+
+        newData.pages[pageCurrent].posts = newData.pages[pageCurrent].posts.map(
+          (item) =>
+            item._id === post._id
+              ? { ...item, caption: body.new_caption }
+              : item
+        );
+
+        queryClient.setQueryData([postKey.GET_HOME_FEED], newData);
+      },
+    });
+
   const handleLikePost = () => {
     const oldData = queryClient.getQueryData([
       postKey.GET_HOME_FEED,
@@ -92,6 +113,19 @@ const PostItem: React.FC<PostItemProps> = ({
     removePostAsync(post._id);
   };
 
+  const handleOpenModalEdit = () => {
+    const newCaption = window.prompt(
+      `Enter a new caption for the post ${post._id}`,
+      post.caption
+    );
+
+    if (newCaption) {
+      editPostAsync({ post_id: post._id, new_caption: newCaption });
+    } else {
+      toast.error("Update post failed because caption is empty");
+    }
+  };
+
   return (
     <div className="mb-5 last:mb-0 md:px-0 px-2">
       <div className="flex items-center justify-between">
@@ -118,11 +152,20 @@ const PostItem: React.FC<PostItemProps> = ({
             render={(attrs) => (
               <div {...attrs}>
                 <div className="bg-white shadow-lg rounded-md">
-                  <button className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4">
-                    <FiEdit2 size={15} /> <span>Edit post</span>
+                  <button
+                    disabled={editPostLoading || isLoading}
+                    onClick={handleOpenModalEdit}
+                    className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4"
+                  >
+                    {!editPostLoading ? (
+                      <FiEdit2 size={15} />
+                    ) : (
+                      <CircularProgress width={16} height={16} />
+                    )}
+                    <span>Edit post</span>
                   </button>
                   <button
-                    disabled={isLoading}
+                    disabled={isLoading || editPostLoading}
                     onClick={handleRemovePost}
                     className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4"
                   >

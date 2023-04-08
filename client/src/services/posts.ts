@@ -5,7 +5,13 @@ import {
   ReplyCommentFormValue,
   Response,
 } from "../types";
-import { CommentResponse, HomeFeed, PostDetail, Comment } from "../types/posts";
+import {
+  CommentResponse,
+  HomeFeed,
+  PostDetail,
+  Comment,
+  EditPostFormValue,
+} from "../types/posts";
 import client from "../utils/client";
 
 export const addPost = async (post: CreatePostFormValue) => {
@@ -81,5 +87,10 @@ export const replyComment = async (values: ReplyCommentFormValue) => {
 
 export const removePost = async (post_id: string) => {
   const response = await client.post<Response>("/posts/remove", { post_id });
+  return response.data;
+};
+
+export const editPost = async (values: EditPostFormValue) => {
+  const response = await client.post<Response>("/posts/edit", values);
   return response.data;
 };

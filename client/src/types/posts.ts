@@ -46,3 +46,8 @@ export interface Comment {
   is_liked: boolean;
   parent_id: string;
 }
+
+export interface EditPostFormValue {
+  post_id: string;
+  new_caption: string;
+}

@@ -43,7 +43,7 @@ img {
 }
 
 .animation-fade {
-  animation: fade ease-in-out 1s;
+  animation: fade ease-in-out 0.5s;
 }
 
 .background {
