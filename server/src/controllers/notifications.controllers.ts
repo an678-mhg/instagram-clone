@@ -1,38 +1,56 @@
 import { Request, Response } from "express";
-import notificationsModels from "../models/notifications.models";
 import { createNotificationFormValue } from "../types";
+import notificationsModels from "../models/notifications.models";
+import followModels from "../models/follow.models";
 
 class notificationsControllers {
   async createNotification(req: Request, res: Response) {
-    const { comment, post, type, user } =
+    const { comment, message, post, url } =
       req.body as createNotificationFormValue;
     const from_user = req.body._id;
 
-    if (!user || !type) {
+    if (!message || !url) {
       return res
         .status(400)
-        .json({ success: false, message: "Missing paramerter" });
+        .json({ success: false, message: "Missing paramerter!" });
     }
 
     try {
-      const newNotifications = new notificationsModels({
+      const followers = await followModels.find({ user_follow: from_user });
+
+      const newNotify = new notificationsModels({
         from_user,
-        user,
-        read: false,
-        type,
-        url:
-          type === "comment"
-            ? `/post/${post}?comment_id=${comment}`
-            : type === "like"
-            ? `/post/${post}`
-            : `/profile/${from_user}`,
+        user: followers.map((follow) => follow.user),
+        message,
+        url,
         comment,
         post,
       });
 
-      await newNotifications.save();
+      await newNotify.save();
 
-      res.json({ success: true, notification: newNotifications });
+      res.json({ success: true, notification: newNotify });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async getNotification(req: Request, res: Response) {
+    const user_id = req.body._id;
+
+    try {
+      const notifications = await notificationsModels
+        .find({
+          user: user_id,
+        })
+        .populate({
+          path: "from_user",
+          select: "_id username fullname avatar",
+        })
+        .sort("-createdAt");
+
+      res.json({ success: true, notifications });
     } catch (error) {
       res
         .status(500)

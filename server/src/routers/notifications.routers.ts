@@ -13,4 +13,9 @@ routers.post(
   notificationsControllers.createNotification
 );
 
+// private
+// description: create notification
+// /api/notifications/gets
+routers.get("/gets", verifyToken, notificationsControllers.getNotification);
+
 export default routers;
