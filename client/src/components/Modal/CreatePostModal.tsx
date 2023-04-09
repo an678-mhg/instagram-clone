@@ -13,6 +13,7 @@ import { useQueryClient } from "react-query";
 import { postKey } from "../../utils/react-query-key";
 import checkFile from "../../utils/checkFile";
 import EmojiTippy from "../Comment/EmojiTippy";
+import { createNotification } from "../../services/notifications";
 
 interface FilePreview {
   file: File;
@@ -94,7 +95,7 @@ const CreatePostModal = () => {
         formData?.files?.map((file) => uploadFile(file.file))
       );
 
-      await mutateAsync({
+      const newPost = await mutateAsync({
         caption: formData.caption,
         media,
         post_type: formData.type,
@@ -104,6 +105,14 @@ const CreatePostModal = () => {
       setIsOpen(false);
 
       queryClient.refetchQueries([postKey.GET_HOME_FEED]);
+
+      createNotification({
+        comment: null,
+        message: "just created a new post",
+        post: newPost?.post?._id,
+        url: `/post/${newPost?.post?._id}`,
+      });
+
       toast.dismiss(toastId);
       toast.success("Upload post success");
     } catch (error) {

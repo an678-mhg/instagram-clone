@@ -14,3 +14,7 @@ export const accountKey = {
 export const usersKey = {
   GET_INFO: (_id: string) => `GET_INFO_${_id}`,
 };
+
+export const notificationKey = {
+  GET_NOTIFICATION: "GET_NOTIFICATION",
+};

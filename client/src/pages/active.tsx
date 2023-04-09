@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import useQueryParams from "../hooks/useQueryParams";
 import { activeAccount } from "../services/auth";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/contants";
+import { setToken } from "../utils/token";
 
 const Active = () => {
   const queryParams = useQueryParams();
@@ -17,8 +17,7 @@ const Active = () => {
           queryParams.get("activeToken") as string
         );
         if (response.success) {
-          localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-          localStorage.setItem(REFRESH_TOKEN, response.refreshToken);
+          setToken(response.accessToken, response.refreshToken);
           setUser(response.user);
           toast.success("Active account success", { id: toastId });
         }

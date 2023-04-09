@@ -106,8 +106,8 @@ export interface Emoji {
 }
 
 export interface createNotificationFormValue {
-  user: string;
-  type: "comment" | "like" | "follow" | "replyComment";
   comment: string | null;
   post: string | null;
+  url: string;
+  message: string;
 }
