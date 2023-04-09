@@ -14,6 +14,7 @@ import { postKey } from "../../utils/react-query-key";
 import checkFile from "../../utils/checkFile";
 import EmojiTippy from "../Comment/EmojiTippy";
 import { createNotification } from "../../services/notifications";
+import { SocketContext } from "../../context/SocketContext";
 
 interface FilePreview {
   file: File;
@@ -35,6 +36,8 @@ const initialFormData: FormData = {
 const CreatePostModal = () => {
   const { user } = useContext(AuthContext);
   const { setIsOpen } = useContext(CreatePostModalContext);
+  const { socket } = useContext(SocketContext);
+
   const queryClient = useQueryClient();
   const areaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -78,6 +81,8 @@ const CreatePostModal = () => {
     });
   };
 
+  console.log(socket);
+
   const handleAddPost = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -106,12 +111,16 @@ const CreatePostModal = () => {
 
       queryClient.refetchQueries([postKey.GET_HOME_FEED]);
 
-      createNotification({
+      const notification = await createNotification({
         comment: null,
         message: "just created a new post",
         post: newPost?.post?._id,
         url: `/post/${newPost?.post?._id}`,
       });
+
+      console.log(socket);
+
+      socket?.emit("create-new-post", notification);
 
       toast.dismiss(toastId);
       toast.success("Upload post success");

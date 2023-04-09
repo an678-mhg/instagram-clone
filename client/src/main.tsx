@@ -14,6 +14,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./styles/index.css";
+import SocketContextProvider from "./context/SocketContext";
 
 const queryClientOptions: QueryClientConfig = {
   defaultOptions: {
@@ -29,14 +30,16 @@ const queryClientOptions: QueryClientConfig = {
 const queryClient = new QueryClient(queryClientOptions);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <CreatePostModalContextProvider>
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <AuthContextProvider>
+      <CreatePostModalContextProvider>
+        <SocketContextProvider>
           <App />
           <Toaster />
-        </CreatePostModalContextProvider>
-      </AuthContextProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+        </SocketContextProvider>
+      </CreatePostModalContextProvider>
+    </AuthContextProvider>
+  </QueryClientProvider>
+  // </React.StrictMode>
 );

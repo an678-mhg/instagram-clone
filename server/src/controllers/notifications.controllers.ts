@@ -29,7 +29,17 @@ class notificationsControllers {
 
       await newNotify.save();
 
-      res.json({ success: true, notification: newNotify });
+      const notify = await notificationsModels
+        .findOne({ _id: newNotify._id })
+        .populate({
+          path: "from_user",
+          select: "_id username fullname avatar",
+        });
+
+      res.json({
+        success: true,
+        notification: notify,
+      });
     } catch (error) {
       res
         .status(500)
