@@ -172,7 +172,12 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
                   ? "Hide replies"
                   : `View ${comment.num_replies} replies`}
                 {mutateReplyCommentLoading && (
-                  <CircularProgress className="ml-3" width={15} height={15} />
+                  <CircularProgress
+                    color="#fff"
+                    className="ml-3"
+                    width={15}
+                    height={15}
+                  />
                 )}
               </p>
             </div>

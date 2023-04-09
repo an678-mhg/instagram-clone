@@ -51,7 +51,7 @@ const Profile = () => {
 
   return (
     <div className="xl:w-[950px] w-full md:mt-8 mt-4">
-      <div className="w-full border-b border-gray-200 md:pb-8 pb-4">
+      <div className="w-full border-b border-[#262626] md:pb-8 pb-4">
         <div className="flex items-center md:space-x-16 space-x-4 md:px-16 px-4">
           <img
             loading="lazy"
@@ -66,7 +66,7 @@ const Profile = () => {
               {user?._id === profile?.user?._id ? (
                 <Link
                   to="/edit-profile"
-                  className="px-4 py-1.5 rounded-md inline bg-gray-200 font-semibold text-sm"
+                  className="px-4 py-1.5 rounded-md inline bg-[#333] font-semibold text-sm"
                 >
                   Edit profile
                 </Link>
@@ -78,12 +78,12 @@ const Profile = () => {
                     className={`px-4 py-1.5 rounded-md ${
                       !profile.user.is_follow
                         ? "text-white bg-blue-500"
-                        : "text-black bg-gray-300"
+                        : "text-white bg-[#222]"
                     } font-semibold text-sm`}
                   >
                     {profile.user?.is_follow ? "Following" : "Follow"}
                   </button>
-                  <button className="px-4 py-1.5 rounded-md bg-gray-200 font-semibold text-sm">
+                  <button className="px-4 py-1.5 rounded-md bg-[#333] font-semibold text-sm">
                     Message
                   </button>
                 </div>

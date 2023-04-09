@@ -127,7 +127,7 @@ const EditProfile = () => {
                 {...register("username", {
                   required: { value: true, message: "Username is required!" },
                 })}
-                className="px-2 py-1.5 mt-2 bg-gray-300 w-full max-w-full text-sm rounded-sm"
+                className="px-2 py-1.5 mt-2 bg-[#222] w-full max-w-full text-sm rounded-sm"
                 placeholder="Username"
               />
               {errors?.username?.message && (
@@ -144,7 +144,7 @@ const EditProfile = () => {
                 {...register("fullname", {
                   required: { value: true, message: "Fullname is required!" },
                 })}
-                className="px-2 py-1.5 mt-2 bg-gray-300 w-full max-w-full text-sm rounded-sm"
+                className="px-2 py-1.5 mt-2 bg-[#222] w-full max-w-full text-sm rounded-sm"
                 placeholder="Fullname"
               />
               {errors?.fullname?.message && (
@@ -161,7 +161,7 @@ const EditProfile = () => {
                 {...register("website", {
                   required: { value: true, message: "Website is required!" },
                 })}
-                className="px-2 py-1.5 mt-2 bg-gray-300 w-full max-w-full text-sm rounded-sm"
+                className="px-2 py-1.5 mt-2 bg-[#222] w-full max-w-full text-sm rounded-sm"
                 placeholder="Website"
               />
               {errors?.website?.message && (
@@ -178,7 +178,7 @@ const EditProfile = () => {
                 {...register("phone", {
                   required: { value: true, message: "Phone is required!" },
                 })}
-                className="px-2 py-1.5 mt-2 bg-gray-300 w-full max-w-full text-sm rounded-sm"
+                className="px-2 py-1.5 mt-2 bg-[#222] w-full max-w-full text-sm rounded-sm"
                 placeholder="Phone number"
               />
               {errors?.phone?.message && (
@@ -200,7 +200,7 @@ const EditProfile = () => {
                   },
                 })}
                 rows={4}
-                className="px-2 py-1.5 mt-2 bg-gray-300 w-full max-w-full text-sm rounded-sm"
+                className="px-2 py-1.5 mt-2 bg-[#222] w-full max-w-full text-sm rounded-sm"
                 placeholder="Bio"
                 style={{ resize: "none" }}
               />

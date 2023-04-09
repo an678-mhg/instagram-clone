@@ -7,8 +7,8 @@ const Menu: FC<IconProps> = ({ className, color }) => {
       <svg
         aria-label="More options"
         className="_ab6-"
-        color={color}
-        fill={color}
+        color={color || "#fff"}
+        fill={color || "#fff"}
         height={24}
         role="img"
         viewBox="0 0 24 24"

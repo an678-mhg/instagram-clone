@@ -50,7 +50,7 @@ const AccountItem: React.FC<AccountItemProps> = ({ account, isFetching }) => {
           src={account.avatar}
         />
         <div className="ml-3">
-          <h3 className="text-sm font-semibold text-black">
+          <h3 className="text-sm font-semibold text-white">
             {account.username}
           </h3>
           <p className="text-sm font-normal text-gray-400">

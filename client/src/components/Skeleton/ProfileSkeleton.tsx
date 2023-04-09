@@ -1,7 +1,7 @@
 const ProfileSkeleton = () => {
   return (
     <div className="xl:w-[950px] w-full mt-8">
-      <div className="w-full border-b border-gray-200 pb-8">
+      <div className="w-full border-b border-[#262626] pb-8">
         <div className="flex md:space-x-16 space-x-4 md:ml-16 ml-4">
           <div className="md:w-[150px] md:h-[150px] w-[80px] h-[80px] rounded-full skeleton" />
           <div className="flex-1">

@@ -115,9 +115,9 @@ const CreatePostModal = () => {
   return (
     <form
       onSubmit={handleAddPost}
-      className={`w-[835px] max-w-full md:h-[540px] h-screen mx-auto overflow-hidden rounded-md bg-white flex flex-col`}
+      className={`w-[835px] max-w-full md:h-[540px] h-screen mx-auto overflow-hidden rounded-md bg-[#111] flex flex-col`}
     >
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 cursor-pointer">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-[#262626] cursor-pointer">
         <BiArrowBack onClick={() => setIsOpen(false)} className="text-2xl" />
         <h1 className="font-semibold">Create new {formData.type}</h1>
         <button disabled={loading} className="font-semibold text-blue-500">
@@ -151,7 +151,7 @@ const CreatePostModal = () => {
             </div>
           )}
         </div>
-        <div className="p-4 flex-1 flex flex-col border-l md:border-t-0 border-t border-gray-200">
+        <div className="p-4 flex-1 flex flex-col border-l md:border-t-0 border-t border-[#262626]">
           <div className="flex items-center">
             <img
               loading="lazy"
@@ -171,7 +171,7 @@ const CreatePostModal = () => {
             ref={areaRef}
             style={{ resize: "none" }}
             placeholder="Write a caption..."
-            className="outline-none text-sm w-full text-black mt-3 flex-1"
+            className="outline-none text-sm w-full text-white mt-3 flex-1 bg-transparent mb-2"
           />
           <EmojiTippy
             setShowSelectEmoji={setStatusEmoji}

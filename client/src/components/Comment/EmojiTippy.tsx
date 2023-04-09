@@ -23,6 +23,8 @@ const EmojiTippy: React.FC<EmojiTippyProps> = ({
       render={(attrs) => (
         <div {...attrs}>
           <EmojiPicker
+            // @ts-ignore
+            theme="dark"
             emojiVersion="1.0"
             onEmojiClick={(emoji) => typingEmoji(emoji.emoji)}
           />

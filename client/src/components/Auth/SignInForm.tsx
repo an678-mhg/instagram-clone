@@ -37,7 +37,7 @@ const SignInForm = () => {
 
   return (
     <form onSubmit={handleSubmit(handleSignIn)} className="w-[350px]">
-      <div className="pt-10 px-5 rounded-md pb-6 w-full border border-gray-200 flex items-center justify-center flex-col">
+      <div className="pt-10 px-5 rounded-md pb-6 w-full border border-[#262626] flex items-center justify-center flex-col">
         <Logo width={174} height={50} />
 
         {errorMessage && (
@@ -65,7 +65,7 @@ const SignInForm = () => {
                 },
               })}
               placeholder="Email or username"
-              className="px-3 py-2 text-xs w-full rounded-[4px] bg-gray-100"
+              className="px-3 py-2 text-xs w-full rounded-[4px] bg-[#222]"
             />
             {errors?.email?.message && (
               <span className="mt-3 text-xs text-red-500">
@@ -88,7 +88,7 @@ const SignInForm = () => {
                 })}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="px-3 py-2 text-xs w-full rounded-[4px] bg-gray-100"
+                className="px-3 py-2 text-xs w-full rounded-[4px] bg-[#222]"
               />
               <div
                 className="absolute top-[50%] cursor-pointer translate-y-[-50%] right-[5px]"
@@ -117,7 +117,7 @@ const SignInForm = () => {
           </button>
           <div className="relative py-6">
             <div className="w-full h-[1px] bg-gray-200" />
-            <span className="text-sm font-semibold text-gray-400 bg-white px-4 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            <span className="text-sm font-semibold text-gray-400 bg-black px-4 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
               OR
             </span>
           </div>
@@ -126,7 +126,7 @@ const SignInForm = () => {
               onClick={signInGoogle}
               type="button"
               disabled={isLoading || signInSocialLoading}
-              className="px-3 mb-4 w-full bg-gray-100 py-2 rounded-md text-xs justify-center font-semibold flex items-center"
+              className="px-3 mb-4 w-full bg-[#222] py-2 rounded-md text-xs justify-center font-semibold flex items-center"
             >
               <FcGoogle className="w-5 h-5" />{" "}
               <span className="ml-3">Login with Google</span>
@@ -142,7 +142,7 @@ const SignInForm = () => {
           </div>
         </div>
       </div>
-      <div className="w-full border border-gray-200 rounded-md mt-3 p-4 text-center">
+      <div className="w-full border border-[#262626] rounded-md mt-3 p-4 text-center">
         <p className="text-sm">
           Don't have an account?{" "}
           <Link

@@ -40,7 +40,7 @@ const FormComment: React.FC<FormCommentProps> = ({
           setComment("");
         })
       }
-      className="p-4 flex items-center space-x-4 border-t border-b border-gray-200"
+      className="p-4 flex items-center space-x-4 border-t border-b border-[#262626]"
     >
       <EmojiTippy
         setShowSelectEmoji={setStatusEmoji}
@@ -52,14 +52,14 @@ const FormComment: React.FC<FormCommentProps> = ({
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         placeholder={placeholder || "Add a comment..."}
-        className="flex-1 text-sm"
+        className="flex-1 text-sm bg-transparent"
       />
       <button
         disabled={createCommentLoading}
         className="text-blue-500 font-semibold text-sm"
       >
         {createCommentLoading ? (
-          <CircularProgress width={20} height={20} />
+          <CircularProgress color="#fff" width={20} height={20} />
         ) : (
           "Post"
         )}

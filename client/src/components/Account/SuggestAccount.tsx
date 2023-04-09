@@ -19,7 +19,7 @@ const SuggestAccount = () => {
     <div className="flex-1 ml-[64px] xl:block hidden">
       <AccountProfile />
       <div className="mt-2">
-        <h1 className="text-[16px] font-semibold px-4 text-black">
+        <h1 className="text-[16px] font-semibold px-4 text-white">
           Suggestions for you
         </h1>
         <div className="mt-2">

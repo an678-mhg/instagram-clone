@@ -78,7 +78,7 @@ const ListMyPost: React.FC<ListMyPostProps> = ({ _id }) => {
           >
             {isFetchingNextPage && (
               <div className="mb-5">
-                <CircularProgress />
+                <CircularProgress color="#fff" />
               </div>
             )}
           </div>

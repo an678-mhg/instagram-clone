@@ -12,12 +12,12 @@ const SidebarItem: FC<SidebarItemProps> = ({ sidebar }) => {
   return (
     <Link
       to={sidebar.href}
-      className={`flex md:justify-start justify-center items-center w-full text-black p-3 md:rounded-full hover:bg-gray-100 ${
-        sidebar.href === location.pathname && "bg-gray-100"
+      className={`flex md:justify-start justify-center items-center w-full text-white p-3 md:rounded-full hover:bg-[#222] ${
+        sidebar.href === location.pathname && "bg-[#222]"
       } md:mb-2 transition-colors cursor-pointer last:mb-0`}
     >
-      <sidebar.icons className="text-black" />
-      <span className="lg:block hidden text-[16px] text-black ml-4">
+      <sidebar.icons className="text-white" />
+      <span className="lg:block hidden text-[16px] text-white ml-4">
         {sidebar.title}
       </span>
     </Link>

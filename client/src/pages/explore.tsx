@@ -72,7 +72,7 @@ const Explore = () => {
           >
             {isFetchingNextPage && (
               <div className="mb-5">
-                <CircularProgress />
+                <CircularProgress color="#fff" />
               </div>
             )}
           </div>

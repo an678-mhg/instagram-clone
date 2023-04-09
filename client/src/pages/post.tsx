@@ -137,8 +137,8 @@ const Post = () => {
       <div className="md:w-[50%] w-full object-contain md:h-full">
         <ImageSlide media={post?.media as string[]} />
       </div>
-      <div className="flex-1 flex flex-col border-l border-gray-200">
-        <div className="px-4 py-2 flex items-center w-full border-b border-gray-200">
+      <div className="flex-1 flex flex-col border-l border-[#262626]">
+        <div className="px-4 py-2 flex items-center w-full border-b border-[#262626]">
           <Link to={`/profile/${post?.user?._id}`}>
             <img
               loading="lazy"
@@ -179,7 +179,7 @@ const Post = () => {
           ))}
           <div ref={bottomCommentRef}></div>
         </div>
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-[#262626] p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="cursor-pointer" onClick={handleLikePost}>

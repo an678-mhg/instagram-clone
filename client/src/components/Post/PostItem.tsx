@@ -136,7 +136,7 @@ const PostItem: React.FC<PostItemProps> = ({
             src={post.user?.avatar}
           />
 
-          <h3 className="text-sm font-semibold ml-3 text-black">
+          <h3 className="text-sm font-semibold ml-3 text-white">
             {post.user?.username}{" "}
             <span className="text-gray-400">
               • {calculateCreatedTime(post.createdAt)}
@@ -151,28 +151,28 @@ const PostItem: React.FC<PostItemProps> = ({
             onClickOutside={() => setShowMenu(false)}
             render={(attrs) => (
               <div {...attrs}>
-                <div className="bg-white shadow-lg rounded-md">
+                <div className="bg-black shadow-lg rounded-md">
                   <button
                     disabled={editPostLoading || isLoading}
                     onClick={handleOpenModalEdit}
-                    className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4"
+                    className="cursor-pointer px-4 py-2 border-b border-[#262626] text-sm font-normal flex items-center space-x-4"
                   >
                     {!editPostLoading ? (
                       <FiEdit2 size={15} />
                     ) : (
-                      <CircularProgress width={16} height={16} />
+                      <CircularProgress color="#fff" width={16} height={16} />
                     )}
                     <span>Edit post</span>
                   </button>
                   <button
                     disabled={isLoading || editPostLoading}
                     onClick={handleRemovePost}
-                    className="cursor-pointer px-4 py-2 border-b border-gray-200 text-sm font-normal flex items-center space-x-4"
+                    className="cursor-pointer px-4 py-2 border-b border-[#262626] text-sm font-normal flex items-center space-x-4"
                   >
                     {!isLoading ? (
                       <BsTrash size={15} />
                     ) : (
-                      <CircularProgress width={16} height={16} />
+                      <CircularProgress color="#fff" width={16} height={16} />
                     )}
                     <span>Remove post</span>
                   </button>
@@ -184,7 +184,7 @@ const PostItem: React.FC<PostItemProps> = ({
               className="cursor-pointer"
               onClick={() => setShowMenu((prev) => !prev)}
             >
-              <Menu className="text-black" />
+              <Menu className="text-white" />
             </div>
           </Tippy>
         )}
@@ -200,26 +200,26 @@ const PostItem: React.FC<PostItemProps> = ({
             {post.is_liked ? <Like /> : <Notification />}
           </button>
           <Link to={`/post/${post._id}`}>
-            <Comment className="text-black" />
+            <Comment className="text-white" />
           </Link>
-          <Message className="text-black" />
+          <Message className="text-white" />
         </div>
-        <Save className="text-black" />
+        <Save className="text-white" />
       </div>
       <div className="my-2">
-        <p className="text-sm font-semibold text-black">
+        <p className="text-sm font-semibold text-white">
           {post.like_count} likes
         </p>
-        <p className="text-sm font-semibold text-black">
+        <p className="text-sm font-semibold text-white">
           {post.comment_count} comments
         </p>
       </div>
-      <div className="border-b border-gray-200 pb-4">
+      <div className="border-b border-[#262626] pb-4">
         <p
           dangerouslySetInnerHTML={{
             __html: parseLinkDescription(post?.caption),
           }}
-          className="text-sm font-normal text-black line-clamp-2"
+          className="text-sm font-normal text-white line-clamp-2"
         />
       </div>
     </div>

@@ -24,7 +24,7 @@ const ImageSlide: React.FC<ImageSlideProps> = ({ media, radius }) => {
       {media?.map((item) => (
         <SwiperSlide key={item}>
           <div
-            className={`flex bg-gray-100 items-center h-full justify-center ${
+            className={`flex bg-[#222] items-center h-full justify-center ${
               radius && "rounded-md overflow-hidden"
             }`}
           >

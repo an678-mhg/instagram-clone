@@ -4,8 +4,8 @@ const VideoAndImage = () => {
       <svg
         aria-label="Icon to represent media such as images or videos"
         className="_ab6-"
-        color="rgb(38, 38, 38)"
-        fill="rgb(38, 38, 38)"
+        color="#fff"
+        fill="#fff"
         height={77}
         role="img"
         viewBox="0 0 97.6 77.3"

@@ -68,7 +68,7 @@ const Home = () => {
                 ref={ref}
                 className="mt-4 flex w-full items-center justify-center"
               >
-                {isFetchingNextPage && <CircularProgress />}
+                {isFetchingNextPage && <CircularProgress color="#fff" />}
               </div>
             )}
           </InView>

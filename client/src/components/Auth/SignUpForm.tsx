@@ -25,7 +25,7 @@ const SignUpForm = () => {
 
   return (
     <form onSubmit={handleSubmit(handleSignUp)} className="w-[350px]">
-      <div className="pt-10 px-5 rounded-md pb-6 w-full border border-gray-200 flex items-center justify-center flex-col">
+      <div className="pt-10 px-5 rounded-md pb-6 w-full border border-[#262626] flex items-center justify-center flex-col">
         <Logo width={174} height={50} />
 
         {errorMessage && (
@@ -53,7 +53,7 @@ const SignUpForm = () => {
                 },
               })}
               placeholder="Email"
-              className="px-3 py-2 text-xs w-full rounded-[4px] bg-gray-100"
+              className="px-3 py-2 text-xs w-full rounded-[4px] bg-[#222]"
             />
             {errors?.email?.message && (
               <span className="mt-3 text-xs text-red-500">
@@ -67,7 +67,7 @@ const SignUpForm = () => {
                 required: { value: true, message: "Fullname is required!" },
               })}
               placeholder="Display name"
-              className="px-3 py-2 text-xs w-full rounded-[4px] bg-gray-100"
+              className="px-3 py-2 text-xs w-full rounded-[4px] bg-[#222]"
             />
             {errors?.fullname?.message && (
               <span className="mt-3 text-xs text-red-500">
@@ -81,7 +81,7 @@ const SignUpForm = () => {
                 required: { value: true, message: "Username is required!" },
               })}
               placeholder="Username"
-              className="px-3 py-2 text-xs w-full rounded-[4px] bg-gray-100"
+              className="px-3 py-2 text-xs w-full rounded-[4px] bg-[#222]"
             />
             {errors?.username?.message && (
               <span className="mt-3 text-xs text-red-500">
@@ -104,7 +104,7 @@ const SignUpForm = () => {
                 })}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="px-3 py-2 text-xs w-full rounded-[4px] bg-gray-100"
+                className="px-3 py-2 text-xs w-full rounded-[4px] bg-[#222]"
               />
               <div
                 className="absolute top-[50%] cursor-pointer translate-y-[-50%] right-[5px]"
@@ -133,7 +133,7 @@ const SignUpForm = () => {
           </button>
         </div>
       </div>
-      <div className="w-full border border-gray-200 rounded-md mt-3 p-4 text-center">
+      <div className="w-full border border-[#262626] rounded-md mt-3 p-4 text-center">
         <p className="text-sm">
           If you already have an account?{" "}
           <Link
