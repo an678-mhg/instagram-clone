@@ -36,7 +36,7 @@ const initialFormData: FormData = {
 const CreatePostModal = () => {
   const { user } = useContext(AuthContext);
   const { setIsOpen } = useContext(CreatePostModalContext);
-  const { socket } = useContext(SocketContext);
+  const { socketRef } = useContext(SocketContext);
 
   const queryClient = useQueryClient();
   const areaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -81,8 +81,6 @@ const CreatePostModal = () => {
     });
   };
 
-  console.log(socket);
-
   const handleAddPost = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -118,9 +116,7 @@ const CreatePostModal = () => {
         url: `/post/${newPost?.post?._id}`,
       });
 
-      console.log(socket);
-
-      socket?.emit("create-new-post", notification);
+      socketRef?.current?.emit("create-new-post", notification);
 
       toast.dismiss(toastId);
       toast.success("Upload post success");
