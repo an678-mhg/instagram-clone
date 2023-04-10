@@ -17,10 +17,10 @@ class notificationsControllers {
 
     try {
       const followers =
-        user && user?.length > 0
+        user?.length > 0
           ? user
           : (await followModels.find({ user_follow: from_user })).map(
-              (item) => item.user_follow
+              (item) => item.user
             );
 
       const newNotify = new notificationsModels({
@@ -66,6 +66,19 @@ class notificationsControllers {
         .sort("-createdAt");
 
       res.json({ success: true, notifications });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async updateStatusSeen(req: Request, res: Response) {
+    const user_id = req.body._id;
+
+    try {
+      await notificationsModels.updateMany({ user: user_id }, { read: true });
+
+      res.json({ success: true });
     } catch (error) {
       res
         .status(500)

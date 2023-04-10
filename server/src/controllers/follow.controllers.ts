@@ -3,6 +3,7 @@ import followModels from "../models/follow.models";
 import usersModels from "../models/users.models";
 import { followUserBody } from "../types";
 import checkAuth from "../utils/checkAuth";
+import notificationsModels from "../models/notifications.models";
 
 class followControllers {
   async getSuggestAccount(req: Request, res: Response) {
@@ -69,6 +70,7 @@ class followControllers {
   async followUser(req: Request, res: Response) {
     const { user_follow } = req.body as followUserBody;
     const user_id = req.body._id;
+    let action = "";
 
     try {
       const existFollow = await followModels.findOne({
@@ -81,8 +83,17 @@ class followControllers {
           user: user_id,
           user_follow,
         }).save();
+        action = "follow";
       } else {
-        await followModels.findOneAndDelete({ _id: existFollow._id });
+        await Promise.all([
+          followModels.findOneAndDelete({ _id: existFollow._id }),
+          notificationsModels.deleteMany({
+            from_user: user_id,
+            user: user_follow,
+            message: "just followed you",
+          }),
+        ]);
+        action = "unfollow";
       }
 
       res.json({ success: true });

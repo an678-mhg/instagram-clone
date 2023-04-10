@@ -18,4 +18,13 @@ routers.post(
 // /api/notifications/gets
 routers.get("/gets", verifyToken, notificationsControllers.getNotification);
 
+// private
+// description: update status seen
+// /api/notifications/update-seen
+routers.put(
+  "/update-seen",
+  verifyToken,
+  notificationsControllers.updateStatusSeen
+);
+
 export default routers;
