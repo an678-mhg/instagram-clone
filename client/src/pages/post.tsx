@@ -41,6 +41,20 @@ const Post = () => {
     onError: () => {
       toast.error("Something went wrong");
     },
+    onSuccess: async (response: any) => {
+      if (user?._id === data?.[0]?.user._id || response?.action === "unlike")
+        return;
+
+      const notification = await createNotification({
+        comment: null,
+        post: post._id,
+        message: "just liked your post",
+        url: `/post/${data?.[0]?._id}`,
+        user: [data?.[0]?.user._id as string],
+      });
+
+      socketRef.current?.emit("create-new-notification", notification);
+    },
   });
 
   const { mutateAsync, isLoading: createCommentLoading } = useMutation(
@@ -83,6 +97,8 @@ const Post = () => {
           behavior: "smooth",
           block: "center",
         });
+
+        if (user?._id === data?.[0]?.user?._id) return;
 
         const notification = await createNotification({
           comment: response._id,

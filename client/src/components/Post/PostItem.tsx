@@ -20,6 +20,8 @@ import { FiEdit2 } from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
 import { CircularProgress } from "react-cssfx-loading";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";
+import { createNotification } from "../../services/notifications";
+import { SocketContext } from "../../context/SocketContext";
 
 interface PostItemProps {
   post: Post;
@@ -35,12 +37,26 @@ const PostItem: React.FC<PostItemProps> = ({
   limit,
 }) => {
   const { user } = useContext(AuthContext);
+  const { socketRef } = useContext(SocketContext);
   const [showMenu, setShowMenu] = useState(false);
   const queryClient = useQueryClient();
 
-  const { mutateAsync } = useMutation(likePost, {
-    onError: () => {
-      toast.error("Something went wrong!");
+  const { mutateAsync, isError } = useMutation(likePost, {
+    onError: (error: any) => {
+      toast.error(error?.response?.data || "Something went wrong!");
+    },
+    onSuccess: async (response: any) => {
+      if (user?._id === post.user._id || response?.action === "unlike") return;
+
+      const notification = await createNotification({
+        comment: null,
+        post: post._id,
+        message: "just liked your post",
+        url: `/post/${post._id}`,
+        user: [post.user?._id],
+      });
+
+      socketRef.current?.emit("create-new-notification", notification);
     },
   });
 
@@ -82,6 +98,8 @@ const PostItem: React.FC<PostItemProps> = ({
     });
 
   const handleLikePost = () => {
+    if (isError) return;
+
     const oldData = queryClient.getQueryData([
       postKey.GET_HOME_FEED,
     ]) as InfiniteData<HomeFeed>;

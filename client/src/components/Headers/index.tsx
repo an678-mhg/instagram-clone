@@ -36,12 +36,14 @@ const Headers = () => {
         placement="bottom-end"
         interactive
         visible={showBoxNotification}
-        render={(attrs) => (
-          <BoxNotification
-            notifications={data?.notifications as NotificationType[]}
-            {...attrs}
-          />
-        )}
+        render={(attrs) =>
+          showBoxNotification && (
+            <BoxNotification
+              notifications={data?.notifications as NotificationType[]}
+              {...attrs}
+            />
+          )
+        }
       >
         <div
           onClick={() => setShowBoxNotification((prev) => !prev)}

@@ -16,6 +16,7 @@ import { useContext } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { useEffect, useRef } from "react";
 import useQueryParams from "../../hooks/useQueryParams";
+import { AuthContext } from "../../context/AuthContext";
 
 interface CommentItemProps {
   comment: Comment;
@@ -26,6 +27,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
   const [showReply, setShowReply] = useState(false);
   const queryClient = useQueryClient();
   const { socketRef } = useContext(SocketContext);
+  const { user } = useContext(AuthContext);
   const queryParams = useQueryParams();
   const commentRef = useRef<HTMLDivElement | null>(null);
 
@@ -68,6 +70,8 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
           ]);
 
           setShowReplyForm((prev) => !prev);
+
+          if (user?._id === comment.user?._id) return;
 
           const notification = await createNotification({
             comment: comment._id,

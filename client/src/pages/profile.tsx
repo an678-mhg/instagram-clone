@@ -10,10 +10,13 @@ import { AiOutlineLink, AiOutlineMail } from "react-icons/ai";
 import { followUser } from "../services/follow";
 import { ProfileResponse } from "../types/users";
 import ListMyPost from "../components/Post/ListMyPost";
+import { createNotification } from "../services/notifications";
+import { SocketContext } from "../context/SocketContext";
 
 const Profile = () => {
   const { _id } = useParams();
   const { user } = useContext(AuthContext);
+  const { socketRef } = useContext(SocketContext);
   const queryClient = useQueryClient();
 
   const {
@@ -25,19 +28,31 @@ const Profile = () => {
     getUserInfoById(_id as string)
   );
 
-  const { mutateAsync, isLoading: followUserLoading } = useMutation(followUser);
+  const { mutateAsync, isLoading: followUserLoading } = useMutation(
+    followUser,
+    {
+      onSuccess: async (response: any) => {
+        if (response?.action === "unfollow") return;
 
-  const handleFollowUser = () => {
+        const notification = await createNotification({
+          comment: null,
+          post: null,
+          user: [profile?.user?._id as string],
+          message: "just followed you",
+          url: `/profile/${user?._id}`,
+        });
+
+        socketRef?.current?.emit("create-new-notification", notification);
+      },
+    }
+  );
+
+  const handleFollowUser = async () => {
     if (user?._id === _id) return;
-
     const key = usersKey.GET_INFO(_id as string);
-
     const newData = queryClient.getQueryData([key]) as ProfileResponse;
-
     newData.user.is_follow = !newData.user.is_follow;
-
     queryClient.setQueryData([key], newData);
-
     mutateAsync(_id as string);
   };
 

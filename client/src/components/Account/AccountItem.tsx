@@ -6,6 +6,8 @@ import { AuthContext } from "../../context/AuthContext";
 import { followUser } from "../../services/follow";
 import { User } from "../../types/posts";
 import { accountKey } from "../../utils/react-query-key";
+import { createNotification } from "../../services/notifications";
+import { SocketContext } from "../../context/SocketContext";
 
 interface AccountItemProps {
   account: User;
@@ -14,11 +16,25 @@ interface AccountItemProps {
 
 const AccountItem: React.FC<AccountItemProps> = ({ account, isFetching }) => {
   const { user } = useContext(AuthContext);
+  const { socketRef } = useContext(SocketContext);
   const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation(followUser, {
     onError: () => {
       toast.error("Something went wrong!");
+    },
+    onSuccess: async (response: any) => {
+      if (response?.action === "unfollow") return;
+
+      const notification = await createNotification({
+        comment: null,
+        post: null,
+        user: [account?._id as string],
+        message: "just followed you",
+        url: `/profile/${user?._id}`,
+      });
+
+      socketRef?.current?.emit("create-new-notification", notification);
     },
   });
 
