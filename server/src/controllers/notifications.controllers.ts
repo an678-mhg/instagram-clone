@@ -5,7 +5,7 @@ import followModels from "../models/follow.models";
 
 class notificationsControllers {
   async createNotification(req: Request, res: Response) {
-    const { comment, message, post, url } =
+    const { comment, message, post, url, user } =
       req.body as createNotificationFormValue;
     const from_user = req.body._id;
 
@@ -16,11 +16,16 @@ class notificationsControllers {
     }
 
     try {
-      const followers = await followModels.find({ user_follow: from_user });
+      const followers =
+        user && user?.length > 0
+          ? user
+          : (await followModels.find({ user_follow: from_user })).map(
+              (item) => item.user_follow
+            );
 
       const newNotify = new notificationsModels({
         from_user,
-        user: followers.map((follow) => follow.user),
+        user: followers,
         message,
         url,
         comment,

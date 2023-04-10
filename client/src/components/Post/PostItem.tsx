@@ -57,6 +57,7 @@ const PostItem: React.FC<PostItemProps> = ({
       ].posts.filter((item) => item._id !== post._id);
 
       queryClient.setQueryData([postKey.GET_HOME_FEED], newData);
+      queryClient.refetchQueries([postKey.GET_HOME_FEED]);
     },
   });
 

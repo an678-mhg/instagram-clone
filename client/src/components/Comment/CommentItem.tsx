@@ -11,6 +11,11 @@ import FormComment from "./FormComment";
 import { CircularProgress } from "react-cssfx-loading";
 import { Link } from "react-router-dom";
 import { parseLinkDescription } from "../../utils/contants";
+import { createNotification } from "../../services/notifications";
+import { useContext } from "react";
+import { SocketContext } from "../../context/SocketContext";
+import { useEffect, useRef } from "react";
+import useQueryParams from "../../hooks/useQueryParams";
 
 interface CommentItemProps {
   comment: Comment;
@@ -20,6 +25,9 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReply, setShowReply] = useState(false);
   const queryClient = useQueryClient();
+  const { socketRef } = useContext(SocketContext);
+  const queryParams = useQueryParams();
+  const commentRef = useRef<HTMLDivElement | null>(null);
 
   const { data, isLoading: mutateReplyCommentLoading } = useQuery(
     [postKey.GET_REPLY_COMMENT(comment._id, showReply)],
@@ -38,7 +46,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
   const { mutateAsync: replyCommentAsync, isLoading } = useMutation(
     replyComment,
     {
-      onSuccess: (response) => {
+      onSuccess: async (response) => {
         if (response.success) {
           const newData = queryClient.getQueryData([
             postKey.GET_DETAIL_POST(comment.post),
@@ -58,7 +66,18 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
           queryClient.refetchQueries([
             postKey.GET_REPLY_COMMENT(comment._id, showReply),
           ]);
+
           setShowReplyForm((prev) => !prev);
+
+          const notification = await createNotification({
+            comment: comment._id,
+            message: "just mentioned you in a comment",
+            post: comment.post,
+            url: `/post/${comment.post}?comment=${comment._id}`,
+            user: [comment.user._id],
+          });
+
+          socketRef?.current?.emit("create-new-notification", notification);
         }
       },
       onError: () => {
@@ -126,8 +145,23 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
     }).finally(() => clearText());
   };
 
+  useEffect(() => {
+    const commentIdVisible = queryParams.get("comment");
+
+    if (commentIdVisible) {
+      if (comment._id === commentIdVisible) {
+        commentRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
+        setShowReply(true);
+      }
+    }
+  }, [comment?._id]);
+
   return (
-    <div>
+    <div ref={commentRef}>
       <div className="flex space-x-3">
         <Link to={`/profile/${comment.user?._id}`}>
           <img

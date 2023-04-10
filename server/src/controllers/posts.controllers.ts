@@ -367,14 +367,16 @@ class postControllers {
           .json({ success: false, message: "Only support 1 level answer!" });
       }
 
-      await new commentsModels({
+      const newReplies = new commentsModels({
         comment,
         parent_id,
         post: post_id,
         user: user_id,
-      }).save();
+      });
 
-      res.json({ success: true });
+      await newReplies.save();
+
+      res.json({ success: true, comment: newReplies });
     } catch (error) {
       res
         .status(500)

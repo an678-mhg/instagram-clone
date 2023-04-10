@@ -110,4 +110,5 @@ export interface createNotificationFormValue {
   post: string | null;
   url: string;
   message: string;
+  user?: string[];
 }

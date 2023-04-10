@@ -50,9 +50,9 @@ const SocketContextProvider: React.FC<Layout> = ({ children }) => {
       (notification: NotificationType) => {
         if (Notification.permission === "granted") {
           const notify = new Notification(
-            `${notification.from_user?.username} ${notification.message}`,
+            `${notification.from_user?.username}`,
             {
-              body: calculateCreatedTime(notification.createdAt),
+              body: notification.message,
               image: notification?.from_user?.avatar,
               icon: "/images/logo-gradient.png",
             }

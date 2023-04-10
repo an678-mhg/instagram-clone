@@ -14,15 +14,15 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   return (
     <div
       onClick={() => navigate(notification.url)}
-      className="text-white p-4 flex items-center justify-between cursor-pointer hover:bg-[#333] rounded-md"
+      className="text-white p-4 space-x-4 flex items-center justify-between cursor-pointer hover:bg-[#333] rounded-md"
     >
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-4 flex-1">
         <img
           src={notification?.from_user?.avatar}
           className="w-10 h-10 rounded-full"
         />
-        <div>
-          <h3 className="text-sm">
+        <div className="flex-1">
+          <h3 className="text-sm line-clamp-1">
             <span className="font-semibold">
               {notification?.from_user?.username}
             </span>{" "}

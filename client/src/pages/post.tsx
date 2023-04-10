@@ -4,7 +4,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import CommentIcons from "../icons/Comment";
 import Like from "../icons/Like";
-import Menu from "../icons/Menu";
 import Notification from "../icons/Notification";
 import Save from "../icons/Save";
 import LogoImage from "../icons/LogoImage";
@@ -23,15 +22,15 @@ import { Comment, Post as PostType } from "../types/posts";
 import calculateCreatedTime from "../utils/formatDate";
 import { postKey } from "../utils/react-query-key";
 import { parseLinkDescription } from "../utils/contants";
+import { createNotification } from "../services/notifications";
+import { SocketContext } from "../context/SocketContext";
 
 const Post = () => {
   const { _id } = useParams();
-
   const bottomCommentRef = useRef<HTMLDivElement | null>(null);
-
   const queryClient = useQueryClient();
-
   const { user } = useContext(AuthContext);
+  const { socketRef } = useContext(SocketContext);
 
   const { data, isLoading, isError } = useQuery(
     [postKey.GET_DETAIL_POST(_id as string)],
@@ -47,7 +46,7 @@ const Post = () => {
   const { mutateAsync, isLoading: createCommentLoading } = useMutation(
     createComment,
     {
-      onSuccess: (response) => {
+      onSuccess: async (response) => {
         const newData = queryClient.getQueryData([
           postKey.GET_DETAIL_POST(_id as string),
         ]) as [PostType, Comment[]];
@@ -84,6 +83,16 @@ const Post = () => {
           behavior: "smooth",
           block: "center",
         });
+
+        const notification = await createNotification({
+          comment: response._id,
+          message: "just commented on your post",
+          post: response.post,
+          url: `/post/${response.post}?comment=${response._id}`,
+          user: [data?.[0]?.user?._id as string],
+        });
+
+        socketRef?.current?.emit("create-new-notification", notification);
       },
       onError: () => {
         toast.error("Something went wrong!");
@@ -156,7 +165,6 @@ const Post = () => {
               </Link>
               <p className="text-sm">{post?.user?.fullname}</p>
             </div>
-            <Menu />
           </div>
         </div>
         <div className="md:flex-1 h-[300px] px-4 pt-2 space-y-4 overflow-y-auto">

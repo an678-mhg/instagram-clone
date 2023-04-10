@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
   });
 
   // on user create new post
-  socket.on("create-new-post", (response) => {
+  socket.on("create-new-notification", (response) => {
     const user = response?.notification?.user;
     const client = users.filter((item) => user.includes(item._id));
 
