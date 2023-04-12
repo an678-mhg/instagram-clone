@@ -17,6 +17,7 @@ import { SocketContext } from "../../context/SocketContext";
 import { useEffect, useRef } from "react";
 import useQueryParams from "../../hooks/useQueryParams";
 import { AuthContext } from "../../context/AuthContext";
+import ImageFade from "../ImageFade";
 
 interface CommentItemProps {
   comment: Comment;
@@ -168,7 +169,8 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
     <div ref={commentRef}>
       <div className="flex space-x-3">
         <Link to={`/profile/${comment.user?._id}`}>
-          <img
+          <ImageFade
+            loading="lazy"
             src={comment.user.avatar}
             className="w-8 h-8 rounded-full mt-[5px]"
           />

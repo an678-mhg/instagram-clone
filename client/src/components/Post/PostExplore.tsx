@@ -3,6 +3,7 @@ import Comment from "../../icons/Comment";
 import Notification from "../../icons/Notification";
 import { Post } from "../../types/posts";
 import Like from "../../icons/Like";
+import ImageFade from "../ImageFade";
 
 interface PostExploreProps {
   post: Post;
@@ -14,7 +15,7 @@ const PostExplore: React.FC<PostExploreProps> = ({ post }) => {
       to={`/post/${post._id}`}
       className="aspect-square relative cursor-pointer post-explore"
     >
-      <img
+      <ImageFade
         src={post.media[0]}
         loading="lazy"
         className="object-cover w-full h-full"

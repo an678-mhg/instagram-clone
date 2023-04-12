@@ -8,6 +8,7 @@ import { User } from "../../types/posts";
 import { accountKey } from "../../utils/react-query-key";
 import { createNotification } from "../../services/notifications";
 import { SocketContext } from "../../context/SocketContext";
+import ImageFade from "../ImageFade";
 
 interface AccountItemProps {
   account: User;
@@ -60,7 +61,7 @@ const AccountItem: React.FC<AccountItemProps> = ({ account, isFetching }) => {
   return (
     <div className="flex items-center justify-between px-4 py-2 last:mb-0">
       <Link to={`/profile/${account?._id}`} className="flex items-center">
-        <img
+        <ImageFade
           loading="lazy"
           className="w-[35px] h-[35px] rounded-full"
           src={account.avatar}

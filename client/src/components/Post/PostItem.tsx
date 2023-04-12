@@ -22,6 +22,7 @@ import { CircularProgress } from "react-cssfx-loading";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";
 import { createNotification } from "../../services/notifications";
 import { SocketContext } from "../../context/SocketContext";
+import ImageFade from "../ImageFade";
 
 interface PostItemProps {
   post: Post;
@@ -149,7 +150,7 @@ const PostItem: React.FC<PostItemProps> = ({
     <div className="mb-5 last:mb-0 md:px-0 px-2">
       <div className="flex items-center justify-between">
         <Link to={`/profile/${post.user._id}`} className="flex items-center">
-          <img
+          <ImageFade
             loading="lazy"
             className="w-[42px] h-[42px] rounded-full"
             src={post.user?.avatar}

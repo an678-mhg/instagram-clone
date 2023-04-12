@@ -12,6 +12,7 @@ import { ProfileResponse } from "../types/users";
 import ListMyPost from "../components/Post/ListMyPost";
 import { createNotification } from "../services/notifications";
 import { SocketContext } from "../context/SocketContext";
+import ImageFade from "../components/ImageFade";
 
 const Profile = () => {
   const { _id } = useParams();
@@ -68,7 +69,7 @@ const Profile = () => {
     <div className="xl:w-[950px] w-full md:mt-8 mt-4">
       <div className="w-full border-b border-[#262626] md:pb-8 pb-4">
         <div className="flex items-center md:space-x-16 space-x-4 md:px-16 px-4">
-          <img
+          <ImageFade
             loading="lazy"
             src={profile?.user?.avatar}
             className="md:w-[150px] md:h-[150px] w-[80px] h-[80px] rounded-full"

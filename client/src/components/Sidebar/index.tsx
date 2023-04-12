@@ -9,6 +9,7 @@ import useLogout from "../../hooks/useLogout";
 import { FiLogOut } from "react-icons/fi";
 import Create from "../../icons/Create";
 import { CreatePostModalContext } from "../../context/CreatePostModalContext";
+import ImageFade from "../ImageFade";
 
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
@@ -41,7 +42,7 @@ const Sidebar = () => {
             to={`/profile/${user?._id}`}
             className="flex md:justify-start justify-center items-center w-full p-3 md:rounded-full hover:bg-[#222] text-white mb-2 transition-colors cursor-pointer last:mb-0"
           >
-            <img
+            <ImageFade
               loading="lazy"
               className="w-6 h-6 rounded-full"
               alt={user?.username}

@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
+import ImageFade from "./ImageFade";
 
 // interface ImageSlideProps {
 //   media: { url: string; type: string }[];
@@ -28,7 +29,7 @@ const ImageSlide: React.FC<ImageSlideProps> = ({ media, radius }) => {
               radius && "rounded-md overflow-hidden"
             }`}
           >
-            <img
+            <ImageFade
               loading="lazy"
               width="100%"
               className="object-contain aspect-square"

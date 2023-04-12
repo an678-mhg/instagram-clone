@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import useLogout from "../../hooks/useLogout";
+import ImageFade from "../ImageFade";
 
 const AccountProfile = () => {
   const { user } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const AccountProfile = () => {
   return (
     <div className="flex items-center justify-between px-4 py-2 last:mb-0">
       <Link to={`/profile/${user?._id}`} className="flex items-center">
-        <img
+        <ImageFade
           loading="lazy"
           className="w-[50px] h-[50px] rounded-full"
           src={user?.avatar}

@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import checkFile from "../utils/checkFile";
 import uploadFile from "../utils/upload";
+import ImageFade from "../components/ImageFade";
 
 export interface changeProfileFormValue {
   username: string;
@@ -99,7 +100,7 @@ const EditProfile = () => {
       >
         <div className="w-full">
           <div className="flex items-center space-x-3">
-            <img
+            <ImageFade
               src={previewFile || user?.avatar}
               className="w-10 h-10 rounded-full object-cover"
               loading="lazy"

@@ -24,6 +24,7 @@ import { postKey } from "../utils/react-query-key";
 import { parseLinkDescription } from "../utils/contants";
 import { createNotification } from "../services/notifications";
 import { SocketContext } from "../context/SocketContext";
+import ImageFade from "../components/ImageFade";
 
 const Post = () => {
   const { _id } = useParams();
@@ -165,7 +166,7 @@ const Post = () => {
       <div className="flex-1 flex flex-col border-l border-[#262626]">
         <div className="px-4 py-2 flex items-center w-full border-b border-[#262626]">
           <Link to={`/profile/${post?.user?._id}`}>
-            <img
+            <ImageFade
               loading="lazy"
               className="w-[40px] h-[40px] rounded-full"
               src={post?.user?.avatar}
@@ -185,7 +186,11 @@ const Post = () => {
         </div>
         <div className="md:flex-1 h-[300px] px-4 pt-2 space-y-4 overflow-y-auto">
           <div className="flex space-x-3">
-            <img className="w-8 h-8 rounded-full" src={post.user?.avatar} />
+            <ImageFade
+              loading="lazy"
+              className="w-8 h-8 rounded-full"
+              src={post.user?.avatar}
+            />
             <div className="flex">
               <h3 className="text-sm font-semibold">
                 {post.user?.username}{" "}

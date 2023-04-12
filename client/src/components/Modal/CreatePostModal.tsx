@@ -15,6 +15,7 @@ import checkFile from "../../utils/checkFile";
 import EmojiTippy from "../Comment/EmojiTippy";
 import { createNotification } from "../../services/notifications";
 import { SocketContext } from "../../context/SocketContext";
+import ImageFade from "../ImageFade";
 
 interface FilePreview {
   file: File;
@@ -167,7 +168,7 @@ const CreatePostModal = () => {
         </div>
         <div className="p-4 flex-1 flex flex-col border-l md:border-t-0 border-t border-[#262626]">
           <div className="flex items-center">
-            <img
+            <ImageFade
               loading="lazy"
               src={user?.avatar}
               className="w-8 h-8 rounded-full"
