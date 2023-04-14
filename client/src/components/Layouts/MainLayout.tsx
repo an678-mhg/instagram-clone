@@ -7,7 +7,9 @@ import CreatePostModal from "../Modal/CreatePostModal";
 import Sidebar from "../Sidebar";
 
 const MainLayout: FC<Layout> = ({ children }) => {
-  const { isOpen, setIsOpen } = useContext(CreatePostModalContext);
+  const { isOpen, setIsOpen, setAction, setPost } = useContext(
+    CreatePostModalContext
+  );
 
   return (
     <div className="flex">
@@ -20,7 +22,19 @@ const MainLayout: FC<Layout> = ({ children }) => {
       </div>
 
       {isOpen && (
-        <Modal handleClose={() => setIsOpen(false)}>
+        <Modal
+          handleClose={() => {
+            const isUserCloseModal = window.confirm(
+              "Are you sure dimiss post!"
+            );
+
+            if (isUserCloseModal) {
+              setAction("create");
+              setPost(null);
+              setIsOpen(false);
+            }
+          }}
+        >
           <CreatePostModal />
         </Modal>
       )}

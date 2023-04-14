@@ -37,6 +37,6 @@ routers.get("/me", verifyToken, authControllers.getMe);
 // public
 // description: google login
 // /api/auth/google
-routers.post("/google", authControllers.googleLogin);
+routers.post("/social", authControllers.socialLogin);
 
 export default routers;

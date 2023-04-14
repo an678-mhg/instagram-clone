@@ -7,7 +7,7 @@ import { CreatePostModalContext } from "../../context/CreatePostModalContext";
 import ImageSlide from "../ImageSlide";
 import { toast } from "react-hot-toast";
 import { useMutation } from "react-query";
-import { addPost } from "../../services/posts";
+import { addPost, editPost } from "../../services/posts";
 import uploadFile from "../../utils/upload";
 import { useQueryClient } from "react-query";
 import { postKey } from "../../utils/react-query-key";
@@ -16,6 +16,12 @@ import EmojiTippy from "../Comment/EmojiTippy";
 import { createNotification } from "../../services/notifications";
 import { SocketContext } from "../../context/SocketContext";
 import ImageFade from "../ImageFade";
+import {
+  AiFillPlusCircle,
+  AiOutlinePlus,
+  AiOutlinePlusCircle,
+} from "react-icons/ai";
+import { CreatePostFormValue } from "../../types";
 
 interface FilePreview {
   file: File;
@@ -36,13 +42,17 @@ const initialFormData: FormData = {
 
 const CreatePostModal = () => {
   const { user } = useContext(AuthContext);
-  const { setIsOpen } = useContext(CreatePostModalContext);
+  const { setIsOpen, post, setPost, action, setAction } = useContext(
+    CreatePostModalContext
+  );
   const { socketRef } = useContext(SocketContext);
 
   const queryClient = useQueryClient();
   const areaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>(
+    post ? { ...initialFormData, caption: post.caption } : initialFormData
+  );
   const [loading, setLoading] = useState(false);
   const [showSelectEmoji, setShowSelectEmoji] = useState(false);
 
@@ -63,6 +73,7 @@ const CreatePostModal = () => {
   }, [formData?.files?.length]);
 
   const { mutateAsync } = useMutation(addPost);
+  const { mutateAsync: editPostAsync } = useMutation(editPost);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files as FileList);
@@ -73,57 +84,81 @@ const CreatePostModal = () => {
 
     setFormData({
       ...formData,
-      files: files?.map((file) => {
-        return {
-          file,
-          preview: URL.createObjectURL(file),
-        };
-      }),
+      files: [
+        ...formData.files,
+        ...files?.map((file) => {
+          return {
+            file,
+            preview: URL.createObjectURL(file),
+          };
+        }),
+      ],
     });
   };
 
   const handleAddPost = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.caption || formData.files?.length === 0) {
-      return toast.error("A caption or photo is required!");
+    if (action === "create") {
+      if (!formData.caption || formData.files?.length === 0) {
+        return toast.error("A caption or photo is required!");
+      }
+    } else {
+      if (!formData.caption) {
+        return toast.error("A caption is required!");
+      }
     }
 
     let toastId;
 
     try {
-      toastId = toast.loading("Upload posts start");
+      toastId = toast.loading(`${action} posts start`);
       setLoading(true);
 
       const media = await Promise.all(
         formData?.files?.map((file) => uploadFile(file.file))
       );
 
-      const newPost = await mutateAsync({
+      const payload: CreatePostFormValue = {
         caption: formData.caption,
-        media,
+        media: post ? [...post?.media, ...media] : media,
         post_type: formData.type,
         user_id: user?._id as string,
-      });
+      };
+
+      if (action === "update") {
+        payload._id = post?._id;
+      }
+
+      const newPost = await (action === "create"
+        ? mutateAsync(payload)
+        : editPostAsync(payload));
 
       setIsOpen(false);
 
       queryClient.refetchQueries([postKey.GET_HOME_FEED]);
 
-      const notification = await createNotification({
-        comment: null,
-        message: "just created a new post",
-        post: newPost?.post?._id,
-        url: `/post/${newPost?.post?._id}`,
-      });
+      if (action === "create") {
+        const notification = await createNotification({
+          comment: null,
+          message: "just created a new post",
+          post: newPost?.post?._id,
+          url: `/post/${newPost?.post?._id}`,
+        });
 
-      socketRef?.current?.emit("create-new-notification", notification);
+        socketRef?.current?.emit("create-new-notification", notification);
+      }
+
+      if (action === "update") {
+        setPost(null);
+        setAction("create");
+      }
 
       toast.dismiss(toastId);
-      toast.success("Upload post success");
+      toast.success(`${action} post success`);
     } catch (error) {
       toast.dismiss(toastId);
-      toast.error("Upload posts failed");
+      toast.error(`${action} posts failed`);
     }
   };
 
@@ -134,29 +169,51 @@ const CreatePostModal = () => {
     >
       <div className="flex items-center justify-between px-4 py-2 border-b border-[#262626] cursor-pointer">
         <BiArrowBack onClick={() => setIsOpen(false)} className="text-2xl" />
-        <h1 className="font-semibold">Create new {formData.type}</h1>
-        <button disabled={loading} className="font-semibold text-blue-500">
-          Share
+        <h1 className="font-semibold capitalize">
+          {action} new {formData.type}
+        </h1>
+        <button
+          disabled={loading}
+          className="capitalize font-semibold text-blue-500"
+        >
+          {action}
         </button>
       </div>
 
       <div className="w-full flex-1 flex md:flex-row flex-col h-full overflow-hidden">
         <div className="md:w-[60%] overflow-hidden relative flex justify-center items-center md:h-full h-auto aspect-square md:py-0 flex-col">
-          {formData?.files?.length > 0 ? (
-            <ImageSlide media={formData?.files?.map((file) => file.preview)} />
+          <input
+            onChange={handleFileChange}
+            id="fileSelect"
+            type="file"
+            hidden
+            multiple
+          />
+          {post || formData?.files?.length > 0 ? (
+            <>
+              <ImageSlide
+                media={
+                  post
+                    ? [
+                        ...post.media,
+                        ...formData?.files?.map((file) => file.preview),
+                      ]
+                    : formData?.files?.map((file) => file.preview)
+                }
+              />
+              <label
+                htmlFor="fileSelect"
+                className="cursor-pointer absolute bottom-0 right-0 z-[999999] w-10 h-10 bg-[#111] m-4 rounded-full flex items-center justify-center"
+              >
+                <AiOutlinePlus size={20} color="#fff" />
+              </label>
+            </>
           ) : (
             <div className="flex items-center flex-col">
               <VideoAndImage />
               <h3 className="mt-3 text-lg font-semibold">
                 Drag, drop video and image file
               </h3>
-              <input
-                onChange={handleFileChange}
-                id="fileSelect"
-                type="file"
-                hidden
-                multiple
-              />
               <label
                 htmlFor="fileSelect"
                 className="mt-3 text-sm cursor-pointer bg-blue-500 text-white font-semibold px-4 py-2 rounded-md"
@@ -175,7 +232,9 @@ const CreatePostModal = () => {
             />
             <p className="text-sm font-semibold ml-3">
               {user?.username}{" "}
-              <span className="font-normal">create a {formData.type}</span>
+              <span className="font-normal">
+                {action} a {formData.type}
+              </span>
             </p>
           </div>
           <textarea

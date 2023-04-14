@@ -2,7 +2,12 @@ import { toast } from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import Like from "../../icons/Like";
 import Notification from "../../icons/Notification";
-import { getComment, likeComment, replyComment } from "../../services/posts";
+import {
+  deleteComment,
+  getComment,
+  likeComment,
+  replyComment,
+} from "../../services/posts";
 import { Comment, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
 import { postKey } from "../../utils/react-query-key";
@@ -18,17 +23,20 @@ import { useEffect, useRef } from "react";
 import useQueryParams from "../../hooks/useQueryParams";
 import { AuthContext } from "../../context/AuthContext";
 import ImageFade from "../ImageFade";
+import { BsTrash } from "react-icons/bs";
 
 interface CommentItemProps {
   comment: Comment;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [showReply, setShowReply] = useState(false);
   const queryClient = useQueryClient();
   const { socketRef } = useContext(SocketContext);
   const { user } = useContext(AuthContext);
+
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [showReply, setShowReply] = useState(false);
+
   const queryParams = useQueryParams();
   const commentRef = useRef<HTMLDivElement | null>(null);
 
@@ -45,6 +53,28 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
       toast.error("Something went wrong!");
     },
   });
+
+  const { mutateAsync: deleteCommentAsync, isLoading: deleteCommentLoading } =
+    useMutation(deleteComment, {
+      onSuccess: () => {
+        const newData = queryClient.getQueryData([
+          postKey.GET_DETAIL_POST(comment.post),
+        ]) as [Post, Comment[]];
+
+        if (comment.parent_id === null) {
+          newData[1] = newData[1].filter((item) => item._id !== comment._id);
+
+          queryClient.setQueryData(
+            [postKey.GET_DETAIL_POST(comment.post)],
+            newData
+          );
+        } else {
+          queryClient.refetchQueries([
+            postKey.GET_REPLY_COMMENT(comment.parent_id, true),
+          ]);
+        }
+      },
+    });
 
   const { mutateAsync: replyCommentAsync, isLoading } = useMutation(
     replyComment,
@@ -150,6 +180,14 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
     }).finally(() => clearText());
   };
 
+  const handleDeleteComment = () => {
+    const isUserDeleteComment = window.confirm("Are you sure delete comment!");
+
+    if (isUserDeleteComment) {
+      deleteCommentAsync(comment._id);
+    }
+  };
+
   useEffect(() => {
     const commentIdVisible = queryParams.get("comment");
 
@@ -223,13 +261,30 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
             </div>
           )}
         </div>
-        <div onClick={handleLikeComment} className="mt-[5px] cursor-pointer">
+        <button
+          disabled={deleteCommentLoading}
+          onClick={handleLikeComment}
+          className="mt-[5px] cursor-pointer"
+        >
           {comment.is_liked ? (
             <Like width={16} height={16} />
           ) : (
             <Notification width={16} height={16} />
           )}
-        </div>
+        </button>
+        {user?._id === comment?.user?._id && (
+          <button
+            disabled={deleteCommentLoading}
+            onClick={handleDeleteComment}
+            className="mt-[5px] cursor-pointer"
+          >
+            {deleteCommentLoading ? (
+              <CircularProgress color="#fff" width={16} height={16} />
+            ) : (
+              <BsTrash width={16} height={16} />
+            )}
+          </button>
+        )}
       </div>
 
       {showReplyForm && (

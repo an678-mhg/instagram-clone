@@ -9,12 +9,12 @@ import {
   QueryClientProvider,
 } from "react-query";
 import CreatePostModalContextProvider from "./context/CreatePostModalContext";
+import SocketContextProvider from "./context/SocketContext";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./styles/index.css";
-import SocketContextProvider from "./context/SocketContext";
 
 const queryClientOptions: QueryClientConfig = {
   defaultOptions: {
@@ -30,16 +30,16 @@ const queryClientOptions: QueryClientConfig = {
 const queryClient = new QueryClient(queryClientOptions);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  // <React.StrictMode>
-  <QueryClientProvider client={queryClient}>
-    <AuthContextProvider>
-      <CreatePostModalContextProvider>
-        <SocketContextProvider>
-          <App />
-          <Toaster />
-        </SocketContextProvider>
-      </CreatePostModalContextProvider>
-    </AuthContextProvider>
-  </QueryClientProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <CreatePostModalContextProvider>
+          <SocketContextProvider>
+            <App />
+            <Toaster />
+          </SocketContextProvider>
+        </CreatePostModalContextProvider>
+      </AuthContextProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );

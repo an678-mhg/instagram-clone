@@ -29,10 +29,10 @@ const SocketContextProvider: React.FC<Layout> = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-    socketRef.current = io(import.meta.env.VITE_SOCKET_URL as string);
-  }, [user?._id, socketRef.current]);
+  // useEffect(() => {
+  //   if (!user) return;
+  //   socketRef.current = io(import.meta.env.VITE_SOCKET_URL as string);
+  // }, [user?._id, socketRef.current]);
 
   useEffect(() => {
     socketRef.current?.emit("new-connection", user);

@@ -27,8 +27,8 @@ export const signUp = async (data: SignUpFormValue) => {
   return response.data;
 };
 
-export const googleLogin = async (data: GoogleLoginFormValue) => {
-  const response = await client.post<SignInResponse>("/auth/google", data);
+export const socialLogin = async (data: GoogleLoginFormValue) => {
+  const response = await client.post<SignInResponse>("/auth/social", data);
   return response.data;
 };
 

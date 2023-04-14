@@ -5,7 +5,7 @@ import Menu from "../../icons/Menu";
 import Message from "../../icons/Message";
 import Notification from "../../icons/Notification";
 import Save from "../../icons/Save";
-import { editPost, likePost, removePost } from "../../services/posts";
+import { likePost, removePost } from "../../services/posts";
 import { HomeFeed, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
 import ImageSlide from "../ImageSlide";
@@ -39,6 +39,8 @@ const PostItem: React.FC<PostItemProps> = ({
 }) => {
   const { user } = useContext(AuthContext);
   const { socketRef } = useContext(SocketContext);
+  const { setIsOpen, setPost, setAction } = useContext(CreatePostModalContext);
+
   const [showMenu, setShowMenu] = useState(false);
   const queryClient = useQueryClient();
 
@@ -78,26 +80,6 @@ const PostItem: React.FC<PostItemProps> = ({
     },
   });
 
-  const { mutateAsync: editPostAsync, isLoading: editPostLoading } =
-    useMutation(editPost, {
-      onSuccess: (_, body) => {
-        const newData = queryClient.getQueryData([
-          postKey.GET_HOME_FEED,
-        ]) as InfiniteData<HomeFeed>;
-
-        const pageCurrent = Math.floor(index / limit);
-
-        newData.pages[pageCurrent].posts = newData.pages[pageCurrent].posts.map(
-          (item) =>
-            item._id === post._id
-              ? { ...item, caption: body.new_caption }
-              : item
-        );
-
-        queryClient.setQueryData([postKey.GET_HOME_FEED], newData);
-      },
-    });
-
   const handleLikePost = () => {
     if (isError) return;
 
@@ -128,22 +110,15 @@ const PostItem: React.FC<PostItemProps> = ({
   };
 
   const handleRemovePost = () => {
-    const isDelete = window.confirm("Are you sure!");
+    const isDelete = window.confirm("Are you sure remove post!");
     if (!isDelete) return setShowMenu(false);
     removePostAsync(post._id);
   };
 
   const handleOpenModalEdit = () => {
-    const newCaption = window.prompt(
-      `Enter a new caption for the post ${post._id}`,
-      post.caption
-    );
-
-    if (newCaption) {
-      editPostAsync({ post_id: post._id, new_caption: newCaption });
-    } else {
-      toast.error("Update post failed because caption is empty");
-    }
+    setAction("update");
+    setPost(post);
+    setIsOpen(true);
   };
 
   return (
@@ -173,19 +148,15 @@ const PostItem: React.FC<PostItemProps> = ({
               <div {...attrs}>
                 <div className="bg-black shadow-lg rounded-md">
                   <button
-                    disabled={editPostLoading || isLoading}
+                    disabled={isLoading}
                     onClick={handleOpenModalEdit}
                     className="cursor-pointer px-4 py-2 border-b border-[#262626] text-sm font-normal flex items-center space-x-4"
                   >
-                    {!editPostLoading ? (
-                      <FiEdit2 size={15} />
-                    ) : (
-                      <CircularProgress color="#fff" width={16} height={16} />
-                    )}
+                    <FiEdit2 size={15} />
                     <span>Edit post</span>
                   </button>
                   <button
-                    disabled={isLoading || editPostLoading}
+                    disabled={isLoading}
                     onClick={handleRemovePost}
                     className="cursor-pointer px-4 py-2 border-b border-[#262626] text-sm font-normal flex items-center space-x-4"
                   >

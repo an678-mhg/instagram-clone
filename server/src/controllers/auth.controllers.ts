@@ -245,7 +245,7 @@ class authControllers {
         accessToken,
         refreshToken: newRefreshToken,
       });
-    } catch (error) {
+    } catch (error: any) {
       res
         .status(500)
         .json({ success: false, message: "Server not found!", error });
@@ -320,7 +320,7 @@ class authControllers {
         .json({ success: false, message: "Server not found!", error });
     }
   }
-  async googleLogin(req: Request, res: Response) {
+  async socialLogin(req: Request, res: Response) {
     try {
       const { idTokens } = req.body as googleLoginBody;
 

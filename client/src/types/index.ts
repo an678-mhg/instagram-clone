@@ -83,6 +83,7 @@ export interface CreatePostFormValue {
   media: string[];
   post_type: "stories" | "posts";
   user_id: string;
+  _id?: string;
 }
 
 export interface CreateCommentFormValue {

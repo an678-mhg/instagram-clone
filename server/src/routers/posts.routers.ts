@@ -46,6 +46,11 @@ routers.post("/remove", verifyToken, postsControllers.removePost);
 // private
 // description: edit post by id
 // /api/posts/edit
-routers.post("/edit", verifyToken, postsControllers.editPost);
+routers.post("/edit/:_id", verifyToken, postsControllers.editPost);
+
+// private
+// description: delete comment by id
+// /api/posts/comment/remove
+routers.post("/comment/remove", verifyToken, postsControllers.deleteComment);
 
 export default routers;

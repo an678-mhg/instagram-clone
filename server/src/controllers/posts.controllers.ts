@@ -419,11 +419,10 @@ class postControllers {
   }
   async editPost(req: Request, res: Response) {
     try {
-      const post_id = req.body.post_id;
-      const new_caption = req.body.new_caption as string;
-      const user_id = req.body._id;
+      const post_id = req.params._id;
+      const { caption, media, post_type, user_id } = req.body as addPostBody;
 
-      if (!post_id || !new_caption) {
+      if (!post_id || !caption || !media || !post_type || !user_id) {
         return res
           .status(400)
           .json({ success: false, message: "Missing parameters" });
@@ -438,9 +437,38 @@ class postControllers {
         });
       }
 
-      await post?.update({ $set: { caption: new_caption } });
+      await post?.update({
+        $set: { caption, media, post_type, user: user_id },
+      });
 
       res.json({ success: true, message: "Edit post success!" });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
+  async deleteComment(req: Request, res: Response) {
+    const comment_id = req.body.comment_id;
+    const user_id = req.body._id;
+
+    try {
+      const existComment = await commentsModels.findOne({ _id: comment_id });
+
+      if (existComment?.user?.toString() !== user_id) {
+        return res.status(404).json({
+          success: false,
+          message: "You do not have permission to edit this resource",
+        });
+      }
+
+      await Promise.all([
+        existComment?.delete(),
+        commentsModels.deleteMany({ parent_id: comment_id }),
+        notificationsModels.deleteMany({ comment: comment_id }),
+      ]);
+
+      res.json({ success: true, message: "Delete comment success!" });
     } catch (error) {
       res
         .status(500)

@@ -8,12 +8,7 @@ import { SignInResponse } from "../types";
 import { setToken } from "../utils/token";
 
 const useSignInSocial = (
-  loginFunction: ({
-    idTokens,
-  }: {
-    idTokens: string;
-  }) => Promise<SignInResponse>,
-  provider: AuthProvider
+  loginFunction: ({ idTokens }: { idTokens: string }) => Promise<SignInResponse>
 ) => {
   4;
   const [signInSocialLoading, setSignInSocialLoading] = useState(false);
@@ -23,7 +18,7 @@ const useSignInSocial = (
 
   const { mutateAsync } = useMutation(loginFunction);
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (provider: AuthProvider) => {
     let toastId;
     setSignInSocialLoading(true);
 
