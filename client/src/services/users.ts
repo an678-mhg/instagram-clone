@@ -1,6 +1,6 @@
 import { QueryFunctionContext } from "react-query";
 import { changeProfileFormValue } from "../pages/edit-profile";
-import { Response } from "../types";
+import { Response, User } from "../types";
 import { MyPostResponse, ProfileResponse } from "../types/users";
 import client from "../utils/client";
 
@@ -24,5 +24,15 @@ export const getMyPost = async (
 
 export const editProfile = async (values: changeProfileFormValue) => {
   const response = await client.put<Response>("/users/edit-profile", values);
+  return response.data;
+};
+
+export const searchUsers = async (searchText: string) => {
+  const response = await client.get<{ success: Boolean; users: User[] }>(
+    "/users/search",
+    {
+      params: { searchText },
+    }
+  );
   return response.data;
 };

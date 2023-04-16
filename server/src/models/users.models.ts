@@ -57,4 +57,14 @@ const users = new Schema(
   }
 );
 
-export default mongoose.model("users", users);
+users.index({
+  fullname: "text",
+  username: "text",
+  bio: "text",
+  email: "text",
+  phone: "text",
+});
+
+const usersModels = mongoose.model("users", users);
+
+export default usersModels;

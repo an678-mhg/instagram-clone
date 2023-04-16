@@ -16,11 +16,7 @@ import EmojiTippy from "../Comment/EmojiTippy";
 import { createNotification } from "../../services/notifications";
 import { SocketContext } from "../../context/SocketContext";
 import ImageFade from "../ImageFade";
-import {
-  AiFillPlusCircle,
-  AiOutlinePlus,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 import { CreatePostFormValue } from "../../types";
 
 interface FilePreview {

@@ -19,4 +19,9 @@ routers.get("/get/posts/:_id", usersControllers.getMyPost);
 // /api/users/edit-profile
 routers.put("/edit-profile", verifyToken, usersControllers.changeProfile);
 
+// public
+// description: search users by keywords
+// /api/users/search
+routers.get("/search", usersControllers.searchUsers);
+
 export default routers;

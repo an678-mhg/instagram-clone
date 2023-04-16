@@ -30,16 +30,16 @@ const queryClientOptions: QueryClientConfig = {
 const queryClient = new QueryClient(queryClientOptions);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <CreatePostModalContextProvider>
-          <SocketContextProvider>
-            <App />
-            <Toaster />
-          </SocketContextProvider>
-        </CreatePostModalContextProvider>
-      </AuthContextProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <AuthContextProvider>
+      <CreatePostModalContextProvider>
+        <SocketContextProvider>
+          <App />
+          <Toaster />
+        </SocketContextProvider>
+      </CreatePostModalContextProvider>
+    </AuthContextProvider>
+  </QueryClientProvider>
+  // </React.StrictMode>
 );

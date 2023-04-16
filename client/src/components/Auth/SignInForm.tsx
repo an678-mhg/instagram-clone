@@ -44,14 +44,14 @@ const SignInForm = () => {
         {errorMessage && (
           <span className="mt-3 flex items-center font-semibold text-xs text-red-500">
             <AiOutlineWarning className="mr-1 h-4" />{" "}
-            <span>{errorMessage}</span>
+            <span className="flex-1">{errorMessage}</span>
           </span>
         )}
 
         {signInSocialErrorMess && (
           <span className="mt-3 flex items-center font-semibold text-xs text-red-500">
             <AiOutlineWarning className="mr-1 h-4" />{" "}
-            <span>{signInSocialErrorMess}</span>
+            <span className="flex-1">{signInSocialErrorMess}</span>
           </span>
         )}
 

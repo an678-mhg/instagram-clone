@@ -219,6 +219,41 @@ class usersControllers {
         .json({ success: false, message: "Server not found!", error });
     }
   }
+  async searchUsers(req: Request, res: Response) {
+    try {
+      const searchText = req.query?.searchText as string;
+      const textReg = new RegExp(searchText, "i");
+
+      if (!searchText) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing parameters!" });
+      }
+
+      const results = await usersModels
+        .find({
+          $or: [
+            {
+              username: textReg,
+            },
+            {
+              fullname: textReg,
+            },
+            {
+              bio: textReg,
+            },
+          ],
+        })
+        .select("-password -activeToken -refreshToken");
+
+      res.json({ success: true, users: results });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Server not found!", error });
+    }
+  }
 }
 
 export default new usersControllers();
