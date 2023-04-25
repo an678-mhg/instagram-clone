@@ -45,7 +45,7 @@ const ListMyPost: React.FC<ListMyPostProps> = ({ _id }) => {
   if (data?.pages?.length === 0 || data?.pages[0]?.posts?.length === 0) {
     return (
       <div className="mt-5">
-        <NoPostYet />
+        <h1 className="text-center">No posts yet</h1>
       </div>
     );
   }

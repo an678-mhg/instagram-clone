@@ -1,18 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
+// Layout
 import AuthLayout from "../components/Layouts/AuthLayout";
 import MainLayout from "../components/Layouts/MainLayout";
 import ProtecedLayout from "../components/Layouts/ProtecedLayout";
-import Home from "../pages";
-import Active from "../pages/active";
-import Explore from "../pages/explore";
-import Forgot from "../pages/forgot";
-import Post from "../pages/post";
-import Profile from "../pages/profile";
-import Search from "../pages/search";
-import SignIn from "../pages/signin";
-import SignUp from "../pages/signup";
-import Stories from "../pages/stories";
-import EditProfile from "../pages/edit-profile";
+import { lazy } from "react";
+// Pages
+const Home = lazy(() => import("../pages"));
+const Active = lazy(() => import("../pages/active"));
+const Explore = lazy(() => import("../pages/explore"));
+const Forgot = lazy(() => import("../pages/forgot"));
+const Post = lazy(() => import("../pages/post"));
+const Profile = lazy(() => import("../pages/profile"));
+const Search = lazy(() => import("../pages/search"));
+const SignIn = lazy(() => import("../pages/signin"));
+const SignUp = lazy(() => import("../pages/signup"));
+const Stories = lazy(() => import("../pages/stories"));
+const EditProfile = lazy(() => import("../pages/edit-profile"));
+const Messages = lazy(() => import("../pages/messages"));
 
 const routers = createBrowserRouter([
   {
@@ -103,6 +107,16 @@ const routers = createBrowserRouter([
       <ProtecedLayout>
         <MainLayout>
           <EditProfile />
+        </MainLayout>
+      </ProtecedLayout>
+    ),
+  },
+  {
+    path: "/messages",
+    element: (
+      <ProtecedLayout>
+        <MainLayout>
+          <Messages />
         </MainLayout>
       </ProtecedLayout>
     ),

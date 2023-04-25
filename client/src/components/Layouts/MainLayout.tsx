@@ -11,6 +11,16 @@ const MainLayout: FC<Layout> = ({ children }) => {
     CreatePostModalContext
   );
 
+  const handleClose = () => {
+    const isUserCloseModal = window.confirm("Are you sure dimiss post!");
+
+    if (isUserCloseModal) {
+      setAction("create");
+      setPost(null);
+      setIsOpen(false);
+    }
+  };
+
   return (
     <div className="flex">
       <Sidebar />
@@ -22,20 +32,8 @@ const MainLayout: FC<Layout> = ({ children }) => {
       </div>
 
       {isOpen && (
-        <Modal
-          handleClose={() => {
-            const isUserCloseModal = window.confirm(
-              "Are you sure dimiss post!"
-            );
-
-            if (isUserCloseModal) {
-              setAction("create");
-              setPost(null);
-              setIsOpen(false);
-            }
-          }}
-        >
-          <CreatePostModal />
+        <Modal handleClose={handleClose}>
+          <CreatePostModal handleClose={handleClose} />
         </Modal>
       )}
     </div>

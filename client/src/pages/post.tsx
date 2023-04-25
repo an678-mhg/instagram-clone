@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import CommentIcons from "../icons/Comment";
 import Like from "../icons/Like";
 import Notification from "../icons/Notification";
-import Save from "../icons/Save";
 import LogoImage from "../icons/LogoImage";
 import CommentItem from "../components/Comment/CommentItem";
 import FormComment from "../components/Comment/FormComment";
@@ -215,9 +214,6 @@ const Post = () => {
                 {post?.is_liked ? <Like /> : <Notification />}
               </div>
               <CommentIcons />
-            </div>
-            <div>
-              <Save />
             </div>
           </div>
           <p className="mt-3 text-sm font-semibold">{post?.like_count} likes</p>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef } from "react";
-import { Layout } from "../types";
+import { Layout, User } from "../types";
 import { AuthContext } from "./AuthContext";
 import { io, Socket } from "socket.io-client";
 import { useQueryClient } from "react-query";
@@ -8,7 +8,6 @@ import {
   NotificationResponse,
 } from "../types/notification";
 import { notificationKey } from "../utils/react-query-key";
-import calculateCreatedTime from "../utils/formatDate";
 
 interface SocketContextValue {
   socketRef: React.MutableRefObject<Socket | null>;
@@ -20,6 +19,7 @@ export const SocketContext = createContext<SocketContextValue>({
 
 const SocketContextProvider: React.FC<Layout> = ({ children }) => {
   const socketRef = useRef<Socket | null>(null);
+  // const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
   const { user } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
@@ -39,7 +39,7 @@ const SocketContextProvider: React.FC<Layout> = ({ children }) => {
   }, [user?._id, socketRef.current]);
 
   useEffect(() => {
-    socketRef.current?.on("return-users", (users) => {
+    socketRef.current?.on("return-users", (users: User[]) => {
       console.log(users);
     });
   }, [user?._id, socketRef.current]);

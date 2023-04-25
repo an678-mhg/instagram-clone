@@ -38,7 +38,7 @@ const BoxNotification: React.FC<BoxNotificationProps> = ({ notifications }) => {
   }
 
   return (
-    <div className="w-[350px] h-[350px] md:w-[400px] md:h-[400px] rounded-md bg-[#111] overflow-y-auto">
+    <div className="w-[350px] h-[300px] md:w-[400px] md:h-[300px] rounded-md bg-[#111] overflow-y-auto">
       {notifications?.map((item) => (
         <NotificationItem notification={item} key={item._id} />
       ))}

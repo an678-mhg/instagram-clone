@@ -55,7 +55,7 @@ const SearchBox = () => {
       render={(attrs) => (
         <div
           {...attrs}
-          className="bg-[#333] p-4 rounded-md w-[350px] h-[350px] overflow-y-auto space-y-4"
+          className="bg-[#333] p-4 rounded-md w-[350px] h-[250px] overflow-y-auto space-y-4"
         >
           {searchResults?.map((account: any) => (
             <SearchAccountItem account={account} key={account._id} />

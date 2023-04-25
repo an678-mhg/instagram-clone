@@ -36,7 +36,11 @@ const initialFormData: FormData = {
   type: "posts",
 };
 
-const CreatePostModal = () => {
+interface CreatePostModalProps {
+  handleClose: () => void;
+}
+
+const CreatePostModal: React.FC<CreatePostModalProps> = ({ handleClose }) => {
   const { user } = useContext(AuthContext);
   const { setIsOpen, post, setPost, action, setAction } = useContext(
     CreatePostModalContext
@@ -164,7 +168,7 @@ const CreatePostModal = () => {
       className={`w-[835px] max-w-full md:h-[540px] h-screen mx-auto overflow-hidden rounded-md bg-[#111] flex flex-col`}
     >
       <div className="flex items-center justify-between px-4 py-2 border-b border-[#262626] cursor-pointer">
-        <BiArrowBack onClick={() => setIsOpen(false)} className="text-2xl" />
+        <BiArrowBack onClick={handleClose} className="text-2xl" />
         <h1 className="font-semibold capitalize">
           {action} new {formData.type}
         </h1>

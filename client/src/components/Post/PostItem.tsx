@@ -4,7 +4,6 @@ import Like from "../../icons/Like";
 import Menu from "../../icons/Menu";
 import Message from "../../icons/Message";
 import Notification from "../../icons/Notification";
-import Save from "../../icons/Save";
 import { likePost, removePost } from "../../services/posts";
 import { HomeFeed, Post } from "../../types/posts";
 import calculateCreatedTime from "../../utils/formatDate";
@@ -195,7 +194,6 @@ const PostItem: React.FC<PostItemProps> = ({
           </Link>
           <Message className="text-white" />
         </div>
-        <Save className="text-white" />
       </div>
       <div className="my-2">
         <p className="text-sm font-semibold text-white">
