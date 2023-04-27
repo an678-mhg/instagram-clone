@@ -5,9 +5,11 @@ import { logout } from "../services/auth";
 import { toast } from "react-hot-toast";
 import { REFRESH_TOKEN } from "../utils/contants";
 import { removeToken } from "../utils/token";
+import { SocketContext } from "../context/SocketContext";
 
 const useLogout = () => {
   const { setUser } = useContext(AuthContext);
+  const { socketRef } = useContext(SocketContext);
   const queryClient = useQueryClient();
 
   const { mutateAsync, isLoading } = useMutation(logout, {
@@ -17,6 +19,7 @@ const useLogout = () => {
         setUser(null);
         toast.success("Logout success!");
         queryClient.clear();
+        socketRef.current?.disconnect();
       }
     },
     onError: () => {

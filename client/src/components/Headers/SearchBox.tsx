@@ -1,51 +1,18 @@
-import { useState, useRef, useEffect } from "react";
 import Search from "../../icons/Search";
 import Tippy from "@tippyjs/react/headless";
-import { searchUsers } from "../../services/users";
-import { toast } from "react-hot-toast";
 import { CircularProgress } from "react-cssfx-loading";
-import { User } from "../../types";
 import SearchAccountItem from "./SearchAccountItem";
-import { useLocation } from "react-router-dom";
+import useSearchUsers from "../../hooks/useSearchUsers";
 
 const SearchBox = () => {
-  const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [showSearchBox, setShowBox] = useState(false);
-
-  const location = useLocation();
-
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
-
-  const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue = e.target.value;
-    setSearchText(textValue);
-
-    if (!textValue.trim()) return;
-
-    if (timeoutRef?.current) {
-      clearTimeout(timeoutRef?.current);
-    }
-
-    timeoutRef.current = setTimeout(async () => {
-      setLoading(true);
-      try {
-        const results = await searchUsers(textValue);
-        if (results?.users?.length) {
-          setShowBox(true);
-          setSearchResults(results?.users);
-        }
-      } catch (error) {
-        toast.error("Something went wrong!");
-      }
-      setLoading(false);
-    }, 500);
-  };
-
-  useEffect(() => {
-    setShowBox(false);
-  }, [location.pathname]);
+  const {
+    handleOnChangeInput,
+    loading,
+    searchResults,
+    searchText,
+    showSearchBox,
+    setShowBox,
+  } = useSearchUsers();
 
   return (
     <Tippy

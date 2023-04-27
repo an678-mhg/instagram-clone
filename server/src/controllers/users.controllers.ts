@@ -71,6 +71,7 @@ class usersControllers {
             website: 1,
             bio: 1,
             email: 1,
+            active: 1,
           },
         },
       ]);

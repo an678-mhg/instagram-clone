@@ -2,13 +2,13 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: { origin: process.env.FRONT_END_URL } });
 const PORT = process.env.PORT || 8000;
-dotenv.config();
 
 let users = [];
 
@@ -45,5 +45,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log("listening on *:8000");
+  console.log(`Server socket is running on port ${PORT}`);
 });

@@ -19,7 +19,7 @@ const databaseUrl: string = process.env.DATABASE_URL as string;
 
 connectDatabase(databaseUrl);
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: process.env.FRONT_END_URL }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -12,7 +12,7 @@ const Modal = ({ children, handleClose }: Modal) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="md:p-6 md:w-auto md:h-auto w-full h-full"
+        className="md:p-6 md:w-auto md:h-auto w-full h-full flex items-center justify-center"
       >
         {children}
       </div>
